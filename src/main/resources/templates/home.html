@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--Bootstrap css-->
+    <link href="../static/css/bootstrap/bootstrap.min.css" th:href="@{css/bootstrap/bootstrap.min.css}" rel="stylesheet">
+
+    <!--Custom css-->
+    <link href="../static/css/main.css" th:href="@{css/main.css}" rel="stylesheet">
+    <title>Ontpillen</title>
+</head>
+<body>
+
+<!--<div id="wrapper">-->
+    <nav class="navbar  navbar-dark" id="header">
+        <div class="container">
+
+            <a class="navbar-brand" href="#">
+                <img src="../static/images/logo.svg" th:src="@{images/logo.svg}" style="height: 60px">
+            </a>
+
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Voor behandelaren</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="main-section" class="position-relative" style="height: 100%">
+
+        <!--Setting the background for the main section-->
+        <div class="position-absolute top-0" id="background-image"></div>
+        <div class="position-absolute" id="gradient"></div>
+        <div id="background-color"></div>
+
+        <!--Content of main section-->
+        <div class="position-absolute top-0" id="content">
+            <div class="container">
+
+                <div class="row align-items-center py-5" id="home-main-content-row">
+
+                    <div class="col-12">
+                        <div class="card border-radius-18 home-content-col">
+                            <div class="card-body">
+
+                                <ul class="nav fs-4" id="home-main-content-tab">
+                                    <li class="nav-item">
+                                        <button class="nav-link active px-5" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button">Zoeken</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link px-5" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button">Lijst maken</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link px-5" id="privacy-tab" data-bs-toggle="tab" data-bs-target="#privacy" type="button">Privacy</button>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content" id="home-main-content-tab-content">
+                                    <div class="tab-pane fade show active position-relative card-content" id="search">
+                                        <form class="position-absolute top-50 start-50 col-11 col-sm-10 col-md-8 col-lg-6" id="search-form">
+                                            <label for="search-query" class="form-label">Snelzoeken</label>
+                                            <input type="text" class="form-control" id="search-query">
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane fade position-relative card-content" id="list">
+                                        <div class="position-absolute top-50 start-50 col-12 col-sm-11 col-md-10 translate-middle">
+                                            <div class="row">
+                                                <div class="col-7">
+                                                    <h3>Lijst maken</h3>
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl nisi, semper vitae tincidunt ut, accumsan eget diam. Quisque lacus elit, euismod quis odio non, vestibulum commodo ante. Nunc et fringilla enim. Donec ac mi arcu. Aliquam quis lacinia tortor. Aenean imperdiet malesuada neque nec consequat. Nullam maximus leo a malesuada vestibulum. Donec eget consectetur justo. Nullam nibh sapien, malesuada id lacinia ullamcorper, consequat nec arcu. Integer neque tellus, euismod et nisl dapibus, egestas sodales justo. Donec facilisis urna at odio ultrices, sed fringilla nisi euismod. Morbi aliquet eu justo vel convallis. Duis nibh leo, efficitur in est sed, venenatis imperdiet urna. Phasellus egestas malesuada nunc a rhoncus.
+                                                    </p>
+                                                </div>
+                                                <div class="col-5">
+                                                    <form>
+                                                        <label for="age" class="form-label">Leeftijd</label>
+                                                        <input type="number" class="form-control" id="age" min="18" max="150">
+                                                        <label for="sex" class="form-label">Geslacht</label>
+                                                        <select class="form-select" id="sex">
+                                                            <option selected></option>
+                                                            <option value="1">Man</option>
+                                                            <option value="2">Vrouw</option>
+                                                        </select>
+                                                        <button type="submit" class="btn btn-primary">Start lijst</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade position-relative card-content" id="privacy">
+                                        <div class="position-absolute top-50 start-50 col-12 col-sm-11 col-md-10 col-lg-9 col-xl-8 translate-middle">
+                                            <h3>Privacy</h3>
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl nisi, semper vitae tincidunt ut, accumsan eget diam. Quisque lacus elit, euismod quis odio non, vestibulum commodo ante. Nunc et fringilla enim. Donec ac mi arcu. Aliquam quis lacinia tortor. Aenean imperdiet malesuada neque nec consequat. Nullam maximus leo a malesuada vestibulum. Donec eget consectetur justo. Nullam nibh sapien, malesuada id lacinia ullamcorper, consequat nec arcu. Integer neque tellus, euismod et nisl dapibus, egestas sodales justo. Donec facilisis urna at odio ultrices, sed fringilla nisi euismod. Morbi aliquet eu justo vel convallis. Duis nibh leo, efficitur in est sed, venenatis imperdiet urna. Phasellus egestas malesuada nunc a rhoncus.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row py-5 gx-5">
+                    <div class="col-6">
+                        <div class="card home-content-col border-radius-18 p-3">
+                            <div class="card-body">
+                                <h3>Baderen op indicatie</h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl nisi, semper vitae tincidunt ut, accumsan eget diam. Quisque lacus elit, euismod quis odio non, vestibulum commodo ante. Nunc et fringilla enim. Donec ac mi arcu. Aliquam quis lacinia tortor. Aenean imperdiet malesuada neque nec consequat. Nullam maximus leo a malesuada vestibulum. Donec eget consectetur justo. Nullam nibh sapien, malesuada id lacinia ullamcorper, consequat nec arcu. Integer neque tellus, euismod et nisl dapibus, egestas sodales justo. Donec facilisis urna at odio ultrices, sed fringilla nisi euismod. Morbi aliquet eu justo vel convallis. Duis nibh leo, efficitur in est sed, venenatis imperdiet urna. Phasellus egestas malesuada nunc a rhoncus.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card home-content-col border-radius-18 p-3">
+                            <div class="card-body">
+                                <h3>Bladeren op geneesmiddel groepen</h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl nisi, semper vitae tincidunt ut, accumsan eget diam. Quisque lacus elit, euismod quis odio non, vestibulum commodo ante. Nunc et fringilla enim. Donec ac mi arcu. Aliquam quis lacinia tortor. Aenean imperdiet malesuada neque nec consequat. Nullam maximus leo a malesuada vestibulum. Donec eget consectetur justo. Nullam nibh sapien, malesuada id lacinia ullamcorper, consequat nec arcu. Integer neque tellus, euismod et nisl dapibus, egestas sodales justo. Donec facilisis urna at odio ultrices, sed fringilla nisi euismod. Morbi aliquet eu justo vel convallis. Duis nibh leo, efficitur in est sed, venenatis imperdiet urna. Phasellus egestas malesuada nunc a rhoncus.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+<!--</div>-->
+
+<!--jQuery javascript-->
+<script src="../static/js/jquery/jquery-3.5.1.js" th:src="@{js/jquery/jquery-3.5.1.js}"></script>
+<!--Bootstrap javascript-->
+<script src="../static/js/bootstrap/bootstrap.min.js" th:src="@{js/bootstrap/bootstrap.min.js}"></script>
+<!--Custom javascript-->
+<script src="../static/js/main.js" th:src="@{js/main.js}"></script>
+<script src="../static/js/main_content_adjustments.js" th:src="@{js/main_content_adjustments.js}"></script>
+<script src="../static/js/background_adjustments.js" th:src="@{js/background_adjustments.js}"></script>
+</body>
+</html>
