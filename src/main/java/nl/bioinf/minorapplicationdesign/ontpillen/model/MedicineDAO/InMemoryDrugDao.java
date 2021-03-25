@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class InMemoryDrugDao implements DrugsDao{
-    Map<String, DrugSubstance> drugMap = new HashMap(); // DrugSubstance needs to be abstract class Drug?
+public class InMemoryDrugDao implements DrugsDao {
+    static Map<String, DrugSubstance> drugMap = new HashMap(); // DrugSubstance needs to be abstract class Drug?
 
     @Override
     public Drug getDrugByName(String drugName) {
@@ -48,41 +48,12 @@ public class InMemoryDrugDao implements DrugsDao{
         if(!drugMap.containsKey(drugName)){
             DrugSubstance drugSubstance = new DrugSubstance(); // same here DrugSubstance needs to be abstract class Drug?
             drugSubstance.setName(drugName);
-            drugSubstance.setBrandNames(drugName);
+            drugSubstance.addBrandNames(drugName);
             drugMap.put(drugName, drugSubstance);
         }
     }
 
-    public void addDrugSubstanceBrandName(String drugName, String brandName){
-        DrugSubstance drugSubstance = getDrugSubstance(drugName);
-        drugSubstance.addBrandNames(brandName);
-    }
-
-
-    public void setDrugSubstanceDescription(String drugName, String Description){
-        DrugSubstance drugSubstance = getDrugSubstance(drugName);
-        drugSubstance.setDescription(Description);
-    }
-
-    public void setDrugSubstanceSideEffects(String drugName, List<String> sideEffects){
-        DrugSubstance drugSubstance = getDrugSubstance(drugName);
-        drugSubstance.setSideEffects(sideEffects);
-    }
-
-    public void setDrugSubstanceUseIndications(String drugName, String useIndications){ // or the class Useindication?
-        DrugSubstance drugSubstance = getDrugSubstance(drugName);
-//        drugSubstance.setUseIndications(useIndications);
-    }
-
-    public void setDrugSubstanceStopIndications(String drugName, String stopIndications){ // or the class Stopindication?
-        DrugSubstance drugSubstance = getDrugSubstance(drugName);
-//        drugSubstance.setUseIndications(stopIndications);
-    }
-
-
-    private DrugSubstance getDrugSubstance(String drugName) {
+    static DrugSubstance getDrugSubstance(String drugName) {
         return drugMap.get(drugName);
     }
-
-
 }

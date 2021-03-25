@@ -1,6 +1,5 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO;
 
-import java.util.Collections;
 import java.util.List;
 
 public class DrugSubstance extends Drug {
@@ -10,6 +9,26 @@ public class DrugSubstance extends Drug {
     List<String> sideEffects;
     List<UseIndication> useIndications;
     List<StopIndication>  stopIndications;
+
+    public void setDescription(String Description){
+        this.description = Description;
+    }
+
+    public void addBrandName(String brandName){
+        this.brandNames.add(brandName);
+    }
+
+    public void setSideEffects(List<String> sideEffects){
+        this.sideEffects = sideEffects;
+    }
+
+    public void setUseIndications(List<UseIndication> useIndications){ // or the class Useindication?
+        this.useIndications = useIndications;
+    }
+
+    public void setStopIndications(List<StopIndication> stopIndications){ // or the class Stopindication?
+        this.stopIndications = stopIndications;
+    }
 
     public String getName() {
         return name;
@@ -23,10 +42,6 @@ public class DrugSubstance extends Drug {
         return brandNames;
     }
 
-    public void setBrandNames(String brandNames) {
-        this.brandNames = Collections.singletonList(brandNames);
-    }
-
     public void addBrandNames(String brandNames) {
         this.brandNames.add(brandNames);
     }
@@ -35,31 +50,15 @@ public class DrugSubstance extends Drug {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public List<String> getSideEffects() {
         return sideEffects;
-    }
-
-    public void setSideEffects(List<String> sideEffects) {
-        this.sideEffects = sideEffects;
     }
 
     public List<UseIndication> getUseIndications() {
         return useIndications;
     }
 
-    public void setUseIndications(List<UseIndication> useIndications) {
-        this.useIndications = useIndications;
-    }
-
     public List<StopIndication> getStopIndications() {
         return stopIndications;
-    }
-
-    public void setStopIndications(List<StopIndication> stopIndications) {
-        this.stopIndications = stopIndications;
     }
 }
