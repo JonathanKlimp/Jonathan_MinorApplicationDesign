@@ -6,7 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class InMemoryDrugDao implements DrugsDao {
-    static Map<String, DrugSubstance> drugMap = new HashMap(); // DrugSubstance needs to be abstract class Drug?
+    static Map<String, DrugSubstance> drugMap = new HashMap();
+    static Map<String, DrugsGroup> drugsGroupMap = new HashMap();
 
     @Override
     public Drug getDrugByName(String drugName) {
@@ -27,13 +28,15 @@ public class InMemoryDrugDao implements DrugsDao {
      * This method adds a new drugGroup to the inMemoryDrugDao given a drugGroup.
      * It will check if the drugGroup already exists in the in memory storage.
      * If it does not exist it will add it.
-     * @param drugGroup new drug group to be added
+     * @param drugGroupName new drug group to be added
+     * @param drugsInGroup List of abstract Drug objects with all drugs from the DrugGroup
      */
     @Override
-    public void addDrugsGroup(List<Drug> drugGroup) {
-        if(!drugMap.containsKey(drugGroup)){
+    public void addDrugsGroup(String drugGroupName, List<Drug> drugsInGroup) {
+        if(!drugMap.containsKey(drugGroupName)){
             DrugsGroup drugsGroup = new DrugsGroup();
-            drugsGroup.setChildren(drugGroup);
+            drugsGroup.setChildren(drugsInGroup);
+            drugsGroupMap.put(drugGroupName, drugsGroup);
         }
     }
 
@@ -46,14 +49,14 @@ public class InMemoryDrugDao implements DrugsDao {
     @Override
     public void addDrugSubstance(String drugName) {
         if(!drugMap.containsKey(drugName)){
-            DrugSubstance drugSubstance = new DrugSubstance(); // same here DrugSubstance needs to be abstract class Drug?
+            DrugSubstance drugSubstance = new DrugSubstance();
             drugSubstance.setName(drugName);
-            drugSubstance.addBrandNames(drugName);
+            drugSubstance.addBrandName(drugName);
             drugMap.put(drugName, drugSubstance);
         }
     }
 
-    static DrugSubstance getDrugSubstance(String drugName) {
+    private DrugSubstance getDrugSubstance(String drugName) {
         return drugMap.get(drugName);
     }
 }
