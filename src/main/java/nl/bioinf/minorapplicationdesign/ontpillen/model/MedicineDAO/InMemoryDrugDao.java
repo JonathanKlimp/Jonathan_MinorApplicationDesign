@@ -1,12 +1,20 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class InMemoryDrugDao implements DrugsDao {
-    static Map<String, DrugSubstance> drugMap = new HashMap(); // DrugSubstance needs to be abstract class Drug?
+    static Map<String, DrugSubstance> drugMap = new HashMap();
+    static Map<String, DrugsGroup> drugsGroupMap = new HashMap();
+
+    private static InMemoryDrugDao informationStorage;
+
+    private InMemoryDrugDao() {}
+
+    public static InMemoryDrugDao getInstance() {
+        if (informationStorage == null)
+            informationStorage = new InMemoryDrugDao();
+        return informationStorage;
+    }
 
     @Override
     public Drug getDrugByName(String drugName) {
@@ -18,6 +26,8 @@ public class InMemoryDrugDao implements DrugsDao {
         return drugMap.keySet();
     }
 
+    public Set<String> getListOfDrugsGroups() {return drugsGroupMap.keySet();}
+
     @Override
     public List<Drug> listDrugsRecursive() {
         return null;
@@ -26,14 +36,21 @@ public class InMemoryDrugDao implements DrugsDao {
     /**
      * This method adds a new drugGroup to the inMemoryDrugDao given a drugGroup.
      * It will check if the drugGroup already exists in the in memory storage.
-     * If it does not exist it will add it.
-     * @param drugGroup new drug group to be added
+     * If it does not exist it will add it. It will add the medicines of that group to the class DrugGroup
+     * @param drugGroupName new drug group to be added
+     * @param drugsInGroup List of abstract Drug objects with all drugs from the DrugGroup
      */
     @Override
-    public void addDrugsGroup(List<Drug> drugGroup) {
-        if(!drugMap.containsKey(drugGroup)){
+    public void addDrugsGroup(String drugGroupName, List<String> drugsInGroup) {
+        if(!drugMap.containsKey(drugGroupName)){
+            List<Drug> newDrugsInGroup = new ArrayList<>();
             DrugsGroup drugsGroup = new DrugsGroup();
-            drugsGroup.setChildren(drugGroup);
+            for(String medicine : drugsInGroup){
+                addDrugSubstance(medicine);
+                newDrugsInGroup.add(getDrugByName(medicine));
+            }
+            drugsGroup.setChildren(newDrugsInGroup);
+            drugsGroupMap.put(drugGroupName, drugsGroup);
         }
     }
 
@@ -46,14 +63,14 @@ public class InMemoryDrugDao implements DrugsDao {
     @Override
     public void addDrugSubstance(String drugName) {
         if(!drugMap.containsKey(drugName)){
-            DrugSubstance drugSubstance = new DrugSubstance(); // same here DrugSubstance needs to be abstract class Drug?
+            DrugSubstance drugSubstance = new DrugSubstance();
             drugSubstance.setName(drugName);
-            drugSubstance.addBrandNames(drugName);
+            drugSubstance.addBrandName(drugName);
             drugMap.put(drugName, drugSubstance);
         }
     }
 
-    static DrugSubstance getDrugSubstance(String drugName) {
+    private DrugSubstance getDrugSubstance(String drugName) {
         return drugMap.get(drugName);
     }
 }

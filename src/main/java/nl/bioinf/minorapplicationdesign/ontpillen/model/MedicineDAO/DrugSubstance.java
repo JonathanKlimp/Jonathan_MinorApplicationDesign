@@ -1,13 +1,14 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DrugSubstance extends Drug {
     String name;
-    List<String> brandNames;
+    List<String> brandNames = new ArrayList<>();
     String description;
     List<String> sideEffects;
-    List<UseIndication> useIndications;
+    List<String> useIndications;
     List<StopIndication>  stopIndications;
 
     public void setDescription(String Description){
@@ -22,11 +23,11 @@ public class DrugSubstance extends Drug {
         this.sideEffects = sideEffects;
     }
 
-    public void setUseIndications(List<UseIndication> useIndications){ // or the class Useindication?
+    public void setUseIndications(List<String> useIndications){
         this.useIndications = useIndications;
     }
 
-    public void setStopIndications(List<StopIndication> stopIndications){ // or the class Stopindication?
+    public void setStopIndications(List<StopIndication> stopIndications){
         this.stopIndications = stopIndications;
     }
 
@@ -42,10 +43,6 @@ public class DrugSubstance extends Drug {
         return brandNames;
     }
 
-    public void addBrandNames(String brandNames) {
-        this.brandNames.add(brandNames);
-    }
-
     public String getDescription() {
         return description;
     }
@@ -54,7 +51,7 @@ public class DrugSubstance extends Drug {
         return sideEffects;
     }
 
-    public List<UseIndication> getUseIndications() {
+    public List<String> getUseIndications() {
         return useIndications;
     }
 
