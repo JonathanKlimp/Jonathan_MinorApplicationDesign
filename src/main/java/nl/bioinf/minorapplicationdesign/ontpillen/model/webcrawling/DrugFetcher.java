@@ -31,9 +31,7 @@ public class DrugFetcher extends AbstractWebcrawler {
             Element tag = uppergroup.get(0);
             if (tag.nextElementSibling().is("ul")) {
                 medicines.put(tag.text(),tag.nextElementSibling().select("li").eachText());
-                for(String medicine : tag.nextElementSibling().select("li").eachText()){
-                    this.informationStorage.addDrugSubstance(medicine);
-                }
+                this.informationStorage.addDrugsGroup(tag.text(), tag.nextElementSibling().select("li").eachText());
             } else {
                 String query = tag.nextElementSibling().tagName() + ":not(ul)";
                 drugGroups.put(tag.text(),tag.nextElementSiblings().select(query).eachText());

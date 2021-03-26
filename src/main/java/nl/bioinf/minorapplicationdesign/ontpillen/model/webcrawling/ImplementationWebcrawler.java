@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImplementationWebcrawler {
-    DrugsDao informationStorage = new InMemoryDrugDao(); // make singleton
+    InMemoryDrugDao informationStorage = InMemoryDrugDao.getInstance();
 
     public void runWebcrawlers() throws IOException {
 //        FarmacoWebcrawler farmacoWebcrawler = new FarmacoWebcrawler(informationStorage);
@@ -17,7 +17,6 @@ public class ImplementationWebcrawler {
 
         DrugFetcher drugFetcher = new DrugFetcher(informationStorage);
         drugFetcher.getInformation();
-        System.out.println(informationStorage.getListOfDrugs());
 
 //        ApotheekWebcrawler apotheekWebcrawler = new ApotheekWebcrawler(informationStorage);
 //        apotheekWebcrawler.getInformation();

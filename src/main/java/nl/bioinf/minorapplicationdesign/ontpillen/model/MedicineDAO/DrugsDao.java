@@ -8,5 +8,5 @@ public interface DrugsDao {
     Set<String> getListOfDrugs();
     List<Drug> listDrugsRecursive();
     void addDrugSubstance(String drugName);
-    void addDrugsGroup(String drugGroupName, List<Drug> drugsInGroup);
+    void addDrugsGroup(String drugGroupName, List<String> drugsInGroup);
 }
