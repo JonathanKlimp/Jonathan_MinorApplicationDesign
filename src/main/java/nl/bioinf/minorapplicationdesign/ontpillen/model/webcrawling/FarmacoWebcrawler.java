@@ -18,6 +18,7 @@ public class FarmacoWebcrawler extends AbstractWebcrawler {
         super(drugsDao);
     }
 
+
     @Override
     public List<String> getInformation() {
         String drugs = getDrugs(informationStorage);
@@ -28,7 +29,7 @@ public class FarmacoWebcrawler extends AbstractWebcrawler {
 
     private String getDrugs(DrugsDao informationStorage) {
         Drug drug = new DrugsGroup();
-        informationStorage.addDrug(null);
+        informationStorage.addDrugSubstance(null);
         return null;
     }
 

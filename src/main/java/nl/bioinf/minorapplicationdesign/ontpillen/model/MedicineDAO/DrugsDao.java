@@ -1,14 +1,12 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 public interface DrugsDao {
-
-
-    String getDrugByName();
-    List<Drug> listDrugs();
+    Drug getDrugByName(String drugName);
+    Set<String> getListOfDrugs();
     List<Drug> listDrugsRecursive();
-    void addDrug(Drug drug);
+    void addDrugSubstance(String drugName);
+    void addDrugsGroup(String drugGroupName, List<String> drugsInGroup);
 }

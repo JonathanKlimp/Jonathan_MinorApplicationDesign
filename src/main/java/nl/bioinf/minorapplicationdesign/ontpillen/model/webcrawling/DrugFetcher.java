@@ -1,6 +1,7 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.webcrawling;
 
 
+import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.DrugsDao;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,12 +10,16 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.*;
 
-public class DrugFetcher {
+public class DrugFetcher extends AbstractWebcrawler {
+    DrugFetcher(DrugsDao drugsDao) {
+        super(drugsDao);
+    }
+
     static List<Element> uppergroup;
     static HashMap<String, List<String>> drugGroups = new HashMap<>();
     static HashMap<String, List<String>> medicines = new HashMap<>();
 
-    public static void parseDrugs() throws IOException {
+    public void parseDrugs() throws IOException {
         SSLHelper.bypassSSL();
         String url = "https://www.farmacotherapeutischkompas.nl/bladeren/categorie/psychiatrie";
         Document doc = Jsoup.connect(url).get();
@@ -22,10 +27,11 @@ public class DrugFetcher {
         checkUl(uppergroup);
         }
 
-        private static void checkUl(List<Element> uppergroup){
+        private void checkUl(List<Element> uppergroup){
             Element tag = uppergroup.get(0);
             if (tag.nextElementSibling().is("ul")) {
                 medicines.put(tag.text(),tag.nextElementSibling().select("li").eachText());
+                this.informationStorage.addDrugsGroup(tag.text(), tag.nextElementSibling().select("li").eachText());
             } else {
                 String query = tag.nextElementSibling().tagName() + ":not(ul)";
                 drugGroups.put(tag.text(),tag.nextElementSiblings().select(query).eachText());
@@ -37,5 +43,11 @@ public class DrugFetcher {
                 checkUl(uppergroup);
             }
         }
+
+    @Override
+    public List<String> getInformation() throws IOException {
+        parseDrugs();
+        return null;
     }
+}
 
