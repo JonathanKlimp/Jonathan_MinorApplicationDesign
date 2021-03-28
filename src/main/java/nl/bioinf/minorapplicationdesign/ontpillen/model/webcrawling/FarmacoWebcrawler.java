@@ -33,16 +33,15 @@ public class FarmacoWebcrawler extends AbstractWebcrawler {
         return null;
     }
 
-    private static Document getConnection(String medicine) throws IOException {
+    private Document getConnection(String medicine) throws IOException {
         String basicUrl = "https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/";
         String completeUrl = (basicUrl + medicine.charAt(0) + "/" + medicine).toLowerCase(Locale.ROOT);
         Document doc = Jsoup.connect(completeUrl).get();
         return doc;
     }
-
-    public static void main(String[] args) throws IOException {
+    // FIXME needs to be linked to the data model
+    private void parseInformation(DrugsDao informationStorage, List<String> druglist) throws IOException {
         SSLHelper.bypassSSL();
-        List<String> druglist = List.of("Temazepam", "Citalopram", "Lorazepam");
 
         for (String medicine: druglist) {
             Document doc = getConnection(medicine);
