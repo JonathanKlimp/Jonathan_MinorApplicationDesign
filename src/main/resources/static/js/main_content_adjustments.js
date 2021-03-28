@@ -6,6 +6,9 @@ $(document).ready(() => {
     const $homeMainContentCardBody = $("#home-main-content-row .card-body");
     const $homeMainContentCardContent = $("#home-main-content-row .card-content");
     const $homeMainContentCardNav = $("#home-main-content-row .card ul.nav");
+    const $startListButton = $("select#gender");
+
+    $startListButton.prop("selectedIndex", -1);
 
     calculateHeightsHomeMainContent()
 

@@ -1,7 +1,7 @@
 $(document).ready(() => {
     //Get dom elements
     const $backgroundColor = $("#background-color");
-    const $mainContent = $("#content");
+    const $mainContent = $(".content");
     const $backgroundImage = $("#background-image");
     const $header = $("#header");
     const $gradient = $("#gradient");

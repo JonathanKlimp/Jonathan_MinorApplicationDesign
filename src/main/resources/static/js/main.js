@@ -1,5 +1,5 @@
 $(document).ready(() => {
-    const $mainSection = $("#main-section");
+    const $mainSection = $("#main-wrapper");
     const $header = $("#header");
 
     $mainSection.css({
