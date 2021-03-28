@@ -1,0 +1,102 @@
+:root {
+    --color-primary: rgb(138, 158, 167);
+    --color-secondary: rgb(141, 155, 106);
+    --color-secondary-70: rgba(141, 155, 106, 0.7);
+    --color-dark: rgb(44, 44, 44);
+    --color-gray: rgb(112, 112, 112);
+    --color-accent: rgb(214, 5, 55);
+    --color-accent-dark: rgb(149,3,38);
+    --color-light: rgb(239, 239, 237);
+}
+
+html, body {
+    height: 100%;
+    color: var(--color-light);
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+nav#header, footer {
+    background-color: var(--color-primary);
+}
+
+div#background-image {
+    background-image: url("../images/pexels-artem-podrez-4492103.jpg");
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100vh;
+}
+
+div#gradient {
+    background-image: linear-gradient(rgba(224, 215, 210, 0) , #F3F3F3);
+    height: 200px;
+    width: 100%;
+}
+
+div#background-color {
+    background-color: #F3F3F3;
+    width: 100%;
+}
+
+div.content {
+    width: 100%;
+}
+
+.home-content-col {
+    background-color: var(--color-secondary-70);
+}
+
+.border-radius-18 {
+    border-radius: 18px;
+}
+
+#home-main-content-row .card-body ul.nav li {
+    border-right: 1px solid var(--color-gray);
+}
+
+#home-main-content-row .card-body ul.nav li:last-of-type {
+    border: unset;
+}
+
+#home-main-content-row .card-body ul.nav button {
+    background-color: unset;
+    border: unset;
+    color: var(--color-gray);
+}
+
+#home-main-content-row .card-body ul.nav button.active {
+    color: var(--color-light);
+}
+
+#home-main-content-row .card-content #search-form {
+    -ms-transform: translate(-50%, -100%);
+    transform: translate(-50%, -100%);
+}
+
+.btn-primary {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0.25rem rgba(0, 0, 0, 0.5) ;
+}
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+    background-color: var(--color-accent-dark);
+    border-color: var(--color-accent-dark);
+    box-shadow: unset;
+}
+
+.btn-primary:active, .btn-primary:focus, .btn-primary:active:focus {
+    box-shadow: 0 0 0.25rem rgba(255, 255, 255, 0.5);
+}
+
+#home-main-content-row .card-content .btn-primary {
+    /*display: block;*/
+    width: 100%;
+}
+
+form select#gender:not(form select#gender:focus, form select#gender:active) {
+    box-shadow: unset;
+}
