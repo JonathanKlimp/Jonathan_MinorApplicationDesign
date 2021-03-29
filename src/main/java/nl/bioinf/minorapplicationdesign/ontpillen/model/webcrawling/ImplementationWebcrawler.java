@@ -1,30 +1,27 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.webcrawling;
 
 
-import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.DrugsDao;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.InMemoryDrugDao;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ImplementationWebcrawler {
     InMemoryDrugDao informationStorage = InMemoryDrugDao.getInstance();
 
     public void runWebcrawlers() throws IOException {
-//        FarmacoWebcrawler farmacoWebcrawler = new FarmacoWebcrawler(informationStorage);
+//        FarmacoWebScraper farmacoWebcrawler = new FarmacoWebScraper(drugDao);
 //        farmacoWebcrawler.getInformation();
 
         DrugFetcher drugFetcher = new DrugFetcher(informationStorage);
-        drugFetcher.getInformation();
+        drugFetcher.parseHtml();
 
-//        ApotheekWebcrawler apotheekWebcrawler = new ApotheekWebcrawler(informationStorage);
+//        ApotheekWebScraper apotheekWebcrawler = new ApotheekWebScraper(drugDao);
 //        apotheekWebcrawler.getInformation();
 //
-//        RichtlijnenNhgWebcrawler richtlijnenNhgWebcrawler = new RichtlijnenNhgWebcrawler(informationStorage);
+//        RichtlijnenNhgWebScraper richtlijnenNhgWebcrawler = new RichtlijnenNhgWebScraper(drugDao);
 //        richtlijnenNhgWebcrawler.getInformation();
 //
-//        GgzStandaardenWebcrawler ggzStandaardenWebcrawler = new GgzStandaardenWebcrawler(informationStorage);
+//        GgzStandaardenWebScraper ggzStandaardenWebcrawler = new GgzStandaardenWebScraper(drugDao);
 //        ggzStandaardenWebcrawler.getInformation();
     }
 

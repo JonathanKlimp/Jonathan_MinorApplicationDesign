@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DrugSubstance extends Drug {
-    String name;
-    List<String> brandNames = new ArrayList<>();
-    String description;
-    List<String> sideEffects;
-    List<String> useIndications;
-    List<StopIndication>  stopIndications;
+    private List<String> brandNames = new ArrayList<>();
+    private String description;
+    private List<String> sideEffects;
+    private List<String> useIndications;
+    private List<StopIndication>  stopIndications;
+
+    public DrugSubstance(String name) {
+        super(name);
+    }
 
     public void setDescription(String Description){
         this.description = Description;
@@ -32,7 +35,7 @@ public class DrugSubstance extends Drug {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
