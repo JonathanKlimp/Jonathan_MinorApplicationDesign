@@ -1,20 +1,20 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.webcrawling;
 
-import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.DrugsDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.DrugDao;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApotheekWebcrawler extends AbstractWebcrawler {
+public class ApotheekWebScraper extends AbstractWebScraper {
 
-    ApotheekWebcrawler(DrugsDao drugsDao) {
-        super(drugsDao);
+    ApotheekWebScraper(DrugDao drugDao) {
+        super(drugDao);
     }
 
     List<String> information = new ArrayList<>();
 
     @Override
-    public List<String> getInformation() {
+    public void parseHtml() {
         String description = getDescription();
         String sideEffects = getSideEffects();
         String stopIndication = getStopIndication();
@@ -24,7 +24,6 @@ public class ApotheekWebcrawler extends AbstractWebcrawler {
         information.add(sideEffects);
         information.add(stopIndication);
         information.add(interactions);
-        return information;
     }
 
     private String getInteractions() {
