@@ -1,12 +1,27 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public abstract class Drug {
-    int ID;
-    String name;
-    Drug parent;
+    protected String name;
+    protected Drug parent;
+
+    public Drug(String name) {
+        this.setName(name);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Drug getParent() {
+        return parent;
+    }
+
+    public void setParent(Drug parent) {
+        this.parent = parent;
+    }
 }
