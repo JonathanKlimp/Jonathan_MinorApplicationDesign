@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--Bootstrap css-->
+    <link href="../static/css/bootstrap/bootstrap.min.css" th:href="@{css/bootstrap/bootstrap.min.css}" rel="stylesheet">
+
+    <!--Custom css-->
+    <link href="../static/css/main.css" th:href="@{css/main.css}" rel="stylesheet">
+    <title>Ontpillen</title>
+</head>
+<body>
+
+<ul th:object="${user}">
+    <li th:text="*{age}"></li>
+    <li th:text="*{gender}"><</li>
+</ul>
+
+</body>
+</html>
