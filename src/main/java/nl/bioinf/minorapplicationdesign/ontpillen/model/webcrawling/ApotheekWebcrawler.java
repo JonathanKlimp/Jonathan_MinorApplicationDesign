@@ -45,7 +45,7 @@ public class ApotheekWebcrawler extends AbstractWebcrawler {
     private static String getSideEffects(Document doc) {
         List<String> sideEffects = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen").eachText();
         System.out.println(sideEffects);
-        //TODO eerste kopje weg en de rest behouden?
+        //TODO eerste kopje weg en de rest behouden? Frequenties niet perse nodig?
         return null;
     }
 

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO Hier heb je unit tests voor
 public class ImplementationWebcrawler {
     InMemoryDrugDao informationStorage = InMemoryDrugDao.getInstance();
 

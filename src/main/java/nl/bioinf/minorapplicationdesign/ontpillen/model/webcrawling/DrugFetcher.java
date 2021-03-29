@@ -18,7 +18,7 @@ public class DrugFetcher extends AbstractWebcrawler {
     static List<Element> uppergroup;
     static HashMap<String, List<String>> drugGroups = new HashMap<>();
     static HashMap<String, List<String>> medicines = new HashMap<>();
-
+    //TODO Url needs to be a property
     public void parseDrugs() throws IOException {
         SSLHelper.bypassSSL();
         String url = "https://www.farmacotherapeutischkompas.nl/bladeren/categorie/psychiatrie";

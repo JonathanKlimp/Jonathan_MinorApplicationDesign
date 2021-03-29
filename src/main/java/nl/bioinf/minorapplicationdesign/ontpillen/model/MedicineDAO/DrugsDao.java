@@ -3,6 +3,7 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO;
 import java.util.List;
 import java.util.Set;
 
+//TODO java doc
 public interface DrugsDao {
     Drug getDrugByName(String drugName);
     Set<String> getListOfDrugs();
