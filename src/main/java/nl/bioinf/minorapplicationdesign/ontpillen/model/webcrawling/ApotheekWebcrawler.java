@@ -45,14 +45,14 @@ public class ApotheekWebcrawler extends AbstractWebcrawler {
     private static String getSideEffects(Document doc) {
         List<String> sideEffects = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen").eachText();
         System.out.println(sideEffects);
-        //TODO eerste kopje weg en de rest behouden? Frequenties niet perse nodig?
+        //TODO Titel weg en frequenties niet nodig
         return null;
     }
 
     private static String getDescription(Document doc) {
         Elements useIndicationTag = doc.getElementsByAttributeValueContaining("data-print", "waarbij gebruik");
-        System.out.println(useIndicationTag.select("h2").eachText());
-        //TODO Wat willen we precies hebben? Ook de info onder depressie etc of alleen de algemene info?
+        System.out.println(useIndicationTag.select("h2:contains(Gebruik )").eachText());
+        //TODO alleen de algemene info
         return null;
     }
 
@@ -68,7 +68,7 @@ public class ApotheekWebcrawler extends AbstractWebcrawler {
         for (String drug: medicines) {
             Document doc = getConnection(drug);
             getDescription(doc);
-            getSideEffects(doc);
+            //getSideEffects(doc);
 
         }
     }
