@@ -43,16 +43,16 @@ public class ApotheekWebcrawler extends AbstractWebcrawler {
     }
 
     private static String getSideEffects(Document doc) {
-        List<String> sideEffects = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen").eachText();
-        System.out.println(sideEffects);
+        Elements sideEffects = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen").select(" .listItemContent_text__otIdg, .sideEffects_sideEffects__sczbd");
+        System.out.println(sideEffects.eachText());
         //TODO Titel weg en frequenties niet nodig
         return null;
     }
 
     private static String getDescription(Document doc) {
-        Elements useIndicationTag = doc.getElementsByAttributeValueContaining("data-print", "waarbij gebruik");
-        System.out.println(useIndicationTag.select("h2:contains(Gebruik )").eachText());
-        //TODO alleen de algemene info
+        Element useIndicationTag = doc.getElementsByAttributeValueContaining("data-print", "waarbij gebruik").select(".listItemContent_text__otIdg").get(0);
+        System.out.println(useIndicationTag.children().eachText());
+        //TODO add to the datamodel
         return null;
     }
 
@@ -67,8 +67,8 @@ public class ApotheekWebcrawler extends AbstractWebcrawler {
         List<String> medicines = List.of("citalopram", "lorazepam", "Temazepam");
         for (String drug: medicines) {
             Document doc = getConnection(drug);
-            getDescription(doc);
-            //getSideEffects(doc);
+            //getDescription(doc);
+            getSideEffects(doc);
 
         }
     }
