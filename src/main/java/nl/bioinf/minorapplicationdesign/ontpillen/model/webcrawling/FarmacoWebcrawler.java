@@ -48,6 +48,8 @@ public class FarmacoWebcrawler extends AbstractWebcrawler {
             Elements h2Tags = doc.getElementsByTag("h2");
             List<String> sideEffects = h2Tags.select(":contains(Bijwerkingen)").nextAll().select("p").eachText();
             List<String> drugDescription = h2Tags.select(":contains(Advies)").nextAll().eachText();
+            System.out.println(sideEffects);
+            System.out.println(drugDescription);
 
         }
 
