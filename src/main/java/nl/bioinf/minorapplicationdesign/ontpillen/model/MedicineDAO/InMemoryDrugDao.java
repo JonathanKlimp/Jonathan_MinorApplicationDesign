@@ -10,15 +10,15 @@ public class InMemoryDrugDao implements DrugDao {
     static private Map<String, DrugGroup> mainDrugGroups = new HashMap();
     static private Map<String, Drug> allDrugs = new HashMap<>();
 
-    private static InMemoryDrugDao informationStorage;
-
-    private InMemoryDrugDao() {}
-
-    public static InMemoryDrugDao getInstance() {
-        if (informationStorage == null)
-            informationStorage = new InMemoryDrugDao();
-        return informationStorage;
-    }
+//    private static InMemoryDrugDao informationStorage;
+//
+//    private InMemoryDrugDao() {}
+//
+//    public static InMemoryDrugDao getInstance() {
+//        if (informationStorage == null)
+//            informationStorage = new InMemoryDrugDao();
+//        return informationStorage;
+//    }
 
     @Override
     public void addDrug(Drug drug) {

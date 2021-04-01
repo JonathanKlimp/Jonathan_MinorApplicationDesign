@@ -7,7 +7,7 @@ import java.util.List;
 
 public abstract class AbstractWebScraper {
     List<String> information = null;
-    DrugDao drugDao;
+    protected DrugDao drugDao;
 
     AbstractWebScraper(DrugDao drugDao){
         this.drugDao = drugDao;
