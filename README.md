@@ -67,6 +67,7 @@ and will show different protocols on how to reduce the usage of them. This infor
 which can be used to consult their doctor. 
 The other page is for doctors this page is fairly similar to the user one. Here more detailed information about 
 the drugs is shown.
+
 DISCLAIMER: The information on this website is no advice! Always consult you doctor.
 
 
@@ -75,6 +76,7 @@ DISCLAIMER: The information on this website is no advice! Always consult you doc
 * [Bootstrap](https://getbootstrap.com)
 * [JQuery](https://jquery.com)
 * [Java](https://java.com)
+* [JavaScript](https://www.javascript.com)
 
 
 
@@ -142,7 +144,7 @@ Project Link: [https://github.com/MinorApplicationDesign/MinorApplicationDesign]
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 
-* []()
+* [Img Shields](https://shields.io)
 * []()
 * []()
 
