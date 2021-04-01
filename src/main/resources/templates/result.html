@@ -18,5 +18,11 @@
     <li th:text="*{gender}"><</li>
 </ul>
 
+<ul th:object="${drugDao}" style="color: #0c4128">
+    <li th:each="drug : *{drugSubstances}">
+        <p th:text="${drug.getName()}"></p>
+    </li>
+</ul>
+
 </body>
 </html>
