@@ -107,13 +107,13 @@ This is an example of how to list things you need to use the software and how to
 
 
 
-<!-- USAGE EXAMPLES 
+<!-- USAGE EXAMPLES --> 
 ## Usage
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
 _For more examples, please refer to the [Documentation](https://example.com)_
--->
+
 
 
 <!-- ROADMAP 
@@ -145,9 +145,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Larrisa Bouwknegt  - l.bouwknegt@st.hanze.nl
-Naomi Hindriks - n.j.hindriks@st.hanze.nl
-Jonathan Klimp - j.klimp@st.hanze.nl
+* Larrisa Bouwknegt  - l.bouwknegt@st.hanze.nl
+* Naomi Hindriks - n.j.hindriks@st.hanze.nl
+* Jonathan Klimp - j.klimp@st.hanze.nl
 
 Project Link: [https://github.com/MinorApplicationDesign/MinorApplicationDesign](https://github.com/MinorApplicationDesign/MinorApplicationDesign)
 
@@ -168,13 +168,11 @@ Project Link: [https://github.com/MinorApplicationDesign/MinorApplicationDesign]
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/MinorApplicationDesign/repo.svg?style=for-the-badge
 [contributors-url]: https://github.com/MinorApplicationDesign/MinorApplicationDesign/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/MinorApplicationDesign/MinorApplicationDesign?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/MinorApplicationDesign/MinorApplicationDesign.svg?style=for-the-badge
 [forks-url]: https://github.com/MinorApplicationDesign/MinorApplicationDesign/network/members
-[stars-shield]: https://img.shields.io/github/stars/MinorApplicationDesign/MinorApplicationDesign?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/MinorApplicationDesign/MinorApplicationDesign.svg?style=for-the-badge
 [stars-url]: https://github.com/MinorApplicationDesign/repo/stargazers
-[issues-shield]: https://img.shields.io/github/issues/MinorApplicationDesign/MinorApplicationDesign?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/MinorApplicationDesign/MinorApplicationDesign.svg?style=for-the-badge
 [issues-url]: https://github.com/MinorApplicationDesign/repo/issues
-[license-shield]: https://img.shields.io/github/license/MinorApplicationDesign/MinorApplicationDesign?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/MinorApplicationDesign/MinorApplicationDesign.svg?style=for-the-badge
 [license-url]: https://github.com/MinorApplicationDesign/repo/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/github_username
