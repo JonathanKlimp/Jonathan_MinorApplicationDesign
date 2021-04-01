@@ -5,6 +5,7 @@ import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.InMemoryDrug
 
 import java.io.IOException;
 
+//TODO Hier heb je unit tests voor
 public class ImplementationWebcrawler {
     InMemoryDrugDao informationStorage = InMemoryDrugDao.getInstance();
 
