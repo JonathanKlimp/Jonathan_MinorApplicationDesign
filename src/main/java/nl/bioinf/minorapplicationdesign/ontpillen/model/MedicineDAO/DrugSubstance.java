@@ -3,6 +3,7 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO needs to be private
 public class DrugSubstance extends Drug {
     private List<String> brandNames = new ArrayList<>();
     private String description;
