@@ -32,8 +32,6 @@ public class DrugFetcher extends AbstractWebScraper {
         Element currentDrugElement = this.drugGroups.get(0);
         DrugGroup currentDrug;
 
-        System.out.println(this.drugDao);
-
         if (!this.drugDao.getAllDrugNames().contains(currentDrugElement.text())) {
             this.drugDao.addDrug(new DrugGroup(currentDrugElement.text()));
         }
@@ -79,16 +77,16 @@ public class DrugFetcher extends AbstractWebScraper {
         parseDrugs();
     }
 
-    public static void main(String[] args) throws IOException {
-        DrugFetcher myDrugFetcher = new DrugFetcher(InMemoryDrugDao.getInstance());
-        myDrugFetcher.parseDrugs();
-
-//        Print drugs for demo sprint 2
-        for (Drug drug : InMemoryDrugDao.getInstance().getMainDrugGroups()) {
-            printDrugsRecursive(drug, 0);
-        }
-
-    }
+//    public static void main(String[] args) throws IOException {
+//        DrugFetcher myDrugFetcher = new DrugFetcher(InMemoryDrugDao.getInstance());
+//        myDrugFetcher.parseDrugs();
+//
+////        Print drugs for demo sprint 2
+//        for (Drug drug : InMemoryDrugDao.getInstance().getMainDrugGroups()) {
+//            printDrugsRecursive(drug, 0);
+//        }
+//
+//    }
 
 
     /**
@@ -96,12 +94,11 @@ public class DrugFetcher extends AbstractWebScraper {
      * @param drug The drug to print and print the children from
      * @param depth The current depth (number of parents above this drug)
      */
-    public static void printDrugsRecursive(Drug drug, int depth) {
-        System.out.println("\t".repeat(depth) + drug.getName());
-        if (drug instanceof DrugGroup) {
-            for (Drug child : ((DrugGroup) drug).getChildren())
-            printDrugsRecursive(child, depth + 1);
-        }
-    }
+//    public static void printDrugsRecursive(Drug drug, int depth) {
+//        System.out.println("\t".repeat(depth) + drug.getName());
+//        if (drug instanceof DrugGroup) {
+//            for (Drug child : ((DrugGroup) drug).getChildren())
+//            printDrugsRecursive(child, depth + 1);
+//        }
+//    }
 }
-
