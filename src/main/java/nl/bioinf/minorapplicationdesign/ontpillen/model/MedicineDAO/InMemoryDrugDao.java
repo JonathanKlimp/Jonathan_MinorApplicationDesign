@@ -34,7 +34,7 @@ public class InMemoryDrugDao implements DrugDao {
     @Override
     public Drug getDrugByName(String drugName) {
         if (!allDrugs.containsKey(drugName)) {
-            throw new IllegalArgumentException(drugName + "does not exist.");
+            throw new IllegalArgumentException(drugName + " does not exist.");
         }
         return allDrugs.get(drugName);
     }
