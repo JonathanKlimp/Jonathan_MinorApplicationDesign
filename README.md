@@ -1,25 +1,4 @@
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Thanks again! Now go create something AMAZING! :D
-***
-***
-***
-*** To avoid retyping too much info. Do a search and replace for the following:
-*** github_username, repo_name, twitter_handle, email, project_title, project_description
--->
-
-
-
 <!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 
@@ -79,10 +58,18 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-
-
-<!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
+There is alot of information on the internet for different kinds of drugs. However information 
+about the reduction of drugs usage is hard to some by. The goal of our website is to make information about
+the reduction of drugs usage easy accessible for users.  
+The onpillen website has two pages one page is for the users, here drug users can search for single medicines or
+make a list with all the drugs they are using. The website will show general information about the different medicines 
+and will show different protocols on how to reduce the usage of them. This information can be saved to a pdf document
+which can be used to consult their doctor. 
+The other page is for doctors this page is fairly similar to the user one. Here more detailed information about 
+the drugs is shown.
+DISCLAIMER: The information on this website is no advice! Always consult you doctor.
 
 
 ### Built With
@@ -93,7 +80,7 @@
 
 
 
-<!-- GETTING STARTED -->
+<!-- GETTING STARTED 
 ## Getting Started
 
 To get a local copy up and running follow these simple steps.
@@ -116,26 +103,26 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    npm install
    ```
+  -->
 
 
 
-<!-- USAGE EXAMPLES -->
+<!-- USAGE EXAMPLES 
 ## Usage
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
 _For more examples, please refer to the [Documentation](https://example.com)_
+-->
 
 
-
-<!-- ROADMAP -->
+<!-- ROADMAP 
 ## Roadmap
 
 See the [open issues](https://github.com/github_username/repo_name/issues) for a list of proposed features (and known issues).
+-->
 
-
-
-<!-- CONTRIBUTING -->
+<!-- CONTRIBUTING 
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -145,22 +132,24 @@ Contributions are what make the open source community such an amazing place to b
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+-->
 
 
-
-<!-- LICENSE -->
+<!-- LICENSE 
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
+-->
 
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email
+Larrisa Bouwknegt  - l.bouwknegt@st.hanze.nl
+Naomi Hindriks - n.j.hindriks@st.hanze.nl
+Jonathan Klimp - j.klimp@st.hanze.nl
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/MinorApplicationDesign/MinorApplicationDesign](https://github.com/MinorApplicationDesign/MinorApplicationDesign)
 
 
 
@@ -177,7 +166,7 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/MinorApplicationDesign/repo.svg?style=for-the-badge
 [contributors-url]: https://github.com/MinorApplicationDesign/MinorApplicationDesign/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/MinorApplicationDesign/MinorApplicationDesign?style=for-the-badge
 [forks-url]: https://github.com/MinorApplicationDesign/MinorApplicationDesign/network/members
