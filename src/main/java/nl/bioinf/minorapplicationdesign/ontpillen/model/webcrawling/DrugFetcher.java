@@ -1,7 +1,7 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.webcrawling;
 
 
-import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.DrugsDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,44 +10,98 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.*;
 
-public class DrugFetcher extends AbstractWebcrawler {
-    DrugFetcher(DrugsDao drugsDao) {
-        super(drugsDao);
+public class DrugFetcher extends AbstractWebScraper {
+    private List<Element> drugGroups;
+
+    DrugFetcher(DrugDao drugDao) {
+        super(drugDao);
     }
 
-    static List<Element> uppergroup;
-    static HashMap<String, List<String>> drugGroups = new HashMap<>();
-    static HashMap<String, List<String>> medicines = new HashMap<>();
-    //TODO Url needs to be a property
     public void parseDrugs() throws IOException {
+//        Bypass certificate security for all connections after this point
         SSLHelper.bypassSSL();
         String url = "https://www.farmacotherapeutischkompas.nl/bladeren/categorie/psychiatrie";
         Document doc = Jsoup.connect(url).get();
-        uppergroup = doc.getElementsByClass("pat-rich group-2").select("h2");
-        checkUl(uppergroup);
+        this.drugGroups = doc.getElementsByClass("pat-rich group-2").select("h2");
+        checkUl();
+    }
+
+//    To do: change name into something more appropriate
+//    To do: Method too long, try to extract methods from it.
+    private void checkUl(){
+        Element currentDrugElement = this.drugGroups.get(0);
+        DrugGroup currentDrug;
+
+        System.out.println(this.drugDao);
+
+        if (!this.drugDao.getAllDrugNames().contains(currentDrugElement.text())) {
+            this.drugDao.addDrug(new DrugGroup(currentDrugElement.text()));
         }
 
-        private void checkUl(List<Element> uppergroup){
-            Element tag = uppergroup.get(0);
-            if (tag.nextElementSibling().is("ul")) {
-                medicines.put(tag.text(),tag.nextElementSibling().select("li").eachText());
-                this.informationStorage.addDrugsGroup(tag.text(), tag.nextElementSibling().select("li").eachText());
-            } else {
-                String query = tag.nextElementSibling().tagName() + ":not(ul)";
-                drugGroups.put(tag.text(),tag.nextElementSiblings().select(query).eachText());
-                Elements sibling = tag.nextElementSiblings().select(query);
-                uppergroup.addAll(sibling);
+        currentDrug = (DrugGroup) drugDao.getDrugByName(currentDrugElement.text());
+
+        if (currentDrugElement.nextElementSibling().is("ul")) {
+            List<String> childrenNames = currentDrugElement.nextElementSibling().select("li").eachText();
+
+            for (String childName:childrenNames) {
+                DrugSubstance newDrugSubstance = new DrugSubstance(childName);
+                newDrugSubstance.setParent(currentDrug);
+                currentDrug.addChild(newDrugSubstance);
+                drugDao.addDrug(newDrugSubstance);
             }
-            uppergroup.remove(0);
-            if (uppergroup.size() != 0) {
-                checkUl(uppergroup);
+
+        } else {
+            String query = currentDrugElement.nextElementSibling().tagName();
+            Elements nextGroupSiblings = currentDrugElement.nextElementSiblings().select(query);
+
+            List<String> childrenNames = nextGroupSiblings.eachText();
+
+            for (String childName:childrenNames) {
+                DrugGroup newDrugGroup = new DrugGroup(childName);
+                newDrugGroup.setParent(currentDrug);
+                currentDrug.addChild(newDrugGroup);
+                drugDao.addDrug(newDrugGroup);
             }
+
+            this.drugGroups.addAll(nextGroupSiblings);
         }
+
+        this.drugGroups.remove(0);
+
+//        As long as there are elements in this.drugGroups run this method again
+        if (this.drugGroups.size() != 0) {
+            checkUl();
+        }
+    }
 
     @Override
-    public List<String> getInformation() throws IOException {
+    public void parseHtml() throws IOException {
         parseDrugs();
-        return null;
+    }
+
+    public static void main(String[] args) throws IOException {
+        DrugFetcher myDrugFetcher = new DrugFetcher(InMemoryDrugDao.getInstance());
+        myDrugFetcher.parseDrugs();
+
+//        Print drugs for demo sprint 2
+        for (Drug drug : InMemoryDrugDao.getInstance().getMainDrugGroups()) {
+            printDrugsRecursive(drug, 0);
+        }
+
+    }
+
+
+    /**
+     * Method for demo end of sprint 2
+     * @param drug The drug to print and print the children from
+     * @param depth The current depth (number of parents above this drug)
+     */
+    public static void printDrugsRecursive(Drug drug, int depth) {
+        System.out.println("\t".repeat(depth) + drug.getName());
+        if (drug instanceof DrugGroup) {
+            for (Drug child : ((DrugGroup) drug).getChildren())
+            printDrugsRecursive(child, depth + 1);
+        }
     }
 }
 
