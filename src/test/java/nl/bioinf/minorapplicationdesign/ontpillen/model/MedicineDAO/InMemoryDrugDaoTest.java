@@ -27,7 +27,7 @@ class InMemoryDrugDaoTest {
             fail();
         }
         catch (IllegalArgumentException exception){
-            assertEquals("Cannot add drug that already exists", exception.getMessage());
+            assertEquals("Cannot add drug substance that already exists", exception.getMessage());
         }
     }
 
@@ -37,6 +37,21 @@ class InMemoryDrugDaoTest {
         InMemoryDrugDao informationStorage = InMemoryDrugDao.getInstance();
         informationStorage.addDrug(newDrugGroup);
         assertEquals(newDrugGroup, informationStorage.getDrugByName("Serotonineheropnameremmers, selectief"));
+    }
+
+    @Test
+    void addDrug_addDuplicateDrugGroup_throwIllegalArgumentException() {
+        DrugGroup newDrugGroup1 = new DrugGroup("Serotonineheropnameremmers, selectief");
+        DrugGroup newDrugGroup2 = new DrugGroup("Serotonineheropnameremmers, selectief");
+        InMemoryDrugDao informationStorage = InMemoryDrugDao.getInstance();
+        try {
+            informationStorage.addDrug(newDrugGroup1);
+            informationStorage.addDrug(newDrugGroup2);
+            fail();
+        }
+        catch (IllegalArgumentException exception){
+            assertEquals("Cannot add drug group that already exists", exception.getMessage());
+        }
     }
 
     @Test
