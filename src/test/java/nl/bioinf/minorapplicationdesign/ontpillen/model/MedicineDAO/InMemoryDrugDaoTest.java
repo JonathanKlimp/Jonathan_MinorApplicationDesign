@@ -35,7 +35,7 @@ class InMemoryDrugDaoTest {
             fail();
         }
         catch (IllegalArgumentException exception){
-            assertEquals("Cannot add drug substance that already exists", exception.getMessage());
+            assertEquals("Cannot add drug that already exists", exception.getMessage());
         }
     }
 
@@ -56,7 +56,7 @@ class InMemoryDrugDaoTest {
             fail();
         }
         catch (IllegalArgumentException exception){
-            assertEquals("Cannot add drug group that already exists", exception.getMessage());
+            assertEquals("Cannot add drug that already exists", exception.getMessage());
         }
     }
 
@@ -76,6 +76,4 @@ class InMemoryDrugDaoTest {
             assertEquals("Nicotine does not exist.", exception.getMessage());
         }
     }
-
-
 }
