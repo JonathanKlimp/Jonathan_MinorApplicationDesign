@@ -13,7 +13,7 @@
   <h3 align="center">Ontpillen</h3>
 
   <p align="center">
-    project_description
+    A website that informs drug users with information on how to reduce medicine usage
     <br />
     <a href="https://github.com/MinorApplicationDesign/MinorApplicationDesign"><strong>Explore the docs »</strong></a>
     <br />
@@ -56,9 +56,9 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+![Main page](images/Main_page.png)
 
-There is alot of information on the internet for different kinds of drugs. However information 
+There is a lot of information on the internet for different kinds of drugs. However, information 
 about the reduction of drugs usage is hard to some by. The goal of our website is to make information about
 the reduction of drugs usage easy accessible for users.  
 The onpillen website has two pages one page is for the users, here drug users can search for single medicines or
@@ -68,7 +68,7 @@ which can be used to consult their doctor.
 The other page is for doctors this page is fairly similar to the user one. Here more detailed information about 
 the drugs is shown.
 
-DISCLAIMER: The information on this website is no advice! Always consult you doctor.
+DISCLAIMER: The information on this website is no advice! Always consult your psychiatrist.
 
 
 ### Built With
@@ -110,10 +110,10 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES --> 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
+Currently, this project is a work in progress and can't be used. The main usage of the website will
+be gathering information about medicines. This information will contain general information and guidelines 
+on how to reduce the usage of those medicines. You will be able to save and print this information
+and take it to your psychiatrist.
 
 
 <!-- ROADMAP 
@@ -145,8 +145,9 @@ Project Link: [https://github.com/MinorApplicationDesign/MinorApplicationDesign]
 ## Acknowledgements
 
 * [Img Shields](https://shields.io)
-* []()
-* []()
+* [Apotheek](https://www.apotheek.nl/)
+* [Farmacotherapeutischkompas](https://www.farmacotherapeutischkompas.nl/)
+* [ggzstandaarden](https://www.ggzstandaarden.nl/)
 
 
 
