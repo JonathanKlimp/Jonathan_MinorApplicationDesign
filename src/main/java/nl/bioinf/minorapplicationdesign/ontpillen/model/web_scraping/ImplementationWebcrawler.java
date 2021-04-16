@@ -1,7 +1,8 @@
-package nl.bioinf.minorapplicationdesign.ontpillen.model.webcrawling;
+package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
 
-import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.DrugDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.DrugFetcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

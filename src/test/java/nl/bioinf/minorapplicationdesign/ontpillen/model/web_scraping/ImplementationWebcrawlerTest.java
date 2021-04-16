@@ -1,6 +1,6 @@
-package nl.bioinf.minorapplicationdesign.ontpillen.model.webcrawling;
+package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
-import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.*;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
