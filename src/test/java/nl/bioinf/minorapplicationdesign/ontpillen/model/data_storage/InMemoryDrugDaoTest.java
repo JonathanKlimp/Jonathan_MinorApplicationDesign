@@ -1,5 +1,6 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
@@ -16,6 +17,11 @@ class InMemoryDrugDaoTest {
 
     @Autowired
     DrugDao drugDao;
+
+    @AfterEach
+    public void cleanUpTest() {
+        drugDao.removeAllDrugs();
+    }
 
     @Test
     void addDrug_addNewSubstance_returnNewDrugSubstance() {
