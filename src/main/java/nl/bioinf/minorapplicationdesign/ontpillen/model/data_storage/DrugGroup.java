@@ -1,4 +1,4 @@
-package nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO;
+package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
 import java.util.ArrayList;
 import java.util.Collections;

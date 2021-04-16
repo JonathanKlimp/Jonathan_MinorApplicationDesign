@@ -1,4 +1,4 @@
-package nl.bioinf.minorapplicationdesign.ontpillen.model.webcrawling;
+package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
 import javax.net.ssl.*;
 import java.security.GeneralSecurityException;

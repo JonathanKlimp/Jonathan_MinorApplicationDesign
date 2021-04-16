@@ -1,6 +1,6 @@
 package nl.bioinf.minorapplicationdesign.ontpillen;
 
-import nl.bioinf.minorapplicationdesign.ontpillen.model.webcrawling.ImplementationWebcrawler;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.WebScrapeExecutor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -13,8 +13,8 @@ public class OntpillenApplication {
     public static void main(String[] args) throws IOException {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(MyApplicationContextConfiguration.class);
 
-        ImplementationWebcrawler myCrawlers = ctx.getBean(ImplementationWebcrawler.class);
-        myCrawlers.runWebcrawlers();
+        WebScrapeExecutor myWebScraper = ctx.getBean(WebScrapeExecutor.class);
+        myWebScraper.runWebcrawlers();
 
         ctx.close();
 

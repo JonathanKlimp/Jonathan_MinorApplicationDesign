@@ -1,7 +1,7 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.webcontrol;
 
-import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.Drug;
-import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.DrugDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.Drug;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.webInteraction.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

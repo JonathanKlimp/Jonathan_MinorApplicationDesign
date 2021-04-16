@@ -1,4 +1,4 @@
-package nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO;
+package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ public class DrugSubstance extends Drug {
     private String description;
     private List<String> sideEffects;
     private List<String> useIndications;
-    private List<StopIndication>  stopIndications;
+    private List<nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.StopIndication>  stopIndications;
 
     public DrugSubstance(String name) {
         super(name);
@@ -31,7 +31,7 @@ public class DrugSubstance extends Drug {
         this.useIndications = useIndications;
     }
 
-    public void setStopIndications(List<StopIndication> stopIndications){
+    public void setStopIndications(List<nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.StopIndication> stopIndications){
         this.stopIndications = stopIndications;
     }
 
@@ -59,7 +59,7 @@ public class DrugSubstance extends Drug {
         return useIndications;
     }
 
-    public List<StopIndication> getStopIndications() {
+    public List<nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.StopIndication> getStopIndications() {
         return stopIndications;
     }
 }

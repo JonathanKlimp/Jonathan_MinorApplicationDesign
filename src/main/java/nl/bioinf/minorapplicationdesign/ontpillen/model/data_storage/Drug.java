@@ -1,4 +1,4 @@
-package nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO;
+package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
 
 import org.jsoup.helper.Validate;

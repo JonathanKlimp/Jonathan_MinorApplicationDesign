@@ -1,7 +1,7 @@
 package nl.bioinf.minorapplicationdesign.ontpillen;
 
-import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.DrugDao;
-import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.InMemoryDrugDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.InMemoryDrugDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
