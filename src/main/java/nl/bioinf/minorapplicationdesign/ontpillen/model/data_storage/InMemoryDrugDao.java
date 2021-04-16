@@ -70,4 +70,10 @@ public class InMemoryDrugDao implements DrugDao {
     private boolean drugInDrugDao(Drug drug) throws IllegalArgumentException {
         return allDrugs.containsKey(drug.name);
     }
+
+    public void removeAllDrugs() {
+        drugSubstances.clear();
+        mainDrugGroups.clear();
+        allDrugs.clear();
+    }
 }

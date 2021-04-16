@@ -45,4 +45,9 @@ public interface DrugDao {
      * @return List of all drug names
      */
     public List<String> getAllDrugNames();
+
+    /**
+     * Function that will remove all drugs in the Dao
+     */
+    public void removeAllDrugs();
 }
