@@ -1,11 +1,14 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO;
 
 
+import org.jsoup.helper.Validate;
+
 public abstract class Drug {
     protected String name;
     protected Drug parent;
 
     public Drug(String name) {
+        Validate.notNull(name, "name can't be null");
         this.setName(name);
     }
 
