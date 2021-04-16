@@ -70,6 +70,9 @@ DISCLAIMER: The information on this website is no advice! Always consult your ps
 * [JQuery](https://jquery.com)
 * [Java](https://java.com)
 * [JavaScript](https://www.javascript.com)
+* [springboot](https://spring.io/projects/spring-boot)
+* [Thymeleaf](https://www.thymeleaf.org/)
+* [jsoup](https://jsoup.org/)
 
 
 

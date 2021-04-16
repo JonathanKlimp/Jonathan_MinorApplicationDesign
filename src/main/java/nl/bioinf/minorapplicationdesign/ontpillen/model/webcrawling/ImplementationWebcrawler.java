@@ -20,25 +20,7 @@ public class ImplementationWebcrawler {
     }
 
     public void runWebcrawlers() throws IOException {
-//        FarmacoWebScraper farmacoWebcrawler = new FarmacoWebScraper(drugDao);
-//        farmacoWebcrawler.getInformation();
-
         DrugFetcher drugFetcher = new DrugFetcher(drugDao);
         drugFetcher.parseHtml();
-
-//        ApotheekWebScraper apotheekWebcrawler = new ApotheekWebScraper(drugDao);
-//        apotheekWebcrawler.getInformation();
-//
-//        RichtlijnenNhgWebScraper richtlijnenNhgWebcrawler = new RichtlijnenNhgWebScraper(drugDao);
-//        richtlijnenNhgWebcrawler.getInformation();
-//
-//        GgzStandaardenWebScraper ggzStandaardenWebcrawler = new GgzStandaardenWebScraper(drugDao);
-//        ggzStandaardenWebcrawler.getInformation();
     }
-
-
-//    public static void main(String[] args) throws IOException {
-//        ImplementationWebcrawler test = new ImplementationWebcrawler();
-//        test.runWebcrawlers();
-//    }
 }
