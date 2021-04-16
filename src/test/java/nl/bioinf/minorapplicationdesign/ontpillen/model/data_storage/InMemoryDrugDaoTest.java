@@ -12,7 +12,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@ComponentScan(basePackageClasses = {DrugDao.class})
 class InMemoryDrugDaoTest {
 
     @Autowired
@@ -61,6 +60,18 @@ class InMemoryDrugDaoTest {
     }
 
     @Test
+    void addDrug_nullValue_throwIllegalArgumentException() {
+        try {
+            DrugGroup newDrugGroup = new DrugGroup(null);
+            drugDao.addDrug(newDrugGroup);
+            fail();
+        }
+        catch (Exception exception) {
+            assertEquals("name can't be null", exception.getMessage());
+        }
+    }
+
+    @Test
     void getDrugByName_DrugInStorage_returnDrug() {
         DrugGroup newDrugGroup = new DrugGroup("Citalopram");
         drugDao.addDrug(newDrugGroup);
@@ -71,9 +82,20 @@ class InMemoryDrugDaoTest {
     void getDrugByName_DrugNotInStorage_throwIllegalArgumentException() {
         try {
             drugDao.getDrugByName("Nicotine");
+            fail();
         }
         catch(IllegalArgumentException exception){
             assertEquals("Nicotine does not exist.", exception.getMessage());
+        }
+    }
+
+    @Test
+    void getDrugByName_nullValue_throwIllegalArgumentException() {
+        try {
+            drugDao.getDrugByName(null);
+        }
+        catch (Exception exception){
+            assertEquals("null does not exist.", exception.getMessage());
         }
     }
 }
