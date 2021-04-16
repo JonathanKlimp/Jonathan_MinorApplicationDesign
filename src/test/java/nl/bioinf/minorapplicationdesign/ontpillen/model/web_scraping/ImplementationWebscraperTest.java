@@ -13,17 +13,20 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class ImplementationWebcrawlerTest {
+class ImplementationWebscraperTest {
 
     @Autowired
     DrugDao drugDao;
+
+    @Autowired
+    DrugFetcher drugFetcher;
 
     @Test
     void runWebcrawlers_parseHtml_returnsAllDrugs() throws IOException {
         String[] drugNamesArray = {"alprazolam", "oxazepam", "nalmefeen", "zuclopentixol", "fenelzine", "mianserine", "antipsychotica, atypische", "nitrazepam", "amisulpride", "clobazam", "dapoxetine", "midazolam", "chloorprotixeen", "psychostimulantia", "buprenorfine/naloxon", "benzodiazepine agonisten", "dosulepine", "sertraline", "methylfenidaat", "nortriptyline", "middelen bij verslavingsziekten", "prazepam", "clorazepinezuur", "modafinil", "middelen bij alcoholverslaving", "broomperidol", "zolpidem", "melatonine", "tranylcypromine", "dexamfetamine", "risperidon", "diazepam", "coffeïne", "antipsychotica", "antipsychotica, klassieke", "brotizolam", "paliperidon", "varenicline", "venlafaxine", "fluoxetine", "antidepressiva", "periciazine", "moclobemide", "serotonineheropnameremmers, selectief", "sertindol", "amitriptyline", "imipramine", "fluvoxamine", "antidepressiva, overige", "paroxetine", "duloxetine", "cariprazine", "psycholeptica", "flunitrazepam", "brexpiprazol", "quetiapine", "pimozide", "flurazepam", "lithium", "buprenorfine (bij verslaving)", "serotonineheropnameremmers, niet-selectief", "aripiprazol", "citalopram", "clomipramine", "temazepam", "nicotine", "loprazolam", "lorazepam", "middelen bij nicotineverslaving", "psychofarmaca, overige", "fluspirileen", "lithiumzouten", "melatonine agonisten", "lormetazepam", "flupentixol", "clozapine", "buspiron", "bupropion", "MAO-remmers, niet-selectief", "methadon", "vortioxetine", "disulfiram", "atomoxetine", "lisdexamfetamine", "zopiclon", "acamprosaat", "olanzapine", "haloperidol", "bromazepam", "penfluridol", "trazodon", "pipamperon", "escitalopram", "MAO-A-remmers", "middelen bij opioïdverslaving", "slaapmiddelen", "sulpiride", "mirtazapine", "tricyclische antidepressiva", "psychostimulantia, overige", "maprotiline", "naltrexon", "agomelatine", "lurasidon", "amfetaminen", "esketamine (nasaal)", "tetracyclische antidepressiva"};
         List<String> drugNames = new ArrayList<>(Arrays.asList(drugNamesArray));
 
-        DrugFetcher drugFetcher = new DrugFetcher(drugDao);
+//        DrugFetcher drugFetcher = new DrugFetcher(drugDao);
         drugFetcher.parseHtml();
 
         assertEquals(drugNames, drugDao.getAllDrugNames());
@@ -31,7 +34,7 @@ class ImplementationWebcrawlerTest {
 
     @Test
     void runWebcrawlers_parseHtml_returnsCorrectDrugSubstances() throws IOException {
-        DrugFetcher drugFetcher = new DrugFetcher(drugDao);
+//        DrugFetcher drugFetcher = new DrugFetcher(drugDao);
         drugFetcher.parseHtml();
         String[] drugSubstances = {"alprazolam", "oxazepam", "nalmefeen", "quetiapine", "pimozide", "flurazepam", "zuclopentixol", "fenelzine", "lithium", "mianserine", "buprenorfine (bij verslaving)", "nitrazepam", "amisulpride", "clobazam", "dapoxetine", "midazolam", "chloorprotixeen", "buprenorfine/naloxon", "aripiprazol", "citalopram", "dosulepine", "sertraline", "methylfenidaat", "nortriptyline", "clomipramine", "temazepam", "nicotine", "loprazolam", "prazepam", "clorazepinezuur", "modafinil", "lorazepam", "broomperidol", "fluspirileen", "lormetazepam", "zolpidem", "flupentixol", "melatonine", "tranylcypromine", "clozapine", "dexamfetamine", "buspiron", "bupropion", "methadon", "risperidon", "diazepam", "vortioxetine", "coffeïne", "disulfiram", "brotizolam", "atomoxetine", "lisdexamfetamine", "zopiclon", "paliperidon", "acamprosaat", "varenicline", "olanzapine", "haloperidol", "venlafaxine", "fluoxetine", "bromazepam", "penfluridol", "trazodon", "pipamperon", "periciazine", "escitalopram", "moclobemide", "sulpiride", "sertindol", "amitriptyline", "mirtazapine", "imipramine", "maprotiline", "naltrexon", "fluvoxamine", "agomelatine", "lurasidon", "paroxetine", "esketamine (nasaal)", "duloxetine", "cariprazine", "flunitrazepam", "brexpiprazol"};
         List<String> expectedDrugSubstances = new ArrayList<>(Arrays.asList(drugSubstances));
@@ -45,7 +48,7 @@ class ImplementationWebcrawlerTest {
 
     @Test
     void runWebcrawlers_parseHtml_returnCorrectDrugGroups() throws IOException {
-        DrugFetcher drugFetcher = new DrugFetcher(drugDao);
+//        DrugFetcher drugFetcher = new DrugFetcher(drugDao);
         drugFetcher.parseHtml();
 
         String[] drugGroups = {"middelen bij verslavingsziekten", "antidepressiva", "psychostimulantia", "slaapmiddelen", "psychofarmaca, overige", "psycholeptica"};

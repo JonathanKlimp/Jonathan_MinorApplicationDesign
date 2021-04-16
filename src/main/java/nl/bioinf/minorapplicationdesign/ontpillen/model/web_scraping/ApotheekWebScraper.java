@@ -5,31 +5,24 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-public class ApotheekWebScraper extends AbstractWebScraper {
+@Component
+public class ApotheekWebScraper implements AbstractWebScraper {
+    private DrugDao drugDao;
 
-    ApotheekWebScraper(DrugDao drugDao) {
-        super(drugDao);
+    @Autowired
+    public void setDrugDao(DrugDao drugDao) {
+        this.drugDao = drugDao;
     }
-
-    List<String> information = new ArrayList<>();
 
     @Override
     public void parseHtml() {
-//        String description = getDescription();
-//        String sideEffects = getSideEffects();
-//        String stopIndication = getStopIndication();
-//        String interactions = getInteractions();
-//
-//        //information.add(description);
-//        information.add(sideEffects);
-//        information.add(stopIndication);
-//        information.add(interactions);
-//        return information;
+        throw new UnsupportedOperationException("Method not implemented yet");
     }
 
     private static String getInteractions(Document doc) {

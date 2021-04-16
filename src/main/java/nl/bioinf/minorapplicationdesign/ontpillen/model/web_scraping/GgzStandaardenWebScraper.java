@@ -1,25 +1,20 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+@Component
+public class GgzStandaardenWebScraper implements AbstractWebScraper {
+    private DrugDao drugDao;
 
-public class GgzStandaardenWebScraper extends AbstractWebScraper {
-    List<String> information = new ArrayList<>();
-
-    GgzStandaardenWebScraper(DrugDao drugDao) {
-        super(drugDao);
+    @Autowired
+    public void setDrugDao(DrugDao drugDao) {
+        this.drugDao = drugDao;
     }
 
     @Override
     public void parseHtml() {
-        String sideEffects = getSideEffects();
-
-        information.add(sideEffects);
-    }
-
-    private String getSideEffects() {
-        return null;
+        throw new UnsupportedOperationException("Method not implemented");
     }
 }

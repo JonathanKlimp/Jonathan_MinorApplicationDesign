@@ -5,14 +5,9 @@ import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import java.io.IOException;
 import java.util.List;
 
-public abstract class AbstractWebScraper {
-    List<String> information = null;
-    protected DrugDao drugDao;
+public interface AbstractWebScraper {
 
-    AbstractWebScraper(DrugDao drugDao){
-        this.drugDao = drugDao;
-    }
-
-    public abstract void parseHtml() throws IOException;
+//    TODO add javadoc to interface method
+    public void parseHtml() throws IOException;
 
 }
