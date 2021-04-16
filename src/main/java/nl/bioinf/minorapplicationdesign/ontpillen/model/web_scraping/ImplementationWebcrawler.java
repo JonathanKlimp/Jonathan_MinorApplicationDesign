@@ -2,13 +2,13 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.webcrawling;
 
 
 import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.DrugDao;
-import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.InMemoryDrugDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 //TODO Hier heb je unit tests voor
+//TODO naam veranderen, het is geen implementatie van webscraper meer, maar een soort main die alle scraping uitvoert.
 
 @Component
 public class ImplementationWebcrawler {

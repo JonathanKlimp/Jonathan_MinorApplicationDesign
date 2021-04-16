@@ -1,7 +1,7 @@
-package nl.bioinf.minorapplicationdesign.ontpillen.model.webcrawling;
+package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
 
-import nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.*;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
