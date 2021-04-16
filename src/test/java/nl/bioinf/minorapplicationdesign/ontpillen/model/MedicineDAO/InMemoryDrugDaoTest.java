@@ -12,7 +12,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@ComponentScan(basePackageClasses = {DrugDao.class})
 class InMemoryDrugDaoTest {
 
     @Autowired
