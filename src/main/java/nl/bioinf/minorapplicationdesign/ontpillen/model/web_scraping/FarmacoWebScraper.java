@@ -1,5 +1,6 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.Drug;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,6 +11,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -32,9 +35,11 @@ public class FarmacoWebScraper implements AbstractWebScraper {
 
     @Override
     public void parseHtml() throws IOException {
-        System.out.println("basic url: " + this.basicUrl);
-        List drugs = Arrays.asList("Citalopram", "Lorazepam", "Temazepam");
-        this.parseInformation(drugs);
+        List<String> drugSubstances = new ArrayList<>();
+        for(Drug drugSubstance : drugDao.getDrugSubstances()){
+            drugSubstances.add(drugSubstance.getName());
+        }
+        this.parseInformation(drugSubstances);
     }
 
     private Document getConnection(String medicine) throws IOException {
@@ -51,8 +56,11 @@ public class FarmacoWebScraper implements AbstractWebScraper {
             Elements h2Tags = doc.getElementsByTag("h2");
             List<String> sideEffects = h2Tags.select(":contains(Bijwerkingen)").nextAll().select("p").eachText();
             List<String> drugDescription = h2Tags.select(":contains(Advies)").nextAll().eachText();
+            List<String> interactions = h2Tags.select(":contains(interacties)").nextAll().eachText();
+
             System.out.println(sideEffects);
             System.out.println(drugDescription);
+            System.out.println(interactions);
         }
 
     }
