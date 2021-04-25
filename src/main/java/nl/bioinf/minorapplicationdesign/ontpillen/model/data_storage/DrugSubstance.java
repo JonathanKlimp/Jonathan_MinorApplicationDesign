@@ -6,7 +6,7 @@ import java.util.List;
 //TODO needs to be private
 public class DrugSubstance extends Drug {
     private List<String> brandNames = new ArrayList<>();
-    private String description;
+    private List<String> description;
     private List<String> sideEffects;
     private List<String> useIndications;
     private List<nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.StopIndication>  stopIndications;
@@ -15,7 +15,7 @@ public class DrugSubstance extends Drug {
         super(name);
     }
 
-    public void setDescription(String Description){
+    public void setDescription(List<String> Description){
         this.description = Description;
     }
 
@@ -47,7 +47,7 @@ public class DrugSubstance extends Drug {
         return brandNames;
     }
 
-    public String getDescription() {
+    public List<String> getDescription() {
         return description;
     }
 

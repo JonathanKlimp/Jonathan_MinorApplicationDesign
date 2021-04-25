@@ -1,6 +1,8 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.Drug;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -21,11 +24,33 @@ public class ApotheekWebScraper implements AbstractWebScraper {
     }
 
     @Override
-    public void parseHtml() {
-        throw new UnsupportedOperationException("Method not implemented yet");
+    public void parseHtml() throws IOException {
+        List<String> drugSubstances = new ArrayList<>();
+        for(Drug drugSubstance : drugDao.getDrugSubstances()){
+            drugSubstances.add(drugSubstance.getName());
+        }
+
+        for (String drug: drugSubstances) {
+
+            System.out.println("CURRENT DRUG IN THE LOOP: " +  drug);
+            Document doc = getConnection(drug);
+            getDescription(doc, drug);
+//            getSideEffects(doc);
+//            getInteractions(doc);
+
+            // code to print the discrption in the Dao
+            Drug drugSubstance = drugDao.getDrugByName(drug);
+            System.out.println("DISCRIPTION OF THE DRUG IN THE DAO: " + drug);
+            DrugSubstance drugSubstance1 = (DrugSubstance) drugSubstance;
+            System.out.println(drugSubstance1.getDescription());
+
+        }
+
+
+
     }
 
-    private static String getInteractions(Document doc) {
+    private String getInteractions(Document doc) {
         Elements interactions = doc.getElementsByAttributeValueContaining("data-print", "andere medicijnen gebruiken").select(".listItemContent_text__otIdg ");
         System.out.println(interactions.eachText());
         return null;
@@ -35,7 +60,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         return null;
     }
 
-    private static String getSideEffects(Document doc) {
+    private String getSideEffects(Document doc) {
 
         Elements sideEffectsHtmlLocation = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen");
         List<String> sideEffectsIntro = sideEffectsHtmlLocation.select(".listItemContent_text__otIdg p, p.listItemContent_text__otIdg").eachText();
@@ -56,14 +81,15 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         return null;
     }
 
-    private static String getDescription(Document doc) {
+    private void getDescription(Document doc, String drug) {
         Element useIndicationTag = doc.getElementsByAttributeValueContaining("data-print", "waarbij gebruik").select(".listItemContent_text__otIdg").get(0);
-        System.out.println(useIndicationTag.children().eachText());
+//        System.out.println(useIndicationTag.children().eachText());
         //TODO add to the datamodel
-        return null;
+        DrugSubstance myDrug = (DrugSubstance) drugDao.getDrugByName(drug);
+        myDrug.setDescription(useIndicationTag.children().eachText());
     }
 
-    private static Document getConnection(String medicine) throws IOException {
+    private Document getConnection(String medicine) throws IOException {
         String basicUrl = "https://www.apotheek.nl/medicijnen/";
         String completeUrl = basicUrl + medicine.toLowerCase();
         Document doc = Jsoup.connect(completeUrl).get();
@@ -72,13 +98,11 @@ public class ApotheekWebScraper implements AbstractWebScraper {
 
     public static void main(String[] args) throws IOException {
         List<String> medicines = List.of("citalopram", "lorazepam", "Temazepam");
-        for (String drug: medicines) {
-            Document doc = getConnection(drug);
+//        for (String drug: medicines) {
+//            Document doc = getConnection(drug);
 //            getDescription(doc);
 //            getSideEffects(doc);
-            getInteractions(doc);
+//            getInteractions(doc);
 
-
-        }
     }
 }
