@@ -5,15 +5,15 @@ import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -22,6 +22,7 @@ import java.util.Locale;
 public class FarmacoWebScraper implements AbstractWebScraper {
     private DrugDao drugDao;
     private String basicUrl;
+    private static final Logger LOGGER = LoggerFactory.getLogger(FarmacoWebScraper.class);
 
     private FarmacoWebScraper(@Value("${farmaco.basic.site}") String url) {
         this.basicUrl = url;
@@ -35,8 +36,10 @@ public class FarmacoWebScraper implements AbstractWebScraper {
 
     @Override
     public void parseHtml() throws IOException {
+        LOGGER.info("Running parseHtml");
         List<String> drugSubstances = new ArrayList<>();
         for(Drug drugSubstance : drugDao.getDrugSubstances()){
+            LOGGER.debug("Fetching " + drugSubstance + "From the Dao");
             drugSubstances.add(drugSubstance.getName());
         }
         this.parseInformation(drugSubstances);
@@ -44,6 +47,7 @@ public class FarmacoWebScraper implements AbstractWebScraper {
 
     private Document getConnection(String medicine) throws IOException {
         String completeUrl = (this.basicUrl + medicine.charAt(0) + "/" + medicine).toLowerCase(Locale.ROOT);
+        LOGGER.debug("Connecting to: " + completeUrl);
         return Jsoup.connect(completeUrl).get();
     }
 
@@ -58,11 +62,10 @@ public class FarmacoWebScraper implements AbstractWebScraper {
             List<String> drugDescription = h2Tags.select(":contains(Advies)").nextAll().eachText();
             List<String> interactions = h2Tags.select(":contains(interacties)").nextAll().eachText();
 
-            System.out.println(sideEffects);
-            System.out.println(drugDescription);
-            System.out.println(interactions);
+            LOGGER.debug("Side effects for drug: " + medicine + "Side effects: " + sideEffects);
+            LOGGER.debug("DrugDescription for drug: " + medicine + "Drug description: " + drugDescription);
+            LOGGER.debug("Drug interactions for drug: " + medicine + "Drug interactions: " + interactions);
         }
-
     }
 }
 
