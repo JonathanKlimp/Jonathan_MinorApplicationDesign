@@ -1,5 +1,10 @@
-package nl.bioinf.minorapplicationdesign.ontpillen.model.webInteraction;
+package nl.bioinf.minorapplicationdesign.ontpillen.model.web_interaction;
 
+
+/**
+ *
+ * @author Naomi Hindriks
+ */
 public class User {
     private int age;
     private String gender;

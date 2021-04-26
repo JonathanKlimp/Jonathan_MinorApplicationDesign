@@ -5,9 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ *
+ * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
+ */
 public class InMemoryDrugDao implements DrugDao {
-    static private Map<String, DrugSubstance> drugSubstances = new HashMap();
-    static private Map<String, DrugGroup> mainDrugGroups = new HashMap();
+    static private List<String> drugSubstances = new ArrayList<>();
+    static private List<String> mainDrugGroups = new ArrayList<>();
     static private Map<String, Drug> allDrugs = new HashMap<>();
 
 
@@ -18,10 +23,10 @@ public class InMemoryDrugDao implements DrugDao {
         }
         allDrugs.put(drug.getName(), drug);
         if (drug instanceof DrugSubstance) {
-            drugSubstances.put(drug.name, (DrugSubstance) drug);
+            drugSubstances.add(drug.getName());
         }
         else if (drug instanceof DrugGroup && drug.getParent() == null) {
-            mainDrugGroups.put(drug.getName(), (DrugGroup) drug);
+            mainDrugGroups.add(drug.getName());
         }
     }
 
@@ -44,13 +49,21 @@ public class InMemoryDrugDao implements DrugDao {
     }
 
     @Override
-    public List<Drug> getDrugSubstances() {
-        return new ArrayList<>(drugSubstances.values());
+    public List<DrugSubstance> getDrugSubstances() {
+        List<DrugSubstance> returnList = new ArrayList<>();
+        for(String drugName : this.drugSubstances) {
+            returnList.add((DrugSubstance) this.allDrugs.get(drugName));
+        }
+        return returnList;
     }
 
     @Override
-    public List<Drug> getMainDrugGroups() {
-        return new ArrayList<>(mainDrugGroups.values());
+    public List<DrugGroup> getMainDrugGroups() {
+        List<DrugGroup> returnList = new ArrayList<>();
+        for(String drugName : this.drugSubstances) {
+            returnList.add((DrugGroup) this.allDrugs.get(drugName));
+        }
+        return returnList;
     }
 
     private boolean drugInDrugDao(Drug drug) throws IllegalArgumentException {
