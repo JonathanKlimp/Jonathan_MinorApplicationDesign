@@ -7,6 +7,12 @@
 
 <nav th:replace="template :: header-nav"></nav>
 
+<!--<div th:if="userType == 'gebruiker'">-->
+<!--    <p>test</p>-->
+<!--</div>-->
+
+<p th:text="${userType}"></p>
+
 <section id="main-section">
 
     <div class="position-relative" id="main-wrapper">
@@ -27,10 +33,10 @@
 
                                 <ul class="nav fs-4" id="home-main-content-tab">
                                     <li class="nav-item">
-                                        <button class="nav-link active px-5" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button">Zoeken</button>
+                                        <button class="nav-link active px-5" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button">Lijst maken</button>
                                     </li>
                                     <li class="nav-item">
-                                        <button class="nav-link px-5" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button">Lijst maken</button>
+                                        <button class="nav-link px-5" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button">Zoeken</button>
                                     </li>
                                     <li class="nav-item">
                                         <button class="nav-link px-5" id="privacy-tab" data-bs-toggle="tab" data-bs-target="#privacy" type="button">Privacy</button>
@@ -39,7 +45,32 @@
 
                                 <div class="tab-content" id="home-main-content-tab-content">
 
-                                    <div class="tab-pane fade show active position-relative card-content" id="search">
+                                    <div class="tab-pane fade show active position-relative card-content" id="list">
+                                        <div class="position-absolute top-50 start-50 col-12 col-sm-11 col-md-10 translate-middle">
+                                            <div class="row">
+                                                <div class="col-12 col-md-7">
+                                                    <h3>Lijst maken</h3>
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl nisi, semper vitae tincidunt ut, accumsan eget diam. Quisque lacus elit, euismod quis odio non, vestibulum commodo ante. Nunc et fringilla enim. Donec ac mi arcu. Aliquam quis lacinia tortor. Aenean imperdiet malesuada neque nec consequat. Nullam maximus leo a malesuada vestibulum. Donec eget consectetur justo. Nullam nibh sapien, malesuada id lacinia ullamcorper, consequat nec arcu. Integer neque tellus, euismod et nisl dapibus, egestas sodales justo. Donec facilisis urna at odio ultrices, sed fringilla nisi euismod. Morbi aliquet eu justo vel convallis. Duis nibh leo, efficitur in est sed, venenatis imperdiet urna. Phasellus egestas malesuada nunc a rhoncus.
+                                                    </p>
+                                                </div>
+                                                <div class="col-12 col-md-5">
+                                                    <form action="#" th:action="@{/list}" th:object="${user}" method="get">
+                                                        <label for="age" class="form-label">Leeftijd</label>
+                                                        <input th:field="*{age}" type="number" class="form-control mb-3" id="age" min="18" max="150">
+                                                        <label for="gender" class="form-label">Geslacht</label>
+                                                        <select th:field="*{gender}" class="form-select mb-3" id="gender" required>
+                                                            <option value="1">Man</option>
+                                                            <option value="2">Vrouw</option>
+                                                        </select>
+                                                        <button type="submit" class="btn btn-primary">Start lijst</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade position-relative card-content" id="search">
                                         <form class="position-absolute top-50 start-50 col-11 col-sm-10 col-md-8 col-lg-6" id="search-form">
                                             <label for="search-query" class="form-label">Snelzoeken</label>
                                             <div class="input-group input-group-lg">
@@ -54,31 +85,6 @@
                                                 <!--                                            </span>-->
                                             </div>
                                         </form>
-                                    </div>
-
-                                    <div class="tab-pane fade position-relative card-content" id="list">
-                                        <div class="position-absolute top-50 start-50 col-12 col-sm-11 col-md-10 translate-middle">
-                                            <div class="row">
-                                                <div class="col-12 col-md-7">
-                                                    <h3>Lijst maken</h3>
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl nisi, semper vitae tincidunt ut, accumsan eget diam. Quisque lacus elit, euismod quis odio non, vestibulum commodo ante. Nunc et fringilla enim. Donec ac mi arcu. Aliquam quis lacinia tortor. Aenean imperdiet malesuada neque nec consequat. Nullam maximus leo a malesuada vestibulum. Donec eget consectetur justo. Nullam nibh sapien, malesuada id lacinia ullamcorper, consequat nec arcu. Integer neque tellus, euismod et nisl dapibus, egestas sodales justo. Donec facilisis urna at odio ultrices, sed fringilla nisi euismod. Morbi aliquet eu justo vel convallis. Duis nibh leo, efficitur in est sed, venenatis imperdiet urna. Phasellus egestas malesuada nunc a rhoncus.
-                                                    </p>
-                                                </div>
-                                                <div class="col-12 col-md-5">
-                                                    <form action="#" th:action="@{/list}" th:object="${user}" method="get">
-                                                        <label for="age" class="form-label">Leeftijd</label>
-                                                        <input type="number" class="form-control mb-3" id="age" min="18" max="150" th:field="*{age}">
-                                                        <label for="gender" class="form-label">Geslacht</label>
-                                                        <select class="form-select mb-3" id="gender" th:field="*{gender}" required>
-                                                            <option value="1">Man</option>
-                                                            <option value="2">Vrouw</option>
-                                                        </select>
-                                                        <button type="submit" class="btn btn-primary">Start lijst</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
 
                                     <div class="tab-pane fade position-relative card-content" id="privacy">
@@ -125,8 +131,6 @@
     </div>
 
 
-
-
 </section>
 
 
@@ -134,7 +138,7 @@
 
 <div th:replace="template :: scripts"></div>
 
-<script src="../static/js/main_content_adjustments.js" th:src="@{js/main_content_adjustments.js}"></script>
-<script src="../static/js/background_adjustments.js" th:src="@{js/background_adjustments.js}"></script>
+<script th:src="@{js/main_content_adjustments.js}" src="../static/js/main_content_adjustments.js"></script>
+<script th:src="@{js/background_adjustments.js}" src="../static/js/background_adjustments.js"></script>
 </body>
 </html>

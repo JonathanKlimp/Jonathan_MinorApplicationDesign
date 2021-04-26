@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ *
+ * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
+ */
 @Component
 public class ApotheekWebScraper implements AbstractWebScraper {
     private DrugDao drugDao;

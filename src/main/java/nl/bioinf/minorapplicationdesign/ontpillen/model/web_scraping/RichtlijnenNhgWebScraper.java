@@ -4,6 +4,10 @@ import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ *
+ * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
+ */
 @Component
 public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
     private DrugDao drugDao;

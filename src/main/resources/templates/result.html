@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!--Bootstrap css-->
-    <link href="../static/css/bootstrap/bootstrap.min.css" th:href="@{css/bootstrap/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{css/bootstrap/bootstrap.min.css}" href="../static/css/bootstrap/bootstrap.min.css" rel="stylesheet">
 
     <!--Custom css-->
-    <link href="../static/css/main.css" th:href="@{css/main.css}" rel="stylesheet">
+    <link th:href="@{css/main.css}" href="../static/css/main.css" rel="stylesheet">
     <title>Ontpillen</title>
 </head>
 <body>
@@ -18,11 +18,11 @@
     <li th:text="*{gender}"><</li>
 </ul>
 
-<ul th:object="${drugDao}" style="color: #0c4128">
-    <li th:each="drug : *{drugSubstances}">
-        <p th:text="${drug.getName()}"></p>
-    </li>
-</ul>
+<th:block th:object="${drugDao}" style="color: #0c4128">
+    <div th:each="drug : *{drugSubstances}">
+        <h3 th:text="${drug.getName()}">_test_</h3>
+    </div>
+</th:block>
 
 </body>
 </html>

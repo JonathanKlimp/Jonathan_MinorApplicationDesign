@@ -1,16 +1,16 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="nl">
 
-
 <!--Head fragment-->
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Naomi Hindriks">
 
     <!--Bootstrap css-->
-    <link href="../static/css/bootstrap/bootstrap.min.css" th:href="@{css/bootstrap/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{css/bootstrap/bootstrap.min.css}" href="../static/css/bootstrap/bootstrap.min.css" rel="stylesheet">
 
     <!--Custom css-->
-    <link href="../static/css/main.css" th:href="@{css/main.css}" rel="stylesheet">
+    <link th:href="@{css/main.css}" href="../static/css/main.css" rel="stylesheet">
     <title th:text="${title}">__Offline title__</title>
 </head>
 
@@ -20,7 +20,7 @@
     <div class="container">
 
         <a class="navbar-brand" href="#">
-            <img src="../static/images/logo.svg" th:src="@{images/logo.svg}" style="height: 60px">
+            <img th:src="@{images/logo.svg}" src="../static/images/logo.svg" style="height: 60px">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
@@ -55,30 +55,37 @@
 
 <!--Footer fragment-->
 <footer th:fragment="footer">
-    <div class="container">
+    <div class="container py-5">
         <div class="row">
             <div class="col">
-                <h5>Site navigatie</h5>
-                <ul>
-                    <li>Geneesmiddelen overzicht</li>
-                    <li>Algemene adviezen</li>
-                </ul>
+                <div class="footer-element">
+                    <h5>Site navigatie</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">Geneesmiddelen overzicht</a></li>
+                        <li><a href="#" class="footer-link">Algemene adviezen</a></li>
+                    </ul>
+                </div>
             </div>
             <div class="col">
-                <h5>Informatie</h5>
-                <ul>
-                    <li>Privacy</li>
-                    <li>Veelgestelde vragen</li>
-                    <li>Over deze site</li>
-                </ul>
+                <div class="footer-element">
+                    <h5>Informatie</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">Privacy</a></li>
+                        <li><a href="#" class="footer-link">Veelgestelde vragen</a></li>
+                        <li><a href="#" class="footer-link">Over deze site</a></li>
+                    </ul>
+                </div>
             </div>
             <div class="col">
-                <h5>Contact</h5>
-                <ul>
-                    <li>Contact pagina</li>
-                    <li>jdoe@mail.nl</li>
-                    <li>jdoe@mail.nl</li>
-                </ul>
+                <div class="footer-element">
+                    <h5>Contact</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">Contact pagina</a></li>
+                        <th:block th:each="email : ${@environment.getProperty('web.content.footer.emails').split(',')}">
+                            <li><a th:href="${'mailto:' + email}" th:text="${email}" href="#" class="footer-link">__Offline email__</a></li>
+                        </th:block>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -89,9 +96,9 @@
     scripts that should be implemented in every page can be placed here-->
 <div th:fragment="scripts">
     <!--jQuery javascript-->
-    <script src="../static/js/jquery/jquery-3.5.1.js" th:src="@{js/jquery/jquery-3.5.1.js}"></script>
+    <script th:src="@{js/jquery/jquery-3.5.1.js}" src="../static/js/jquery/jquery-3.5.1.js"></script>
     <!--Bootstrap javascript-->
-    <script src="../static/js/bootstrap/bootstrap.min.js" th:src="@{js/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{js/bootstrap/bootstrap.min.js}" src="../static/js/bootstrap/bootstrap.min.js"></script>
     <!--Custom javascript-->
-    <script src="../static/js/main.js" th:src="@{js/main.js}"></script>
+    <script th:src="@{js/main.js}" src="../static/js/main.js"></script>
 </div>

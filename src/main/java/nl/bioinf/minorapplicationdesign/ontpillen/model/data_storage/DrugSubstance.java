@@ -3,13 +3,16 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO needs to be private
+/**
+ *
+ * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
+ */
 public class DrugSubstance extends Drug {
     private List<String> brandNames = new ArrayList<>();
     private String description;
     private List<String> sideEffects;
     private List<String> useIndications;
-    private List<nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.StopIndication>  stopIndications;
+    private List<StopIndication>  stopIndications;
 
     public DrugSubstance(String name) {
         super(name);
@@ -31,7 +34,7 @@ public class DrugSubstance extends Drug {
         this.useIndications = useIndications;
     }
 
-    public void setStopIndications(List<nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.StopIndication> stopIndications){
+    public void setStopIndications(List<StopIndication> stopIndications){
         this.stopIndications = stopIndications;
     }
 
@@ -59,7 +62,7 @@ public class DrugSubstance extends Drug {
         return useIndications;
     }
 
-    public List<nl.bioinf.minorapplicationdesign.ontpillen.model.MedicineDAO.StopIndication> getStopIndications() {
+    public List<StopIndication> getStopIndications() {
         return stopIndications;
     }
 }

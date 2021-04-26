@@ -1,3 +1,7 @@
+/*
+ *
+ * @author Naomi Hindriks
+ */
 $(document).ready(() => {
     const $mainSection = $("#main-wrapper");
     const $header = $("#header");

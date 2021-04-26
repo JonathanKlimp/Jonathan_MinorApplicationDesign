@@ -14,6 +14,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ *
+ * @ author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
+ */
 @Component
 @PropertySource("classpath:application.properties")
 public class DrugFetcher implements AbstractWebScraper {

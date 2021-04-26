@@ -1,3 +1,8 @@
+/*
+ *
+ * @author Naomi Hindriks
+ */
+
 $(document).ready(() => {
     //Get dom elements
     const $backgroundColor = $("#background-color");
