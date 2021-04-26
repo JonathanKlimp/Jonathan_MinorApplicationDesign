@@ -72,7 +72,7 @@ public class DrugFetcher implements AbstractWebScraper {
     private void addDrugs(List<Element> drugGroups, Element currentDrugElement, DrugGroup currentDrug) {
         if (currentDrugElement.nextElementSibling().is("ul")) {
             List<String> childrenNames = currentDrugElement.nextElementSibling().select("li").eachText();
-            LOGGER.debug("Adding: " + currentDrug + " to drugSubstances");
+            LOGGER.debug("Adding: " + currentDrug.getName() + " to drugSubstances");
             addDrugSubstance(currentDrug, childrenNames);
 
 
@@ -82,7 +82,7 @@ public class DrugFetcher implements AbstractWebScraper {
 
             List<String> childrenNames = nextGroupSiblings.eachText();
 
-            LOGGER.debug("Adding: " + currentDrug + " to DrugGroups");
+            LOGGER.debug("Adding: " + currentDrug.getName() + " to DrugGroups");
             addDrugGroup(currentDrug, childrenNames);
 
             drugGroups.addAll(nextGroupSiblings);
