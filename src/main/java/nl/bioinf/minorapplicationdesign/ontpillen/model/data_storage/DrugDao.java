@@ -55,4 +55,12 @@ public interface DrugDao {
      * Function that will remove all drugs in the Dao
      */
     public void removeAllDrugs();
+
+
+    /**
+     * Method that checks if a drug with a given name is present in the DAO
+     * @param drugName String name of the drug
+     * @return a boolean, true if a drug with this name is present in the DAO.
+     */
+    public boolean drugInDrugDao(String drugName);
 }
