@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
+/**
+ *
+ * @author Larissa Bouwknegt, Jonathan Klimp
+ */
 public class DrugGroup extends Drug{
     private List<Drug> children = new ArrayList<>();
 

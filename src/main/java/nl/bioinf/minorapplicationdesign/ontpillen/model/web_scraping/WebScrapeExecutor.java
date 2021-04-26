@@ -7,6 +7,10 @@ import java.io.IOException;
 
 //TODO Hier heb je unit tests voor
 
+/**
+ *
+ * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
+ */
 @Component
 public class WebScrapeExecutor {
     private DrugFetcher drugFetcher;

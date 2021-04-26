@@ -3,6 +3,11 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 import java.util.List;
 import java.util.Set;
 
+
+/**
+ *
+ * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
+ */
 public interface DrugDao {
 
     /**
@@ -26,13 +31,13 @@ public interface DrugDao {
      * Function that will return all drug substances in the Dao.
      * @return List of all drugSubstances
      */
-    List<Drug> getDrugSubstances();
+    List<DrugSubstance> getDrugSubstances();
 
     /**
      * Function that will return all main drug groups in the Dao.
      * @return list of all main drug groups
      */
-    List<Drug> getMainDrugGroups();
+    List<DrugGroup> getMainDrugGroups();
 
     /**
      * Function that will return all drugs in the Dao.

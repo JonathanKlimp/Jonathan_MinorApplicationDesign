@@ -3,6 +3,10 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
 import org.jsoup.helper.Validate;
 
+
+/**
+ * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
+ */
 public abstract class Drug {
     protected String name;
     protected Drug parent;

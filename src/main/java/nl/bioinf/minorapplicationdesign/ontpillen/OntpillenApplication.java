@@ -7,6 +7,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import java.io.IOException;
 
+/**
+ *
+ * @author Naomi Hindriks
+ */
 @SpringBootApplication
 public class OntpillenApplication {
 

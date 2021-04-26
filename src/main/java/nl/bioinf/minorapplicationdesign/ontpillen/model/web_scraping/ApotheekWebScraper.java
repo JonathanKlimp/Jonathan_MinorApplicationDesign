@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
+ */
 @Component
 public class ApotheekWebScraper implements AbstractWebScraper {
     private DrugDao drugDao;

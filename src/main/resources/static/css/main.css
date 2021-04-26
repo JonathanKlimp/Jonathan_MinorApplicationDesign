@@ -1,3 +1,18 @@
+/* --------------------------------------------------------
+Style Sheet for Ontpillen
+
+author: Naomi Hindriks
+----------------------------------------------------------*/
+
+/* -----------------------------------------------------------
+CONTENTS:
+=General styling and utility classes
+=Header and footer styling
+=Background styling
+=Home content styling
+------------------------------------------------------------*/
+
+/*=General styling and utility classes*/
 :root {
     --color-primary: rgb(138, 158, 167);
     --color-secondary: rgb(141, 155, 106);
@@ -19,10 +34,51 @@ html, body {
     margin: 0 auto;
 }
 
+.border-radius-18 {
+    border-radius: 18px;
+}
+
+.btn-primary {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0.25rem rgba(0, 0, 0, 0.5) ;
+}
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+    background-color: var(--color-accent-dark);
+    border-color: var(--color-accent-dark);
+    box-shadow: unset;
+}
+
+.btn-primary:active, .btn-primary:focus, .btn-primary:active:focus {
+    box-shadow: 0 0 0.25rem rgba(255, 255, 255, 0.5);
+}
+
+
+/*=Header and footer styling*/
 nav#header, footer {
     background-color: var(--color-primary);
 }
 
+#header.navbar-dark .navbar-nav .nav-link, footer .footer-link {
+    color: var(--color-light);
+    opacity: 75%;
+    text-decoration: none;
+}
+
+#header.navbar-dark .navbar-nav .nav-link:focus, #header.navbar-dark .navbar-nav .nav-link:hover, footer .footer-link:hover, footer .footer-link:focus {
+    opacity: 100%;
+    text-decoration: underline;
+}
+
+footer .footer-element {
+    display: block;
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/*=Background styling*/
 div#background-image {
     background-image: url("../images/pexels-artem-podrez-4492103.jpg");
     background-size: cover;
@@ -42,16 +98,14 @@ div#background-color {
     width: 100%;
 }
 
+
+/*=Home content styling*/
 div.content {
     width: 100%;
 }
 
 .home-content-col {
     background-color: var(--color-secondary-70);
-}
-
-.border-radius-18 {
-    border-radius: 18px;
 }
 
 #home-main-content-row .card-body ul.nav li {
@@ -75,21 +129,6 @@ div.content {
 #home-main-content-row .card-content #search-form {
     -ms-transform: translate(-50%, -100%);
     transform: translate(-50%, -100%);
-}
-
-.btn-primary {
-    background-color: var(--color-accent);
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0.25rem rgba(0, 0, 0, 0.5) ;
-}
-.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
-    background-color: var(--color-accent-dark);
-    border-color: var(--color-accent-dark);
-    box-shadow: unset;
-}
-
-.btn-primary:active, .btn-primary:focus, .btn-primary:active:focus {
-    box-shadow: 0 0 0.25rem rgba(255, 255, 255, 0.5);
 }
 
 #home-main-content-row .card-content .btn-primary {
