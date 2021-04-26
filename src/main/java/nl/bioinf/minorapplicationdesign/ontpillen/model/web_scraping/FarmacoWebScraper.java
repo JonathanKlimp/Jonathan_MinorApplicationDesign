@@ -43,7 +43,7 @@ public class FarmacoWebScraper implements AbstractWebScraper {
         LOGGER.info("Running parseHtml");
         List<String> drugSubstances = new ArrayList<>();
         for(Drug drugSubstance : drugDao.getDrugSubstances()){
-            LOGGER.debug("Fetching " + drugSubstance + "From the Dao");
+            LOGGER.debug("Fetching " + drugSubstance.getName() + " From the Dao");
             drugSubstances.add(drugSubstance.getName());
         }
         this.parseInformation(drugSubstances);
@@ -66,9 +66,9 @@ public class FarmacoWebScraper implements AbstractWebScraper {
             List<String> drugDescription = h2Tags.select(":contains(Advies)").nextAll().eachText();
             List<String> interactions = h2Tags.select(":contains(interacties)").nextAll().eachText();
 
-            LOGGER.debug("Side effects for drug: " + medicine + "Side effects: " + sideEffects);
-            LOGGER.debug("DrugDescription for drug: " + medicine + "Drug description: " + drugDescription);
-            LOGGER.debug("Drug interactions for drug: " + medicine + "Drug interactions: " + interactions);
+            LOGGER.debug("Side effects for drug: " + medicine + " Side effects: " + sideEffects);
+            LOGGER.debug("DrugDescription for drug: " + medicine + " Drug description: " + drugDescription);
+            LOGGER.debug("Drug interactions for drug: " + medicine + " Drug interactions: " + interactions);
         }
     }
 }
