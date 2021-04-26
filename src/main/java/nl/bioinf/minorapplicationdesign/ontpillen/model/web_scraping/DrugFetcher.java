@@ -59,12 +59,22 @@ public class DrugFetcher implements AbstractWebScraper {
         }
 
         currentDrug = (DrugGroup) drugDao.getDrugByName(currentDrugElement.text());
-        LOGGER.debug("Storing: " + currentDrug.getName() + " in the dao");
 
+        addDrugs(drugGroups, currentDrugElement, currentDrug);
+        drugGroups.remove(0);
+
+//        As long as there are elements in this.drugGroups run this method again
+        if (drugGroups.size() != 0) {
+            storeDrugsInDao(drugGroups);
+        }
+    }
+
+    private void addDrugs(List<Element> drugGroups, Element currentDrugElement, DrugGroup currentDrug) {
         if (currentDrugElement.nextElementSibling().is("ul")) {
             List<String> childrenNames = currentDrugElement.nextElementSibling().select("li").eachText();
-
+            LOGGER.debug("Adding: " + currentDrug + " to drugSubstances");
             addDrugSubstance(currentDrug, childrenNames);
+
 
         } else {
             String query = currentDrugElement.nextElementSibling().tagName();
@@ -72,15 +82,10 @@ public class DrugFetcher implements AbstractWebScraper {
 
             List<String> childrenNames = nextGroupSiblings.eachText();
 
+            LOGGER.debug("Adding: " + currentDrug + " to DrugGroups");
             addDrugGroup(currentDrug, childrenNames);
 
             drugGroups.addAll(nextGroupSiblings);
-        }
-        drugGroups.remove(0);
-
-//        As long as there are elements in this.drugGroups run this method again
-        if (drugGroups.size() != 0) {
-            storeDrugsInDao(drugGroups);
         }
     }
 
