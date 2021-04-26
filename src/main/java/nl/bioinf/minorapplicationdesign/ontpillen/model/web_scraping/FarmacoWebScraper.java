@@ -81,9 +81,9 @@ public class FarmacoWebScraper implements AbstractWebScraper {
             drugsubstance.setInteractions(interactions);
 
 
-            LOGGER.debug("Side effects for drug: " + medicine + "Side effects: " + sideEffects);
-            LOGGER.debug("DrugDescription for drug: " + medicine + "Drug description: " + drugDescription);
-            LOGGER.debug("Drug interactions for drug: " + medicine + "Drug interactions: " + interactions);
+            LOGGER.debug("Side effects for drug: " + medicine + " Side effects: " + sideEffects);
+            LOGGER.debug("DrugDescription for drug: " + medicine + " Drug description: " + drugDescription);
+            LOGGER.debug("Drug interactions for drug: " + medicine + " Drug interactions: " + interactions);
         }
     }
 }
