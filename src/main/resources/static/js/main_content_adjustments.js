@@ -10,6 +10,7 @@ $(document).ready(() => {
     const $homeMainContentCardBody = $("#home-main-content-row .card-body");
     const $homeMainContentCardContent = $("#home-main-content-row .card-content");
     const $homeMainContentCardNav = $("#home-main-content-row .card ul.nav");
+    const $homeMainContentCardBodyContentWrapper = $("#home-main-content-row .card .card-body-content-wrapper");
     const $startListButton = $("select#gender");
 
     $startListButton.prop("selectedIndex", -1);
@@ -34,7 +35,8 @@ $(document).ready(() => {
 
         // Set height of homeMainContentCardContent
         $homeMainContentCardContent.css({
-            "height": "calc(" + ($homeMainContentCardBody.height() - $homeMainContentCardNav.outerHeight()) + "px)"
+            "min-height": "calc(" + ($homeMainContentCardBody.height() - $homeMainContentCardNav.outerHeight()) + "px)",
+            "height": $homeMainContentCardBodyContentWrapper.height()+ "px"
         });
     }
 

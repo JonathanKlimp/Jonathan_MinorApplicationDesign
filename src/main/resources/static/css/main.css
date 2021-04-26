@@ -108,12 +108,20 @@ div.content {
     background-color: var(--color-secondary-70);
 }
 
+/*#home-main-content-row .card-content {*/
+/*    height: 100px; !* min-height is set width javascript main_content_adjustments.js*!*/
+/*}*/
+
 #home-main-content-row .card-body ul.nav li {
     border-right: 1px solid var(--color-gray);
 }
 
 #home-main-content-row .card-body ul.nav li:last-of-type {
     border: unset;
+}
+
+#home-main-content-row .card-body-content-wrapper {
+    min-height: 100%;
 }
 
 #home-main-content-row .card-body ul.nav button {
@@ -126,10 +134,10 @@ div.content {
     color: var(--color-light);
 }
 
-#home-main-content-row .card-content #search-form {
-    -ms-transform: translate(-50%, -100%);
-    transform: translate(-50%, -100%);
-}
+/*#home-main-content-row .card-content #search-form {*/
+/*    -ms-transform: translate(-50%, -100%);*/
+/*    transform: translate(-50%, -100%);*/
+/*}*/
 
 #home-main-content-row .card-content .btn-primary {
     /*display: block;*/

@@ -11,7 +11,7 @@
 <!--    <p>test</p>-->
 <!--</div>-->
 
-<p th:text="${userType}"></p>
+<!--<p th:text="${userType}"></p>-->
 
 <section id="main-section">
 
@@ -41,60 +41,70 @@
                                     <li class="nav-item">
                                         <button class="nav-link px-5" id="privacy-tab" data-bs-toggle="tab" data-bs-target="#privacy" type="button">Privacy</button>
                                     </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link px-5" id="test-tab" data-bs-toggle="tab" data-bs-target="#test" type="button">Test</button>
+                                    </li>
                                 </ul>
 
                                 <div class="tab-content" id="home-main-content-tab-content">
 
-                                    <div class="tab-pane fade show active position-relative card-content" id="list">
-                                        <div class="position-absolute top-50 start-50 col-12 col-sm-11 col-md-10 translate-middle">
-                                            <div class="row">
-                                                <div class="col-12 col-md-7">
-                                                    <h3>Lijst maken</h3>
-                                                    <p>
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl nisi, semper vitae tincidunt ut, accumsan eget diam. Quisque lacus elit, euismod quis odio non, vestibulum commodo ante. Nunc et fringilla enim. Donec ac mi arcu. Aliquam quis lacinia tortor. Aenean imperdiet malesuada neque nec consequat. Nullam maximus leo a malesuada vestibulum. Donec eget consectetur justo. Nullam nibh sapien, malesuada id lacinia ullamcorper, consequat nec arcu. Integer neque tellus, euismod et nisl dapibus, egestas sodales justo. Donec facilisis urna at odio ultrices, sed fringilla nisi euismod. Morbi aliquet eu justo vel convallis. Duis nibh leo, efficitur in est sed, venenatis imperdiet urna. Phasellus egestas malesuada nunc a rhoncus.
-                                                    </p>
-                                                </div>
-                                                <div class="col-12 col-md-5">
-                                                    <form action="#" th:action="@{/list}" th:object="${user}" method="get">
-                                                        <label for="age" class="form-label">Leeftijd</label>
-                                                        <input th:field="*{age}" type="number" class="form-control mb-3" id="age" min="18" max="150">
-                                                        <label for="gender" class="form-label">Geslacht</label>
-                                                        <select th:field="*{gender}" class="form-select mb-3" id="gender" required>
-                                                            <option value="1">Man</option>
-                                                            <option value="2">Vrouw</option>
-                                                        </select>
-                                                        <button type="submit" class="btn btn-primary">Start lijst</button>
-                                                    </form>
+                                    <div class="tab-pane fade show active card-content" id="list">
+                                        <div class="d-flex align-items-center justify-content-center card-body-content-wrapper">
+                                            <div class="col-12 col-sm-11 col-md-10">
+                                                <div class="row">
+                                                    <div class="col-12 col-md-7">
+                                                        <h3>Lijst maken</h3>
+                                                        <p>
+                                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl nisi, semper vitae tincidunt ut, accumsan eget diam. Quisque lacus elit, euismod quis odio non, vestibulum commodo ante. Nunc et fringilla enim. Donec ac mi arcu. Aliquam quis lacinia tortor. Aenean imperdiet malesuada neque nec consequat. Nullam maximus leo a malesuada vestibulum. Donec eget consectetur justo. Nullam nibh sapien, malesuada id lacinia ullamcorper, consequat nec arcu. Integer neque tellus, euismod et nisl dapibus, egestas sodales justo. Donec facilisis urna at odio ultrices, sed fringilla nisi euismod. Morbi aliquet eu justo vel convallis. Duis nibh leo, efficitur in est sed, venenatis imperdiet urna. Phasellus egestas malesuada nunc a rhoncus.
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-12 col-md-5">
+                                                        <form action="#" th:action="@{/list}" th:object="${user}" method="get">
+                                                            <label for="age" class="form-label">Leeftijd</label>
+                                                            <input th:field="*{age}" type="number" class="form-control mb-3" id="age" min="18" max="150">
+                                                            <label for="gender" class="form-label">Geslacht</label>
+                                                            <select th:field="*{gender}" class="form-select mb-3" id="gender" required>
+                                                                <option value="1">Man</option>
+                                                                <option value="2">Vrouw</option>
+                                                            </select>
+                                                            <button type="submit" class="btn btn-primary">Start lijst</button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="tab-pane fade position-relative card-content" id="search">
-                                        <form class="position-absolute top-50 start-50 col-11 col-sm-10 col-md-8 col-lg-6" id="search-form">
-                                            <label for="search-query" class="form-label">Snelzoeken</label>
-                                            <div class="input-group input-group-lg">
-                                                <input class="form-control" type="text" id="search-query">
-                                                <input class="input-group-text" type="submit">
-                                                <!--                                            <span class="input-group-text">-->
-                                                <!--                                                <button type="submit">-->
-                                                <!--                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">-->
-                                                <!--                                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>-->
-                                                <!--                                                    </svg>-->
-                                                <!--                                                </button>-->
-                                                <!--                                            </span>-->
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <div class="tab-pane fade position-relative card-content" id="privacy">
-                                        <div class="position-absolute top-50 start-50 col-12 col-sm-11 col-md-10 col-lg-9 col-xl-8 translate-middle">
-                                            <h3>Privacy</h3>
-                                            <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl nisi, semper vitae tincidunt ut, accumsan eget diam. Quisque lacus elit, euismod quis odio non, vestibulum commodo ante. Nunc et fringilla enim. Donec ac mi arcu. Aliquam quis lacinia tortor. Aenean imperdiet malesuada neque nec consequat. Nullam maximus leo a malesuada vestibulum. Donec eget consectetur justo. Nullam nibh sapien, malesuada id lacinia ullamcorper, consequat nec arcu. Integer neque tellus, euismod et nisl dapibus, egestas sodales justo. Donec facilisis urna at odio ultrices, sed fringilla nisi euismod. Morbi aliquet eu justo vel convallis. Duis nibh leo, efficitur in est sed, venenatis imperdiet urna. Phasellus egestas malesuada nunc a rhoncus.
-                                            </p>
+                                    <div class="tab-pane fade card-content" id="search">
+                                        <div class="d-flex align-items-center justify-content-center card-body-content-wrapper">
+                                            <form class="col-11 col-sm-10 col-md-8 col-lg-6" id="search-form">
+                                                <label for="search-query" class="form-label">Zoeken</label>
+                                                <div class="input-group input-group-lg">
+                                                    <input class="form-control" type="text" id="search-query">
+                                                    <input class="input-group-text" type="submit">
+                                                    <!--                                            <span class="input-group-text">-->
+                                                    <!--                                                <button type="submit">-->
+                                                    <!--                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">-->
+                                                    <!--                                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>-->
+                                                    <!--                                                    </svg>-->
+                                                    <!--                                                </button>-->
+                                                    <!--                                            </span>-->
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
+
+                                    <div class="tab-pane fade card-content" id="privacy">
+                                        <div class="d-flex align-items-center justify-content-center card-body-content-wrapper">
+                                            <div class="col-12 col-sm-11 col-md-10 col-lg-9 col-xl-8">
+                                                <h3>Privacy</h3>
+                                                <p>
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl nisi, semper vitae tincidunt ut, accumsan eget diam. Quisque lacus elit, euismod quis odio non, vestibulum commodo ante. Nunc et fringilla enim. Donec ac mi arcu. Aliquam quis lacinia tortor. Aenean imperdiet malesuada neque nec consequat. Nullam maximus leo a malesuada vestibulum. Donec eget consectetur justo. Nullam nibh sapien, malesuada id lacinia ullamcorper, consequat nec arcu. Integer neque tellus, euismod et nisl dapibus, egestas sodales justo. Donec facilisis urna at odio ultrices, sed fringilla nisi euismod. Morbi aliquet eu justo vel convallis. Duis nibh leo, efficitur in est sed, venenatis imperdiet urna. Phasellus egestas malesuada nunc a rhoncus.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                             </div>
