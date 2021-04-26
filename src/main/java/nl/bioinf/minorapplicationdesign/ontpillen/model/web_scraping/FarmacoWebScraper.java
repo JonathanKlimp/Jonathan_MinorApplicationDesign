@@ -2,6 +2,7 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.Drug;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -43,13 +44,20 @@ public class FarmacoWebScraper implements AbstractWebScraper {
         LOGGER.info("Running parseHtml");
         List<String> drugSubstances = new ArrayList<>();
         for(Drug drugSubstance : drugDao.getDrugSubstances()){
-            LOGGER.debug("Fetching " + drugSubstance.getName() + " From the Dao");
+            LOGGER.debug("Fetching " + drugSubstance + "From the Dao");
             drugSubstances.add(drugSubstance.getName());
         }
         this.parseInformation(drugSubstances);
     }
 
     private Document getConnection(String medicine) throws IOException {
+        if (medicine.contains("(") | medicine.contains("/")){
+            //Replaces any non word characters, including whitespaces
+            medicine = medicine.replaceAll("\\W", "_");
+        }
+        if (medicine.contains("ï")){
+            medicine =medicine.replace("ï", "i");
+        }
         String completeUrl = (this.basicUrl + medicine.charAt(0) + "/" + medicine).toLowerCase(Locale.ROOT);
         LOGGER.debug("Connecting to: " + completeUrl);
         return Jsoup.connect(completeUrl).get();
@@ -65,11 +73,17 @@ public class FarmacoWebScraper implements AbstractWebScraper {
             List<String> sideEffects = h2Tags.select(":contains(Bijwerkingen)").nextAll().select("p").eachText();
             List<String> drugDescription = h2Tags.select(":contains(Advies)").nextAll().eachText();
             List<String> interactions = h2Tags.select(":contains(interacties)").nextAll().eachText();
+            Drug currentDrug = drugDao.getDrugByName(medicine);
+            DrugSubstance drugsubstance = (DrugSubstance) currentDrug;
+            drugsubstance.setDescription(drugDescription);
+            //≥ gets parsed as a ?, this is a problem with some drugs
+            drugsubstance.setSideEffects(sideEffects);
+            drugsubstance.setInteractions(interactions);
 
-            LOGGER.debug("Side effects for drug: " + medicine + " Side effects: " + sideEffects);
-            LOGGER.debug("DrugDescription for drug: " + medicine + " Drug description: " + drugDescription);
-            LOGGER.debug("Drug interactions for drug: " + medicine + " Drug interactions: " + interactions);
+
+            LOGGER.debug("Side effects for drug: " + medicine + "Side effects: " + sideEffects);
+            LOGGER.debug("DrugDescription for drug: " + medicine + "Drug description: " + drugDescription);
+            LOGGER.debug("Drug interactions for drug: " + medicine + "Drug interactions: " + interactions);
         }
     }
 }
-
