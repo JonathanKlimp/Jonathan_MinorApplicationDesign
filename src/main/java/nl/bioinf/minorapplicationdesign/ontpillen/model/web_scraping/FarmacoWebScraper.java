@@ -44,7 +44,7 @@ public class FarmacoWebScraper implements AbstractWebScraper {
         LOGGER.info("Running parseHtml");
         List<String> drugSubstances = new ArrayList<>();
         for(Drug drugSubstance : drugDao.getDrugSubstances()){
-            LOGGER.debug("Fetching " + drugSubstance + "From the Dao");
+            LOGGER.debug("Fetching " + drugSubstance.getName() + "From the Dao");
             drugSubstances.add(drugSubstance.getName());
         }
         this.parseInformation(drugSubstances);
