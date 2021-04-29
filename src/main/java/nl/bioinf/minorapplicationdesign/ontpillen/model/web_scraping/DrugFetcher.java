@@ -63,27 +63,31 @@ public class DrugFetcher implements AbstractWebScraper {
         addDrugs(drugGroups, currentDrugElement, currentDrug);
         drugGroups.remove(0);
 
-//        As long as there are elements in this.drugGroups run this method again
+        // As long as there are elements in this.drugGroups run this method again
         if (drugGroups.size() != 0) {
             storeDrugsInDao(drugGroups);
         }
     }
 
-    private void addDrugs(List<Element> drugGroups, Element currentDrugElement, DrugGroup currentDrug) {
+    /**
+     * Method that will get drug from the current element from the html webpage and will add this to drugDao
+     * @param drugGroups List with html elements containing the remaining drug groups
+     * @param currentDrugElement html element with
+     * @param currentDrugGroup current drugGroup
+     */
+    private void addDrugs(List<Element> drugGroups, Element currentDrugElement, DrugGroup currentDrugGroup) {
         if (currentDrugElement.nextElementSibling().is("ul")) {
             List<String> childrenNames = currentDrugElement.nextElementSibling().select("li").eachText();
-            LOGGER.debug("Adding: " + currentDrug.getName() + " to drugSubstances");
-            addDrugSubstance(currentDrug, childrenNames);
-
-
+            LOGGER.debug("Adding: " + currentDrugGroup.getName() + " to drugSubstances");
+            addDrugSubstances(currentDrugGroup, childrenNames);
         } else {
             String query = currentDrugElement.nextElementSibling().tagName();
             Elements nextGroupSiblings = currentDrugElement.nextElementSiblings().select(query);
 
             List<String> childrenNames = nextGroupSiblings.eachText();
 
-            LOGGER.debug("Adding: " + currentDrug.getName() + " to DrugGroups");
-            addDrugGroup(currentDrug, childrenNames);
+            LOGGER.debug("Adding: " + currentDrugGroup.getName() + " to DrugGroups");
+            addDrugGroup(currentDrugGroup, childrenNames);
 
             drugGroups.addAll(nextGroupSiblings);
         }
@@ -98,11 +102,11 @@ public class DrugFetcher implements AbstractWebScraper {
         }
     }
 
-    private void addDrugSubstance(DrugGroup currentDrug, List<String> childrenNames) {
-        for (String childName: childrenNames) {
+    private void addDrugSubstances(DrugGroup parentDrug, List<String> drugSubstances) {
+        for (String childName: drugSubstances) {
             DrugSubstance newDrugSubstance = new DrugSubstance(childName);
-            newDrugSubstance.setParent(currentDrug);
-            currentDrug.addChild(newDrugSubstance);
+            newDrugSubstance.setParent(parentDrug);
+            parentDrug.addChild(newDrugSubstance);
             drugDao.addDrug(newDrugSubstance);
         }
     }
