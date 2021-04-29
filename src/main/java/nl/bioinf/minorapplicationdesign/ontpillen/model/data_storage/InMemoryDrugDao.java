@@ -18,7 +18,7 @@ public class InMemoryDrugDao implements DrugDao {
 
     @Override
     public void addDrug(Drug drug) {
-        if(drugInDrugDao(drug)){
+        if(drugInDrugDao(drug.name)){
             throw new IllegalArgumentException("Cannot add drug that already exists");
         }
         allDrugs.put(drug.getName(), drug);
@@ -66,8 +66,9 @@ public class InMemoryDrugDao implements DrugDao {
         return returnList;
     }
 
-    private boolean drugInDrugDao(Drug drug) throws IllegalArgumentException {
-        return allDrugs.containsKey(drug.name);
+    @Override
+    public boolean drugInDrugDao(String drugName) throws IllegalArgumentException {
+        return allDrugs.containsKey(drugName);
     }
 
     public void removeAllDrugs() {
