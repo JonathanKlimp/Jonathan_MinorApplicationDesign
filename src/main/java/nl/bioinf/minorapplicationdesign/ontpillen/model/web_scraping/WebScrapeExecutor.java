@@ -1,5 +1,7 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,7 @@ public class WebScrapeExecutor {
     private ApotheekWebScraper apotheekWebScraper;
     private GgzStandaardenWebScraper ggzStandaardenWebScraper;
     private RichtlijnenNhgWebScraper richtlijnenNhgWebScraper;
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebScrapeExecutor.class);
 
     @Autowired
     public void setDrugFetcher(DrugFetcher drugFetcher) {
@@ -45,6 +48,7 @@ public class WebScrapeExecutor {
     }
 
     public void runWebcrawlers() throws IOException {
+        LOGGER.info("Running all webcrawlers");
         //Bypass certificate security for all connections after this point
         SSLHelper.bypassSSL();
         this.drugFetcher.parseHtml();

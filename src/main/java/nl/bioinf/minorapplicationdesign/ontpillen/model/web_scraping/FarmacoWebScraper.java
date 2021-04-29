@@ -1,16 +1,20 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.Drug;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,6 +27,7 @@ import java.util.Locale;
 public class FarmacoWebScraper implements AbstractWebScraper {
     private DrugDao drugDao;
     private String basicUrl;
+    private static final Logger LOGGER = LoggerFactory.getLogger(FarmacoWebScraper.class);
 
     private FarmacoWebScraper(@Value("${farmaco.basic.site}") String url) {
         this.basicUrl = url;
@@ -36,29 +41,43 @@ public class FarmacoWebScraper implements AbstractWebScraper {
 
     @Override
     public void parseHtml() throws IOException {
-        System.out.println("basic url: " + this.basicUrl);
-        List drugs = Arrays.asList("Citalopram", "Lorazepam", "Temazepam");
-        this.parseInformation(drugs);
-    }
+        LOGGER.info("Running parseHtml");
+        List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
 
-    private Document getConnection(String medicine) throws IOException {
-        String completeUrl = (this.basicUrl + medicine.charAt(0) + "/" + medicine).toLowerCase(Locale.ROOT);
-        return Jsoup.connect(completeUrl).get();
-    }
-
-    // FIXME needs to be linked to the data model
-    private void parseInformation( List<String> druglist) throws IOException {
         SSLHelper.bypassSSL();
 
-        for (String medicine : druglist) {
-            Document doc = getConnection(medicine);
+        for (DrugSubstance drug : drugSubstances) {
+            // TODO needs to be linked to the data model
+            String drugName = drug.getName();
+            Document doc = getConnection(drugName);
             Elements h2Tags = doc.getElementsByTag("h2");
             List<String> sideEffects = h2Tags.select(":contains(Bijwerkingen)").nextAll().select("p").eachText();
             List<String> drugDescription = h2Tags.select(":contains(Advies)").nextAll().eachText();
-            System.out.println(sideEffects);
-            System.out.println(drugDescription);
-        }
+            List<String> interactions = h2Tags.select(":contains(interacties)").nextAll().eachText();
+            Drug currentDrug = drugDao.getDrugByName(drugName);
+            DrugSubstance drugsubstance = (DrugSubstance) currentDrug;
+            drugsubstance.setDescription(drugDescription);
+            //≥ gets parsed as a ?, this is a problem with some drugs
+            drugsubstance.setSideEffects(sideEffects);
+            drugsubstance.setInteractions(interactions);
 
+
+            LOGGER.debug("Side effects for drug: " + drugName + "Side effects: " + sideEffects);
+            LOGGER.debug("DrugDescription for drug: " + drugName + "Drug description: " + drugDescription);
+            LOGGER.debug("Drug interactions for drug: " + drugName + "Drug interactions: " + interactions);
+        }
+    }
+
+    private Document getConnection(String medicine) throws IOException {
+        if (medicine.contains("(") | medicine.contains("/")){
+            //Replaces any non word characters, including whitespaces
+            medicine = medicine.replaceAll("\\W", "_");
+        }
+        if (medicine.contains("ï")){
+            medicine =medicine.replace("ï", "i");
+        }
+        String completeUrl = (this.basicUrl + medicine.charAt(0) + "/" + medicine).toLowerCase(Locale.ROOT);
+        LOGGER.debug("Connecting to: " + completeUrl);
+        return Jsoup.connect(completeUrl).get();
     }
 }
-
