@@ -37,19 +37,16 @@ public class ApotheekWebScraper implements AbstractWebScraper {
     @Override
     public void parseHtml() throws IOException {
         LOGGER.info("Parsing html");
-        List<String> drugSubstances = new ArrayList<>();
-        for(Drug drugSubstance : drugDao.getDrugSubstances()){
-            drugSubstances.add(drugSubstance.getName());
-        }
+        List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
 
-        for (String drug: drugSubstances) {
-            Document doc = getConnection(drug);
-            getDescription(doc, drug);
+        for (DrugSubstance drug: drugSubstances) {
+            Document doc = getConnection(drug.getName());
+            getDescription(doc, drug.getName());
             getSideEffects(doc);
             getInteractions(doc);
 
             // code to log the description of the Dao
-            Drug drugSubstance = drugDao.getDrugByName(drug);
+            Drug drugSubstance = drugDao.getDrugByName(drug.getName());
             LOGGER.debug("Drug: " + drug);
             DrugSubstance drugSubstance1 = (DrugSubstance) drugSubstance;
             LOGGER.debug("Description in the dao: " + drugSubstance1.getDescription());
