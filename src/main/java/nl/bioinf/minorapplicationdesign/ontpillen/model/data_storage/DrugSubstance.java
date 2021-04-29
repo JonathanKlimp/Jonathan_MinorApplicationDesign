@@ -1,7 +1,5 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
-import org.springframework.core.NestedRuntimeException;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +20,8 @@ public class DrugSubstance extends Drug {
         super(name);
     }
 
+    // Description needs to be changed. There no is no option to add description for patient or psychiatrist
+    // maybe a hashmap with patient, psychiatrist with each having a list with their description
     public void setDescription(List<String> Description){
         this.description = Description;
     }
@@ -50,10 +50,15 @@ public class DrugSubstance extends Drug {
         this.name = name;
     }
 
+    /**
+     * Method that returns list with all brandnames of the drug substance.
+     * @return List with brandnames
+     */
     public List<String> getBrandNames() {
         return Collections.unmodifiableList(brandNames);
     }
 
+    // TODO add javadoc
     public List<String> getDescription() {
         return Collections.unmodifiableList(description);
     }
