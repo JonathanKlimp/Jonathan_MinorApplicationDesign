@@ -16,6 +16,10 @@ public class DrugGroup extends Drug{
         super(name);
     }
 
+    /**
+     * Method returns all drug substances from the current drug group
+     * @return list of drug substances
+     */
     public List<Drug> getChildren() {
         return Collections.unmodifiableList(children);
     }
