@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,18 +39,16 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
 
         for (DrugSubstance drug: drugSubstances) {
-            Document doc = getConnection(drug.getName());
-            getDescription(doc, drug.getName());
+            Document doc = getDrugWebpage(drug.getName());
+            getDescription(doc, drug);
             getSideEffects(doc);
             getInteractions(doc);
 
             // code to log the description of the Dao
-            Drug drugSubstance = drugDao.getDrugByName(drug.getName());
             LOGGER.debug("Drug: " + drug);
-            DrugSubstance drugSubstance1 = (DrugSubstance) drugSubstance;
-            LOGGER.debug("Description in the dao: " + drugSubstance1.getDescription());
-            LOGGER.debug("Interactions in the dao: " + drugSubstance1.getInteractions());
-            LOGGER.debug("SideEffects in the dao: " + drugSubstance1.getSideEffects());
+            LOGGER.debug("Description in the dao: " + drug.getDescription());
+            LOGGER.debug("Interactions in the dao: " + drug.getInteractions());
+            LOGGER.debug("SideEffects in the dao: " + drug.getSideEffects());
         }
     }
 
@@ -83,15 +80,14 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         return null;
     }
 
-    private void getDescription(Document doc, String drug) {
+    private void getDescription(Document doc, DrugSubstance drug) {
         Element useIndicationTag = doc.getElementsByAttributeValueContaining("data-print", "waarbij gebruik").select(".listItemContent_text__otIdg").get(0);
 //        System.out.println(useIndicationTag.children().eachText());
         //TODO add to the datamodel
-        DrugSubstance myDrug = (DrugSubstance) drugDao.getDrugByName(drug);
-        myDrug.setDescription(useIndicationTag.children().eachText());
+        drug.setDescription(useIndicationTag.children().eachText());
     }
 
-    private Document getConnection(String medicine) throws IOException {
+    private Document getDrugWebpage(String medicine) throws IOException {
         //TODO Temporarily solution to pass the test, needs to be figured out what to do with these medicines.
         if (medicine.equals("coffeïne") || medicine.contains("esketamine")){
             medicine = "citalopram";
