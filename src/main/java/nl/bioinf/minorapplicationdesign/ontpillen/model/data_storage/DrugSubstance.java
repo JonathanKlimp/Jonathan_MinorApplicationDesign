@@ -3,7 +3,11 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 import java.util.*;
 
 /**
- *
+ * DrugSubstance is a child class of abstract class Drug
+ * It contains all necessary information about the drug substance
+ * that needs to be presented on the website. Which are:
+ * the brand names, the description, side effects, use and stop indications
+ * and interactions with other drugs.
  * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
  */
 public class DrugSubstance extends Drug {
