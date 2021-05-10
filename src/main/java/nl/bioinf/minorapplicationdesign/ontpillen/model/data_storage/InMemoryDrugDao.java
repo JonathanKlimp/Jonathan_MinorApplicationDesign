@@ -7,7 +7,12 @@ import java.util.Map;
 
 
 /**
- *
+ * InMemoryDrugDao implements interface DrugDao and is the class that
+ * saves all drug substances and drug groups. The class saves all drugs
+ * in a hashmap called allDrugs. To make searching on drug substance and
+ * drug group possible two arraylists are used (drugSubstances, mainDrugGroups)
+ * which contain the drug groups and substances. these arraylists can be used
+ * to search the hashmap on substance or groups.
  * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
  */
 public class InMemoryDrugDao implements DrugDao {
