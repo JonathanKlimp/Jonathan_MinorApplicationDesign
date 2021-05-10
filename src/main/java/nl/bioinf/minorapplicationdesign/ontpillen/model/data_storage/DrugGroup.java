@@ -6,7 +6,9 @@ import java.util.List;
 
 
 /**
- *
+ * DrugGroup is the child class of abstract class Drug.
+ * The class contains the name of the drug group and the
+ * drugs that belong to the drug group as children.
  * @author Larissa Bouwknegt, Jonathan Klimp
  */
 public class DrugGroup extends Drug{
