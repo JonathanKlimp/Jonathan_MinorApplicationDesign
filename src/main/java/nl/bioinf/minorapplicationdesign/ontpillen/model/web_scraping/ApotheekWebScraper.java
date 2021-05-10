@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,29 +36,25 @@ public class ApotheekWebScraper implements AbstractWebScraper {
     @Override
     public void parseHtml() throws IOException {
         LOGGER.info("Parsing html");
-        List<String> drugSubstances = new ArrayList<>();
-        for(Drug drugSubstance : drugDao.getDrugSubstances()){
-            drugSubstances.add(drugSubstance.getName());
-        }
+        List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
 
-        for (String drug: drugSubstances) {
-            Document doc = getConnection(drug);
+        for (DrugSubstance drug: drugSubstances) {
+            Document doc = getDrugWebpage(drug.getName());
             getDescription(doc, drug);
-            getSideEffects(doc);
-            getInteractions(doc);
+            getSideEffects(doc, drug);
+            getInteractions(doc, drug);
 
             // code to log the description of the Dao
-            Drug drugSubstance = drugDao.getDrugByName(drug);
             LOGGER.debug("Drug: " + drug);
-            DrugSubstance drugSubstance1 = (DrugSubstance) drugSubstance;
-            LOGGER.debug("Description in the dao: " + drugSubstance1.getDescription());
-            LOGGER.debug("Interactions in the dao: " + drugSubstance1.getInteractions());
-            LOGGER.debug("SideEffects in the dao: " + drugSubstance1.getSideEffects());
+            LOGGER.debug("Description in the dao: " + drug.getDescription());
+            LOGGER.debug("Interactions in the dao: " + drug.getInteractions());
+            LOGGER.debug("SideEffects in the dao: " + drug.getSideEffectsPatient());
         }
     }
 
-    private void getInteractions(Document doc) {
+    private void getInteractions(Document doc, DrugSubstance drug) {
         Elements interactions = doc.getElementsByAttributeValueContaining("data-print", "andere medicijnen gebruiken").select(".listItemContent_text__otIdg ");
+        drug.setInteractions(interactions.eachText());
         LOGGER.debug("Interactions: " + interactions.eachText());
     }
 
@@ -67,7 +62,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         return null;
     }
 
-    private String getSideEffects(Document doc) {
+    private String getSideEffects(Document doc, DrugSubstance drug) {
 
         Elements sideEffectsHtmlLocation = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen");
         List<String> sideEffectsIntro = sideEffectsHtmlLocation.select(".listItemContent_text__otIdg p, p.listItemContent_text__otIdg").eachText();
@@ -86,15 +81,12 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         return null;
     }
 
-    private void getDescription(Document doc, String drug) {
+    private void getDescription(Document doc, DrugSubstance drug) {
         Element useIndicationTag = doc.getElementsByAttributeValueContaining("data-print", "waarbij gebruik").select(".listItemContent_text__otIdg").get(0);
-//        System.out.println(useIndicationTag.children().eachText());
-        //TODO add to the datamodel
-        DrugSubstance myDrug = (DrugSubstance) drugDao.getDrugByName(drug);
-        myDrug.setDescription(useIndicationTag.children().eachText());
+        drug.setDescription(useIndicationTag.children().eachText());
     }
 
-    private Document getConnection(String medicine) throws IOException {
+    private Document getDrugWebpage(String medicine) throws IOException {
         //TODO Temporarily solution to pass the test, needs to be figured out what to do with these medicines.
         if (medicine.equals("coffeïne") || medicine.contains("esketamine")){
             medicine = "citalopram";

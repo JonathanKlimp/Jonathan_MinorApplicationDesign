@@ -1,10 +1,6 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
-import org.springframework.core.NestedRuntimeException;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -13,7 +9,10 @@ import java.util.List;
 public class DrugSubstance extends Drug {
     private List<String> brandNames = new ArrayList<>();
     private List<String> description;
-    private List<String> sideEffects;
+    private Map<String, List<String>> sideEffects = new HashMap<>() {{
+        put("patient", new ArrayList<>());
+        put("psychiatrist", new ArrayList<>());
+    }};
     private List<String> useIndications;
     private List<StopIndication>  stopIndications;
     private List<String> interactions;
@@ -22,6 +21,8 @@ public class DrugSubstance extends Drug {
         super(name);
     }
 
+    // Description needs to be changed. There no is no option to add description for patient or psychiatrist
+    // maybe a hashmap with patient, psychiatrist with each having a list with their description
     public void setDescription(List<String> Description){
         this.description = Description;
     }
@@ -30,8 +31,12 @@ public class DrugSubstance extends Drug {
         this.brandNames.add(brandName);
     }
 
-    public void setSideEffects(List<String> sideEffects){
-        this.sideEffects = sideEffects;
+    public void setSideEffectsPatient(List<String> sideEffectsPatient) {
+        this.sideEffects.put("patient", sideEffectsPatient);
+    }
+
+    public void setSideEffectsPsychiatrist(List<String> sideEffectsPatient) {
+        this.sideEffects.put("psychiatrist", sideEffectsPatient);
     }
 
     public void setUseIndications(List<String> useIndications){
@@ -50,16 +55,29 @@ public class DrugSubstance extends Drug {
         this.name = name;
     }
 
+    /**
+     * Method that returns list with all brandnames of the drug substance.
+     * @return List with brandnames
+     */
     public List<String> getBrandNames() {
         return Collections.unmodifiableList(brandNames);
     }
 
+    // TODO add javadoc
     public List<String> getDescription() {
         return Collections.unmodifiableList(description);
     }
 
-    public List<String> getSideEffects() {
-        return Collections.unmodifiableList(sideEffects);
+    public List<String> getSideEffectsPatient() {
+        return Collections.unmodifiableList(sideEffects.get("patient"));
+    }
+
+    public List<String> getSideEffectsPsychiatrist() {
+        return Collections.unmodifiableList(sideEffects.get("psychiatrist"));
+    }
+
+    public HashMap<String, List<String>> getAllSideEffects() {
+        return (HashMap<String, List<String>>) Collections.unmodifiableMap(sideEffects);
     }
 
     public List<String> getUseIndications() {

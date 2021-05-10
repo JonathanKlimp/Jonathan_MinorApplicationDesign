@@ -23,8 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class DrugFetcherTest {
-    private String url;
-
     @Autowired
     DrugDao drugDao;
 
@@ -39,10 +37,6 @@ class DrugFetcherTest {
     @BeforeEach
     public void bypassSSL() {
         SSLHelper.bypassSSL();
-    }
-
-    private DrugFetcherTest(@Value("${farmaco.medicines.site}") String url) {
-        this.url = url;
     }
 
     @Test

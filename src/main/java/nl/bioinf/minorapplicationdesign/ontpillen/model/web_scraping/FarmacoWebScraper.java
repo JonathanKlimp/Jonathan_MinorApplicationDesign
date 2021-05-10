@@ -42,12 +42,30 @@ public class FarmacoWebScraper implements AbstractWebScraper {
     @Override
     public void parseHtml() throws IOException {
         LOGGER.info("Running parseHtml");
-        List<String> drugSubstances = new ArrayList<>();
-        for(Drug drugSubstance : drugDao.getDrugSubstances()){
-            LOGGER.debug("Fetching " + drugSubstance.getName() + "From the Dao");
-            drugSubstances.add(drugSubstance.getName());
+        List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
+
+        SSLHelper.bypassSSL();
+
+        for (DrugSubstance drug : drugSubstances) {
+            // TODO needs to be linked to the data model
+            String drugName = drug.getName();
+            Document doc = getConnection(drugName);
+            Elements h2Tags = doc.getElementsByTag("h2");
+            List<String> sideEffects = h2Tags.select(":contains(Bijwerkingen)").nextAll().select("p").eachText();
+            List<String> drugDescription = h2Tags.select(":contains(Advies)").nextAll().eachText();
+            List<String> interactions = h2Tags.select(":contains(interacties)").nextAll().eachText();
+            Drug currentDrug = drugDao.getDrugByName(drugName);
+            DrugSubstance drugsubstance = (DrugSubstance) currentDrug;
+            drugsubstance.setDescription(drugDescription);
+            //≥ gets parsed as a ?, this is a problem with some drugs
+            drugsubstance.setSideEffects(sideEffects);
+            drugsubstance.setInteractions(interactions);
+
+
+            LOGGER.debug("Side effects for drug: " + drugName + "Side effects: " + sideEffects);
+            LOGGER.debug("DrugDescription for drug: " + drugName + "Drug description: " + drugDescription);
+            LOGGER.debug("Drug interactions for drug: " + drugName + "Drug interactions: " + interactions);
         }
-        this.parseInformation(drugSubstances);
     }
 
     private Document getConnection(String medicine) throws IOException {
@@ -61,29 +79,5 @@ public class FarmacoWebScraper implements AbstractWebScraper {
         String completeUrl = (this.basicUrl + medicine.charAt(0) + "/" + medicine).toLowerCase(Locale.ROOT);
         LOGGER.debug("Connecting to: " + completeUrl);
         return Jsoup.connect(completeUrl).get();
-    }
-
-    // FIXME needs to be linked to the data model
-    private void parseInformation( List<String> druglist) throws IOException {
-        SSLHelper.bypassSSL();
-
-        for (String medicine : druglist) {
-            Document doc = getConnection(medicine);
-            Elements h2Tags = doc.getElementsByTag("h2");
-            List<String> sideEffects = h2Tags.select(":contains(Bijwerkingen)").nextAll().select("p").eachText();
-            List<String> drugDescription = h2Tags.select(":contains(Advies)").nextAll().eachText();
-            List<String> interactions = h2Tags.select(":contains(interacties)").nextAll().eachText();
-            Drug currentDrug = drugDao.getDrugByName(medicine);
-            DrugSubstance drugsubstance = (DrugSubstance) currentDrug;
-            drugsubstance.setDescription(drugDescription);
-            //≥ gets parsed as a ?, this is a problem with some drugs
-            drugsubstance.setSideEffects(sideEffects);
-            drugsubstance.setInteractions(interactions);
-
-
-            LOGGER.debug("Side effects for drug: " + medicine + " Side effects: " + sideEffects);
-            LOGGER.debug("DrugDescription for drug: " + medicine + " Drug description: " + drugDescription);
-            LOGGER.debug("Drug interactions for drug: " + medicine + " Drug interactions: " + interactions);
-        }
     }
 }
