@@ -5,6 +5,9 @@ import java.util.Set;
 
 
 /**
+ * DrugDao is the interface for DrugDao classes which allows the drug objects
+ * to be saved in various ways. It contains all necessary methods for example: addDrug,
+ * getAllDrugs and removeAllDrugs.
  * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
  */
 public interface DrugDao {
