@@ -4,7 +4,8 @@ import java.io.IOException;
 
 
 /**
- *
+ * AbstractWebScraper is an interface for all webscrapers.
+ * It contains one method: parseHtml.
  * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
  */
 public interface AbstractWebScraper {
