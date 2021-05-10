@@ -5,6 +5,11 @@ import org.jsoup.helper.Validate;
 
 
 /**
+ * Drug is the abstract base class for all drug types.
+ * A Drug object contains the name of the drug and the parent.
+ * Parent is used to maintain the structure of for example drug substances
+ * which are part of a drug group. In that case the drugSubstance child classes
+ * will their respective drug group as their parent.
  * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
  */
 public abstract class Drug {
