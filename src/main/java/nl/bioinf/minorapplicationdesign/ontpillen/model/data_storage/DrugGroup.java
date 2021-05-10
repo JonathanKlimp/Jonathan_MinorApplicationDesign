@@ -6,7 +6,9 @@ import java.util.List;
 
 
 /**
- *
+ * DrugGroup is the child class of abstract class Drug.
+ * The class contains the name of the drug group and the
+ * drugs that belong to the drug group as children.
  * @author Larissa Bouwknegt, Jonathan Klimp
  */
 public class DrugGroup extends Drug{
@@ -16,6 +18,10 @@ public class DrugGroup extends Drug{
         super(name);
     }
 
+    /**
+     * Method returns all drug substances from the current drug group
+     * @return list of drug substances
+     */
     public List<Drug> getChildren() {
         return Collections.unmodifiableList(children);
     }

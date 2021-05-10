@@ -1,17 +1,22 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
- *
+ * DrugSubstance is a child class of abstract class Drug
+ * It contains all necessary information about the drug substance
+ * that needs to be presented on the website. Which are:
+ * the brand names, the description, side effects, use and stop indications
+ * and interactions with other drugs.
  * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
  */
 public class DrugSubstance extends Drug {
     private List<String> brandNames = new ArrayList<>();
     private List<String> description;
-    private List<String> sideEffects;
+    private Map<String, List<String>> sideEffects = new HashMap<>() {{
+        put("patient", new ArrayList<>());
+        put("psychiatrist", new ArrayList<>());
+    }};
     private List<String> useIndications;
     private List<StopIndication>  stopIndications;
     private List<String> interactions;
@@ -30,8 +35,12 @@ public class DrugSubstance extends Drug {
         this.brandNames.add(brandName);
     }
 
-    public void setSideEffects(List<String> sideEffects){
-        this.sideEffects = sideEffects;
+    public void setSideEffectsPatient(List<String> sideEffectsPatient) {
+        this.sideEffects.put("patient", sideEffectsPatient);
+    }
+
+    public void setSideEffectsPsychiatrist(List<String> sideEffectsPatient) {
+        this.sideEffects.put("psychiatrist", sideEffectsPatient);
     }
 
     public void setUseIndications(List<String> useIndications){
@@ -63,8 +72,16 @@ public class DrugSubstance extends Drug {
         return Collections.unmodifiableList(description);
     }
 
-    public List<String> getSideEffects() {
-        return Collections.unmodifiableList(sideEffects);
+    public List<String> getSideEffectsPatient() {
+        return Collections.unmodifiableList(sideEffects.get("patient"));
+    }
+
+    public List<String> getSideEffectsPsychiatrist() {
+        return Collections.unmodifiableList(sideEffects.get("psychiatrist"));
+    }
+
+    public HashMap<String, List<String>> getAllSideEffects() {
+        return (HashMap<String, List<String>>) Collections.unmodifiableMap(sideEffects);
     }
 
     public List<String> getUseIndications() {

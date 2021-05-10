@@ -41,19 +41,20 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         for (DrugSubstance drug: drugSubstances) {
             Document doc = getDrugWebpage(drug.getName());
             getDescription(doc, drug);
-            getSideEffects(doc);
-            getInteractions(doc);
+            getSideEffects(doc, drug);
+            getInteractions(doc, drug);
 
             // code to log the description of the Dao
             LOGGER.debug("Drug: " + drug);
             LOGGER.debug("Description in the dao: " + drug.getDescription());
             LOGGER.debug("Interactions in the dao: " + drug.getInteractions());
-            LOGGER.debug("SideEffects in the dao: " + drug.getSideEffects());
+            LOGGER.debug("SideEffects in the dao: " + drug.getSideEffectsPatient());
         }
     }
 
-    private void getInteractions(Document doc) {
+    private void getInteractions(Document doc, DrugSubstance drug) {
         Elements interactions = doc.getElementsByAttributeValueContaining("data-print", "andere medicijnen gebruiken").select(".listItemContent_text__otIdg ");
+        drug.setInteractions(interactions.eachText());
         LOGGER.debug("Interactions: " + interactions.eachText());
     }
 
@@ -61,7 +62,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         return null;
     }
 
-    private String getSideEffects(Document doc) {
+    private String getSideEffects(Document doc, DrugSubstance drug) {
 
         Elements sideEffectsHtmlLocation = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen");
         List<String> sideEffectsIntro = sideEffectsHtmlLocation.select(".listItemContent_text__otIdg p, p.listItemContent_text__otIdg").eachText();
@@ -82,8 +83,6 @@ public class ApotheekWebScraper implements AbstractWebScraper {
 
     private void getDescription(Document doc, DrugSubstance drug) {
         Element useIndicationTag = doc.getElementsByAttributeValueContaining("data-print", "waarbij gebruik").select(".listItemContent_text__otIdg").get(0);
-//        System.out.println(useIndicationTag.children().eachText());
-        //TODO add to the datamodel
         drug.setDescription(useIndicationTag.children().eachText());
     }
 
