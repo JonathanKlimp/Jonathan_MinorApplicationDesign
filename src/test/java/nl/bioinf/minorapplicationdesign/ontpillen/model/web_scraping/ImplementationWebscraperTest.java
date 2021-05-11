@@ -66,11 +66,7 @@ class ImplementationWebscraperTest {
 
         // check if the actual drug substances are in the expected list
         for (String drug : actualDrugSubstances) {
-            if (!expectedDrugSubstances.contains(drug)) {
-                itemsMatch = false;
-            } else {
-                itemsMatch = true;
-            }
+            itemsMatch = expectedDrugSubstances.contains(drug);
         }
         assertTrue(itemsMatch);
     }
@@ -90,11 +86,7 @@ class ImplementationWebscraperTest {
 
         // check if the actual drug substances are in the expected list
         for (String drug : actualDrugGroups) {
-            if (!expectedDrugGroups.contains(drug)) {
-                itemsMatch = false;
-            } else {
-                itemsMatch = true;
-            }
+            itemsMatch = expectedDrugGroups.contains(drug);
         }
         assertTrue(itemsMatch);
     }
