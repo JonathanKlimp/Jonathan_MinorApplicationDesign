@@ -18,11 +18,12 @@ public class OntpillenApplication {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(MyApplicationContextConfiguration.class);
 
         WebScrapeExecutor myWebScraper = ctx.getBean(WebScrapeExecutor.class);
-        myWebScraper.runWebcrawlers();
-
         ctx.close();
 
         SpringApplication.run(OntpillenApplication.class, args);
+
+        myWebScraper.runWebcrawlers();
+        ctx.close();
     }
 
 }

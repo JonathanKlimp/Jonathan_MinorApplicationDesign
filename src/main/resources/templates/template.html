@@ -33,7 +33,10 @@
                     <a class="nav-link" href="#">Lijst maken</a>
                 </li>
                 <li class="nav-item px-lg-4">
-                    <a class="nav-link" href="#">Voor behandelaren</a>
+                    <form method="POST">
+                        <button th:if="${session.userType} == 'gebruiker'" type="submit" class="btn btn-link" name="user-type" value="behandelaar">Voor behandelaren</button>
+                        <button th:if="${session.userType} == 'behandelaar'" type="submit" class="btn btn-link" name=user-type value="gebruiker">Voor gebruiker</button>
+                    </form>
                 </li>
             </ul>
 
