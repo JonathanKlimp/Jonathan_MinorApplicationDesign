@@ -41,7 +41,11 @@ public class DrugFetcher implements AbstractWebScraper {
         LOGGER.info("Running parseHtml");
         List<Element> drugGroups = this.getDrugGroups();
         storeDrugsInDao(drugGroups);
+
+        List<Element> remainingDrugs = this.getOtherDrug();
+        storeOtherDrugsInDao(remainingDrugs);
     }
+
 
     private List<Element> getDrugGroups() throws IOException {
         Document doc = Jsoup.connect(this.url).get();
@@ -50,14 +54,26 @@ public class DrugFetcher implements AbstractWebScraper {
     }
 
 
+    /**
+     * Method that will fetch the remaining drugs that are not present in "pat-rich group-2"
+     * it fetches the "pat-rich group-3"
+     * @return List elements of the html containing the drug names
+     * @throws IOException
+     */
+    private List<Element> getOtherDrug() throws IOException {
+        Document doc = Jsoup.connect(this.url).get();
+        LOGGER.debug("Fetching drugs from: " + doc);
+        return doc.getElementsByClass("pat-rich group-3").select("li");
+    }
+
+
     private void storeDrugsInDao(List<Element> drugGroups){
         Element currentDrugElement = drugGroups.get(0);
         DrugGroup currentDrug;
 
-        if (!this.drugDao.getAllDrugNames().contains(currentDrugElement.text())) {
-            this.drugDao.addDrug(new DrugGroup(currentDrugElement.text()));
+        if (!drugDao.getAllDrugNames().contains(currentDrugElement.text())) {
+            drugDao.addDrug(new DrugGroup(currentDrugElement.text()));
         }
-
         currentDrug = (DrugGroup) drugDao.getDrugByName(currentDrugElement.text());
 
         addDrugs(drugGroups, currentDrugElement, currentDrug);
@@ -67,6 +83,23 @@ public class DrugFetcher implements AbstractWebScraper {
         if (drugGroups.size() != 0) {
             storeDrugsInDao(drugGroups);
         }
+    }
+
+
+    /**
+     * Method that will check which drug from "pat-rich group-3" are not present in the dao
+     * and will add them
+     * @param remainingDrugs
+     */
+    private void storeOtherDrugsInDao(List<Element> remainingDrugs) {
+        DrugGroup drugGroupOther = (DrugGroup) drugDao.getDrugByName("psychofarmaca, overige");
+        List<String> drugsToBeAdded = new ArrayList<>();
+        for(Element drugElement : remainingDrugs) {
+            if(!drugDao.drugInDrugDao(drugElement.text())){
+                drugsToBeAdded.add(drugElement.text());
+            }
+        }
+        addDrugSubstances(drugGroupOther, drugsToBeAdded);
     }
 
     /**
