@@ -47,7 +47,6 @@ public class FarmacoWebScraper implements AbstractWebScraper {
         SSLHelper.bypassSSL();
 
         for (DrugSubstance drug : drugSubstances) {
-            // TODO needs to be linked to the data model
             String drugName = drug.getName();
             Document doc = getConnection(drugName);
             Elements h2Tags = doc.getElementsByTag("h2");
@@ -57,16 +56,15 @@ public class FarmacoWebScraper implements AbstractWebScraper {
             Drug currentDrug = drugDao.getDrugByName(drugName);
             DrugSubstance drugsubstance = (DrugSubstance) currentDrug;
             drugsubstance.setDescription(drugDescription);
-            //≥ gets parsed as a ?, this is a problem with some drugs
-            drugsubstance.setSideEffects(sideEffects);
+            drugsubstance.setSideEffectsPsychiatrist(sideEffects);
             drugsubstance.setInteractions(interactions);
-
 
             LOGGER.debug("Side effects for drug: " + drugName + "Side effects: " + sideEffects);
             LOGGER.debug("DrugDescription for drug: " + drugName + "Drug description: " + drugDescription);
             LOGGER.debug("Drug interactions for drug: " + drugName + "Drug interactions: " + interactions);
         }
     }
+
 
     private Document getConnection(String medicine) throws IOException {
         if (medicine.contains("(") | medicine.contains("/")){
