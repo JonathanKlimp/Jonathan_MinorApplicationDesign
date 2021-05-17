@@ -24,10 +24,11 @@ public class OntpillenApplication {
 
         ctx.close();
 
+        LOGGER.info("Starting the application");
         SpringApplication.run(OntpillenApplication.class, args);
 
         myWebScraper.runWebcrawlers();
-        LOGGER.info("Started the application");
+
 
         ctx.close();
     }
