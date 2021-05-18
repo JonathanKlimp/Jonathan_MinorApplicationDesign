@@ -76,8 +76,8 @@ public class InMemoryDrugDao implements DrugDao {
     @Override
     public List<DrugGroup> getMainDrugGroups() {
         List<DrugGroup> returnList = new ArrayList<>();
-        for(String drugName : drugSubstances) {
-            returnList.add((DrugGroup) allDrugs.get(drugName));
+        for (String drugGroup : mainDrugGroups) {
+            returnList.add((DrugGroup) allDrugs.get(drugGroup));
         }
         return returnList;
     }

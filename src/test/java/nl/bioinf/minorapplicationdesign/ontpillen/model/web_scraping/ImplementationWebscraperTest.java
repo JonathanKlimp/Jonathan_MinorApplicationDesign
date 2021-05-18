@@ -5,12 +5,14 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Jonathan Klimp
  */
+
 @SpringBootTest
 class ImplementationWebscraperTest {
 
@@ -59,7 +62,13 @@ class ImplementationWebscraperTest {
         for(Drug drugSubstance : drugDao.getDrugSubstances()){
             actualDrugSubstances.add(drugSubstance.getName());
         }
-        assertEquals(expectedDrugSubstances, actualDrugSubstances);
+        boolean itemsMatch = false;
+
+        // check if the actual drug substances are in the expected list
+        for (String drug : actualDrugSubstances) {
+            itemsMatch = expectedDrugSubstances.contains(drug);
+        }
+        assertTrue(itemsMatch);
     }
 
     @Test
@@ -73,6 +82,12 @@ class ImplementationWebscraperTest {
         for(Drug drugGroup: drugDao.getMainDrugGroups()){
             actualDrugGroups.add(drugGroup.getName());
         }
-        assertEquals(expectedDrugGroups, actualDrugGroups);
+        boolean itemsMatch = false;
+
+        // check if the actual drug substances are in the expected list
+        for (String drug : actualDrugGroups) {
+            itemsMatch = expectedDrugGroups.contains(drug);
+        }
+        assertTrue(itemsMatch);
     }
 }
