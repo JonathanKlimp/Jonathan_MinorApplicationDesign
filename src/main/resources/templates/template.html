@@ -7,10 +7,10 @@
     <meta name="author" content="Naomi Hindriks">
 
     <!--Bootstrap css-->
-    <link th:href="@{css/bootstrap/bootstrap.min.css}" href="../static/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{~/css/bootstrap/bootstrap.min.css}" href="../static/css/bootstrap/bootstrap.min.css" rel="stylesheet">
 
     <!--Custom css-->
-    <link th:href="@{css/main.css}" href="../static/css/main.css" rel="stylesheet">
+    <link th:href="@{~/css/main.css}" href="../static/css/main.css" rel="stylesheet">
     <title th:text="${title}">__Offline title__</title>
 </head>
 
@@ -19,8 +19,8 @@
 <nav th:fragment="header-nav" class="navbar navbar-dark navbar-expand-lg" id="header">
     <div class="container">
 
-        <a class="navbar-brand" href="#">
-            <img th:src="@{images/logo.svg}" src="../static/images/logo.svg" style="height: 60px">
+        <a class="navbar-brand" href="/" th:href="@{~/}">
+            <img th:src="@{~/images/logo.svg}" src="../static/images/logo.svg" style="height: 60px">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
@@ -33,13 +33,16 @@
                     <a class="nav-link" href="#">Lijst maken</a>
                 </li>
                 <li class="nav-item px-lg-4">
-                    <a class="nav-link" href="#">Voor behandelaren</a>
+                    <form method="POST">
+                        <button th:if="${userType.getUserType()} == 'gebruiker'" type="submit" class="btn btn-link" name="user-type" value="behandelaar">Voor behandelaren</button>
+                        <button th:if="${userType.getUserType()} == 'behandelaar'" type="submit" class="btn btn-link" name=user-type value="gebruiker">Voor gebruiker</button>
+                    </form>
                 </li>
             </ul>
 
-            <form class="ms-lg-5">
+            <form class="ms-lg-5" method="post" th:action="@{~/zoeken}">
                 <div class="input-group input-group-sm">
-                    <input class="form-control" type="search" placeholder="Zoeken" id="search-query">
+                    <input class="form-control" type="search" placeholder="Zoeken" id="search-query" name="search-query">
                     <button class="btn btn-light" type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -51,6 +54,23 @@
 
     </div>
 </nav>
+
+<!--Subheader fragment, used for pages, but not homepage-->
+<section id="sub-header" th:fragment="subheader(breadcrumb, title, button)">
+    <div class="container pt-3 pb-5">
+        <div class="row mb-2">
+            <p th:text="${breadcrumb}">__offline breadcrumb__</p>
+        </div>
+        <div class="row gy-4 mt-3 pt-5 align-items-end">
+            <div class="col-md-8">
+                <h2 th:text="${title}">__offline subtitle__</h2>
+            </div>
+            <div th:if="${button} == 'true'" class="col-md-4">
+                <button class="btn btn-secondary px-5">+ Voeg toe aan lijst</button>
+            </div>
+        </div>
+    </div>
+</section>
 
 
 <!--Footer fragment-->
@@ -96,9 +116,9 @@
     scripts that should be implemented in every page can be placed here-->
 <div th:fragment="scripts">
     <!--jQuery javascript-->
-    <script th:src="@{js/jquery/jquery-3.5.1.js}" src="../static/js/jquery/jquery-3.5.1.js"></script>
+    <script th:src="@{~/js/jquery/jquery-3.5.1.js}" src="../static/js/jquery/jquery-3.5.1.js"></script>
     <!--Bootstrap javascript-->
-    <script th:src="@{js/bootstrap/bootstrap.min.js}" src="../static/js/bootstrap/bootstrap.min.js"></script>
+    <script th:src="@{~/js/bootstrap/bootstrap.min.js}" src="../static/js/bootstrap/bootstrap.min.js"></script>
     <!--Custom javascript-->
-    <script th:src="@{js/main.js}" src="../static/js/main.js"></script>
+    <script th:src="@{~/js/main.js}" src="../static/js/main.js"></script>
 </div>

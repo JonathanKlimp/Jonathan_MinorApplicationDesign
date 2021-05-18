@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+
+<head th:replace="template :: head('Zoekresultaat: ' + ${searchQuery})"></head>
+
+<body>
+
+<nav th:replace="template :: header-nav"></nav>
+
+<section th:replace="template :: subheader('', 'Zoekresultaten voor ' + ${searchQuery}, 'false')"></section>
+
+<section id="search-result-page">
+    <div id="search-result-content" class="container pt-5">
+        <th:block th:each="drugName : ${drugDao.getAllDrugNames()}">
+            <th:block th:if="${drugName.contains(searchQuery.toLowerCase())}">
+
+                <!--Search result items, item for every drug that contains searchQuery in name-->
+                <div class="row">
+                    <div class="col border-bottom pb-3 mb-5">
+                        <a th:href="@{'~/medicijn/' + ${drugName}}" href="#"><h3 th:text="${drugName.substring(0,1).toUpperCase() + drugName.substring(1)}">__offline search item title__</h3></a>
+
+<!--                        Block will be inserted if the drug is a DrugSubstance-->
+                        <th:block th:if="${drugDao.getDrugByName(drugName).getIsSubstance()}">
+                            <p th:text="${drugDao.getDrugSubstanceByName(drugName).getDescription()}">__offline short description/tags__</p>
+                        </th:block>
+
+<!--                        This block will be inserted if the drug is not a DrugSubstance (but rather a DrugGroup)-->
+                        <th:block th:unless="${drugDao.getDrugByName(drugName).getIsSubstance()}">
+                            <p th:text="${drugDao.getDrugGroupByName(drugName).getDescription()}">__offline short description/tags__</p>
+                        </th:block>
+
+<!--                        <p th:text="${drugDao.getDrugByName(drugName)}">__offline short description/tags__</p>-->
+                    </div>
+                </div>
+
+            </th:block>
+        </th:block>
+    </div>
+</section>
+
+<footer th:replace="template :: footer"></footer>
+
+<div th:replace="template :: scripts"></div>
+</body>
+
+</html>

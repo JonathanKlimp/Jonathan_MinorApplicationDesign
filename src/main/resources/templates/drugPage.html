@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+
+<head th:replace="template :: head(${drugName})"></head>
+
+<body>
+
+<nav th:replace="template :: header-nav"></nav>
+
+<section th:replace="template :: subheader('breadcrumb', ${drugName.substring(0,1).toUpperCase() + drugName.substring(1)}, 'true')"></section>
+
+<p>Test</p>
+
+<footer th:replace="template :: footer"></footer>
+
+<div th:replace="template :: scripts"></div>
+</body>
+</html>

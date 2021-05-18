@@ -15,6 +15,7 @@ import org.jsoup.helper.Validate;
 public abstract class Drug {
     protected String name;
     protected Drug parent;
+    protected boolean isSubstance;
 
     public Drug(String name) {
         Validate.notNull(name, "name can't be null");
@@ -35,5 +36,13 @@ public abstract class Drug {
 
     public void setParent(Drug parent) {
         this.parent = parent;
+    }
+
+    public void setIsSubstance(boolean newBool) {
+        this.isSubstance = newBool;
+    }
+
+    public boolean getIsSubstance() {
+        return this.isSubstance;
     }
 }

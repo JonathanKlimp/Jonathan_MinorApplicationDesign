@@ -15,6 +15,11 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+//    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+//    implementation 'org.springframework.session:spring-session-core:2.2.6.RELEASE'
+//    implementation 'org.springframework.session:spring-session-jdbc:2.2.6.RELEASE'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // jsoup HTML parser library @ https://jsoup.org/
     implementation 'org.jsoup:jsoup:1.13.1'

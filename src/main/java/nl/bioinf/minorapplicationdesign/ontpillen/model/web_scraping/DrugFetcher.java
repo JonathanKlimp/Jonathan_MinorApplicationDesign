@@ -136,6 +136,7 @@ public class DrugFetcher implements AbstractWebScraper {
     private void addDrugGroup(DrugGroup currentDrug, List<String> childrenNames) {
         for (String childName: childrenNames) {
             DrugGroup newDrugGroup = new DrugGroup(childName);
+            newDrugGroup.setIsSubstance(false);
             newDrugGroup.setParent(currentDrug);
             currentDrug.addChild(newDrugGroup);
             drugDao.addDrug(newDrugGroup);
@@ -146,6 +147,7 @@ public class DrugFetcher implements AbstractWebScraper {
         for (String childName: drugSubstances) {
             DrugSubstance newDrugSubstance = new DrugSubstance(childName);
             newDrugSubstance.setParent(parentDrug);
+            newDrugSubstance.setIsSubstance(true);
             parentDrug.addChild(newDrugSubstance);
             drugDao.addDrug(newDrugSubstance);
         }
