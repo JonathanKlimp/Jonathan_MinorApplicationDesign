@@ -60,6 +60,7 @@ public class InMemoryDrugDao implements DrugDao {
      * @param drugName Name of the drug to be returned
      * @return DrugSubstance object
      */
+    //    TODO what happens if drug is in dao but not a substance (but a group)?
     @Override
     public DrugSubstance getDrugSubstanceByName(String drugName) {
         return (DrugSubstance) getDrugByName(drugName);
@@ -71,6 +72,7 @@ public class InMemoryDrugDao implements DrugDao {
      * @param drugName Name of the drug to be returned
      * @return DrugGroup object
      */
+    //    TODO what happens if drug is in dao but not a group (but a substance)?
     @Override
     public DrugGroup getDrugGroupByName(String drugName) {
         return (DrugGroup) getDrugByName(drugName);

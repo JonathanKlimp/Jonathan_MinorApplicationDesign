@@ -18,9 +18,26 @@
     <li th:text="*{gender}"><</li>
 </ul>
 
-<th:block th:object="${drugDao}" style="color: #0c4128">
-    <div th:each="drug : *{drugSubstances}">
+<th:block th:object="${drugDao}">
+    <div th:each="drug : *{allDrugs}" style="color: black">
         <h3 th:text="${drug.getName()}">_test_</h3>
+
+        <!--        If the drug is a substance-->
+        <th:block th:if="${drug.getIsSubstance()}">
+            <th:block th:object="${drugDao.getDrugSubstanceByName(drug.getName())}">
+                <p th:text="*{getDescription()}"></p>
+                <p th:text="*{getSideEffectsPsychiatrist()}"></p>
+                <p th:text="*{getSideEffectsPatient()}"></p>
+            </th:block>
+        </th:block>
+
+        <!--        If the drug is a group-->
+        <th:block th:unless="${drug.getIsSubstance()}">
+            <p>drug is a group</p>
+<!--            <th:block th:object="${drugDao.getDrugGroupByName(drug.getName())}">-->
+<!--                <p th:text="${*.getChildren()}"></p>-->
+<!--            </th:block>-->
+        </th:block>
     </div>
 </th:block>
 

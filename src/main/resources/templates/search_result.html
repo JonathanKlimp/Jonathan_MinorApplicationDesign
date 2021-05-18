@@ -21,14 +21,12 @@
 
 <!--                        Block will be inserted if the drug is a DrugSubstance-->
                         <th:block th:if="${drugDao.getDrugByName(drugName).getIsSubstance()}">
-                            <p th:text="${drugName}"></p>
-                            <p>Drug is a substance</p>
+                            <p th:text="${drugDao.getDrugSubstanceByName(drugName).getDescription()}">__offline short description/tags__</p>
                         </th:block>
 
 <!--                        This block will be inserted if the drug is not a DrugSubstance (but rather a DrugGroup)-->
                         <th:block th:unless="${drugDao.getDrugByName(drugName).getIsSubstance()}">
-                            <p th:text="${drugName}"></p>
-                            <p>Drug is a group</p>
+                            <p th:text="${drugDao.getDrugGroupByName(drugName).getDescription()}">__offline short description/tags__</p>
                         </th:block>
 
 <!--                        <p th:text="${drugDao.getDrugByName(drugName)}">__offline short description/tags__</p>-->
