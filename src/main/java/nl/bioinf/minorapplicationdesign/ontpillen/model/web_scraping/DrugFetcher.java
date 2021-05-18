@@ -39,17 +39,17 @@ public class DrugFetcher implements AbstractWebScraper {
     @Override
     public void parseHtml() throws IOException {
         LOGGER.info("Running parseHtml");
-        List<Element> drugGroups = this.getDrugGroups();
+        Document doc = Jsoup.connect(this.url).get();
+        List<Element> drugGroups = this.getDrugGroups(doc);
         storeDrugsInDao(drugGroups);
 
-        List<Element> remainingDrugs = this.getOtherDrug();
+        List<String> remainingDrugs = this.getRemainingDrugs(doc);
         storeOtherDrugsInDao(remainingDrugs);
     }
 
 
-    private List<Element> getDrugGroups() throws IOException {
-        Document doc = Jsoup.connect(this.url).get();
-        LOGGER.debug("Fetching drugs from: " + doc);
+    private List<Element> getDrugGroups(Document doc) {
+        LOGGER.debug("Fetching drugs from: " + doc.getElementsByClass("pat-rich group-2"));
         return doc.getElementsByClass("pat-rich group-2").select("h2");
     }
 
@@ -58,15 +58,27 @@ public class DrugFetcher implements AbstractWebScraper {
      * Method that will fetch the remaining drugs that are not present in "pat-rich group-2"
      * it fetches the "pat-rich group-3"
      * @return List elements of the html containing the drug names
-     * @throws IOException
      */
-    private List<Element> getOtherDrug() throws IOException {
-        Document doc = Jsoup.connect(this.url).get();
-        LOGGER.debug("Fetching drugs from: " + doc);
-        return doc.getElementsByClass("pat-rich group-3").select("li");
+    private List<String> getRemainingDrugs(Document doc) {
+        LOGGER.debug("Fetching drugs from: " + doc.getElementsByClass("pat-rich group-3"));
+        List<Element> allDrugs = doc.getElementsByClass("pat-rich group-3").select("li");
+        List<String> drugToBeAdded = new ArrayList<>();
+
+        for(Element drugElement : allDrugs) {
+            if(!drugDao.drugInDrugDao(drugElement.text())) {
+                drugToBeAdded.add(drugElement.text());
+            }
+        }
+        return drugToBeAdded;
     }
 
 
+    /**
+     * Method that will store the drugs in the Dao. The input is an List containing Element
+     * objects. Since there can be multiple drug Groups in a single drug Group the method will
+     * run recursive until there are no drugGroups left and all drugs are added.
+     * @param drugGroups is a list with Element objects containing the drugGroups
+     */
     private void storeDrugsInDao(List<Element> drugGroups){
         Element currentDrugElement = drugGroups.get(0);
         DrugGroup currentDrug;
@@ -88,24 +100,19 @@ public class DrugFetcher implements AbstractWebScraper {
 
     /**
      * Method that will check which drug from "pat-rich group-3" are not present in the dao
-     * and will add them
-     * @param remainingDrugs
+     * and will add them to the drugGroup psychofarmaca, overige
+     * @param remainingDrugs List with strings of the remaining drugs to be added.
      */
-    private void storeOtherDrugsInDao(List<Element> remainingDrugs) {
+    private void storeOtherDrugsInDao(List<String> remainingDrugs) {
         DrugGroup drugGroupOther = (DrugGroup) drugDao.getDrugByName("psychofarmaca, overige");
-        List<String> drugsToBeAdded = new ArrayList<>();
-        for(Element drugElement : remainingDrugs) {
-            if(!drugDao.drugInDrugDao(drugElement.text())){
-                drugsToBeAdded.add(drugElement.text());
-            }
-        }
-        addDrugSubstances(drugGroupOther, drugsToBeAdded);
+        addDrugSubstances(drugGroupOther, remainingDrugs);
     }
 
     /**
-     * Method that will get drug from the current element from the html webpage and will add this to drugDao
+     * Method that checks if the given drug element is a drugGroup of drugSubstance and will add it to the
+     * dao.
      * @param drugGroups List with html elements containing the remaining drug groups
-     * @param currentDrugElement html element with
+     * @param currentDrugElement html element with the current drug
      * @param currentDrugGroup current drugGroup
      */
     private void addDrugs(List<Element> drugGroups, Element currentDrugElement, DrugGroup currentDrugGroup) {
