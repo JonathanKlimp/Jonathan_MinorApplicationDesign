@@ -37,7 +37,7 @@ class FarmacoWebScraperTest {
     }
 
     @AfterEach
-    public void cleanUpTest() {
+    public void cleanUpDao() {
         drugDao.removeAllDrugs();
     }
 
