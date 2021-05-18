@@ -1,6 +1,8 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.Drug;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugGroup;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,5 +59,25 @@ class DrugFetcherTest {
 
         drugNames.removeAll(drugDao.getAllDrugNames());
         assertEquals(drugNames, expectedDrugs);
+    }
+
+    @Test
+    void parseHtml_scrapeDrugs_CheckDrugGroups() throws IOException {
+        String[] drugGroupsArray = {"antidepressiva", "middelen bij verslavingsziekten", "psychofarmaca, overige", "psycholeptica", "psychostimulantia", "slaapmiddelen"};
+        ArrayList<String> drugGroupsExpected = new ArrayList<>(Arrays.asList(drugGroupsArray));
+
+        drugFetcher.parseHtml();
+
+        List<DrugGroup> drugGroupsDao = drugDao.getMainDrugGroups();
+        List<String> drugGroupsActual = new ArrayList<>();
+
+        for (DrugGroup drugGroup: drugGroupsDao) {
+            drugGroupsActual.add(drugGroup.getName());
+        }
+
+        drugGroupsActual.removeAll(drugGroupsExpected);
+        drugGroupsExpected.removeAll(Arrays.asList(drugGroupsArray));
+
+        assertEquals(drugGroupsActual, drugGroupsExpected);
     }
 }
