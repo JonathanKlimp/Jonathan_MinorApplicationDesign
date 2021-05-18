@@ -106,7 +106,7 @@ class DrugFetcherTest {
         for (DrugSubstance drugSubstance: drugGroupsDao) {
             drugSubstancesActual.add(drugSubstance.getName());
         }
-        System.out.println(drugSubstancesActual);
+
         drugSubstancesActual.removeAll(drugSubstancesExpected);
         drugSubstancesExpected.removeAll(Arrays.asList(drugSubstanceArray));
 
