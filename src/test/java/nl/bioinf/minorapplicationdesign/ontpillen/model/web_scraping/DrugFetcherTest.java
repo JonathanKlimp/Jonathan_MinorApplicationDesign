@@ -100,10 +100,10 @@ class DrugFetcherTest {
 
         drugFetcher.parseHtml();
 
-        List<DrugSubstance> drugGroupsDao = drugDao.getDrugSubstances();
+        List<DrugSubstance> drugGroupsInDao = drugDao.getDrugSubstances();
         List<String> drugSubstancesActual = new ArrayList<>();
 
-        for (DrugSubstance drugSubstance: drugGroupsDao) {
+        for (DrugSubstance drugSubstance: drugGroupsInDao) {
             drugSubstancesActual.add(drugSubstance.getName());
         }
 
