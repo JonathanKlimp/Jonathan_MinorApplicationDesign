@@ -2,6 +2,8 @@ package nl.bioinf.minorapplicationdesign.ontpillen;
 
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.InMemoryDrugDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.web_interaction.User;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.web_interaction.UserType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,4 +24,10 @@ public class MyApplicationContextConfiguration{
         return myDrugDao;
     }
 
+    @Bean
+    @Scope("singleton")
+    public UserType userType() {
+        UserType userType = new UserType();
+        return userType;
+    }
 }

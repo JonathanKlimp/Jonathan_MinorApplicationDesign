@@ -30,6 +30,24 @@ public interface DrugDao {
     Drug getDrugByName(String drugName);
 
     /**
+     * Method that will return a DrugSubstance object given a drug name
+     * that is in the Dao. If the drug is not found
+     * it will throw an IllegalArgumentException.
+     * @param drugName Name of the drug to be returned
+     * @return DrugSubstance object
+     */
+    DrugSubstance getDrugSubstanceByName(String drugName);
+
+    /**
+     * Method that will return a DrugGroup object given a drug name
+     * that is in the Dao. If the drug is not found
+     * it will throw an IllegalArgumentException.
+     * @param drugName Name of the drug to be returned
+     * @return DrugGroup object
+     */
+    DrugGroup getDrugGroupByName(String drugName);
+
+    /**
      * Method that will return all drug substances in the Dao.
      * @return List of all drugSubstances
      */

@@ -9,7 +9,7 @@ $(document).ready(() => {
     const $mainContent = $(".content");
     const $backgroundImage = $("#background-image");
     const $header = $("#header");
-    const $gradient = $("#gradient");
+    // const $gradient = $("#gradient");
 
     // Set height en min height of the background image
     $backgroundImage.css({
@@ -21,19 +21,19 @@ $(document).ready(() => {
         "height": $mainContent.outerHeight() + "px"
     });
 
-    //Set gradient on the right position from top
-    $gradient.css({
-        "top": "calc(" + $backgroundImage.outerHeight() + "px - " + $gradient.outerHeight() + "px)"
-    });
+    // //Set gradient on the right position from top
+    // $gradient.css({
+    //     "top": "calc(" + $backgroundImage.outerHeight() + "px - " + $gradient.outerHeight() + "px)"
+    // });
 
     $(window).resize(() => {
         // Set the height of the background color (to the same height as the main content)
         $backgroundColor.css({
             "height": $mainContent.outerHeight() + "px"
         });
-        //Set gradient on the right position from top
-        $gradient.css({
-            "top": "calc(" + $backgroundImage.outerHeight() + "px - " + $gradient.outerHeight() + "px)"
-        });
+        // //Set gradient on the right position from top
+        // $gradient.css({
+        //     "top": "calc(" + $backgroundImage.outerHeight() + "px - " + $gradient.outerHeight() + "px)"
+        // });
     });
 });

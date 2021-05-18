@@ -2,12 +2,13 @@ package nl.bioinf.minorapplicationdesign.ontpillen.webcontrol;
 
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.web_interaction.User;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.web_interaction.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,10 +23,22 @@ import java.util.Objects;
 @Controller
 public class WebController {
     DrugDao drugDao;
+    UserType userType;
 
     @Autowired
     public void setDrugDao(DrugDao drugDao) {
         this.drugDao = drugDao;
+    }
+
+    @Autowired
+    void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+
+    @ModelAttribute
+    public void addAttributes(Model model) {
+        model.addAttribute("drugDao", this.drugDao);
+        model.addAttribute("userType", this.userType);
     }
 
     @GetMapping("/")
@@ -41,28 +54,37 @@ public class WebController {
         return "index";
     }
 
-    @PostMapping("/")
+    @PostMapping({"/", "/zoekresultaten/{searchQuery}", "/medicijn/{drugName}"})
     public RedirectView changeFrontEnd(HttpServletRequest request) {
-        String userType = request.getParameter("user-type");
+        String newUserType = request.getParameter("user-type");
+        this.userType.setUserType(newUserType);
 
-        System.out.println(request.getRequestURL().toString() + "?" + request.getQueryString());
+        String requestOrigin = request.getRequestURI();
 
-        HttpSession session = request.getSession();
-//        Add the userType to the session
-        session.setAttribute("userType", userType);
-//        Redirect to showIndex
-        return new RedirectView("/");
+        return new RedirectView(requestOrigin);
+    }
+
+    @GetMapping("/zoekresultaten/{searchQuery}")
+    public String showSearchResults(Model model, @PathVariable String searchQuery) {
+//        System.out.println(searchQuery);
+        return "search_result";
     }
 
     @GetMapping("/list")
     public String showResult(Model model, @ModelAttribute User user) {
         model.addAttribute("user", user);
-        model.addAttribute("drugDao", this.drugDao);
         return "result_test";
     }
 
-    @GetMapping("/medicijn")
-    public String showDrugPage(Model model) {
+    @GetMapping("/medicijn/{drugName}")
+    public String showDrugPage(Model model, @PathVariable String drugName) {
+//        System.out.println(drugName);
         return "drugPage";
+    }
+
+    @PostMapping("/zoeken")
+    public RedirectView zoeken(Model model, HttpServletRequest request) {
+        String searchQuery = request.getParameter("search-query");
+        return new RedirectView(("zoekresultaten/" + searchQuery));
     }
 }
