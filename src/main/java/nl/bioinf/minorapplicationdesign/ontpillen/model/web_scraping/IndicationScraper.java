@@ -16,6 +16,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,18 +56,24 @@ public class IndicationScraper implements AbstractWebScraper{
     }
 
     private void checkDrugDao(List<String> parsedDrugs, String indication){
+        List<Drug> drugList = fetchDrugsFromDao(parsedDrugs);
         for (String drug: parsedDrugs) {
-            if (drugDao.drugInDrugDao(drug)) {
-                Drug currentDrug = drugDao.getDrugByName(drug);
-                DrugSubstance drugSubstance = (DrugSubstance) currentDrug;
-                UseIndication newUseIndication = new UseIndication();
-                newUseIndication.setName(indication);
-                newUseIndication.setDrugs(parsedDrugs);
-                drugSubstance.addUseIndication(newUseIndication);
-            }
-            else {
-                LOGGER.info(drug + " is not present in the dao");
+            Drug currentDrug = drugDao.getDrugByName(drug);
+            DrugSubstance drugSubstance = (DrugSubstance) currentDrug;
+            UseIndication newUseIndication = new UseIndication();
+            newUseIndication.setName(indication);
+            newUseIndication.setDrugs(drugList);
+            drugSubstance.addUseIndication(newUseIndication);
+        }
+    }
+
+    private List<Drug> fetchDrugsFromDao(List<String> drugs) {
+        List<Drug> drugList = new ArrayList<>();
+        for (String drug : drugs) {
+            if(drugDao.drugInDrugDao(drug)) {
+                drugList.add(drugDao.getDrugByName(drug));
             }
         }
+        return drugList;
     }
 }
