@@ -17,7 +17,7 @@ public class DrugSubstance extends Drug {
         put("patient", new ArrayList<>());
         put("psychiatrist", new ArrayList<>());
     }};
-    private List<UseIndication> useIndications;
+    private List<UseIndication> useIndications = new ArrayList<>();
     private List<StopIndication>  stopIndications;
     private List<String> interactions;
 
