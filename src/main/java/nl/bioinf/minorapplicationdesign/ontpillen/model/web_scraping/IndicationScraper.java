@@ -20,7 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Class IndicationScraper scrapes all indications of drugs used in psychiatry and the drugs that belong to the said
+ * indication. The fetched result is a string with the name of the indication and a list with string of the
+ * corresponding drugs. This list is used to fetch the Drug objects from the Dao to create a new list of drug objects.
+ * The name and list of drug objects are added to the UseIndication class for each drug on the webpage.
  * @author Larissa Bouwknegt en Jonathan Klimp
  */
 
@@ -50,12 +53,12 @@ public class IndicationScraper implements AbstractWebScraper{
         for (Element indication: indicationHtmlElements) {
             String useIndication = indication.text();
             List<String> parsedDrugs = indication.nextElementSiblings().select("li").eachText();
-            checkDrugDao(parsedDrugs, indication.text());
+            addUseIndication(parsedDrugs, indication.text());
             LOGGER.debug("The indication is "+ useIndication + " the drugs are " + parsedDrugs);
         }
     }
 
-    private void checkDrugDao(List<String> parsedDrugs, String indication){
+    private void addUseIndication(List<String> parsedDrugs, String indication){
         List<Drug> drugList = fetchDrugsFromDao(parsedDrugs);
         for (String drug: parsedDrugs) {
             Drug currentDrug = drugDao.getDrugByName(drug);
