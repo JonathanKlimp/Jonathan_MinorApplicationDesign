@@ -22,7 +22,7 @@ public class UseIndication {
         return Collections.unmodifiableList(drugs);
     }
 
-    public void setDrugs(List<String> drugs) {
+    public void setDrugs(List<Drug> drugs) {
         this.drugs = drugs;
     }
 }
