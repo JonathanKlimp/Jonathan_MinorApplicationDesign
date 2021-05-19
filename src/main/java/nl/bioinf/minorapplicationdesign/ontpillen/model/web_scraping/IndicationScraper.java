@@ -28,9 +28,9 @@ import java.util.List;
 public class IndicationScraper implements AbstractWebScraper{
     private DrugDao drugDao;
     private String url;
-    private static final Logger LOGGER = LoggerFactory.getLogger(DrugFetcher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IndicationScraper.class);
 
-    private IndicationScraper(@Value("${farmaco.basic.site}") String url) {
+    private IndicationScraper(@Value("${farmaco.medicines.site}") String url) {
         this.url = url;
     }
 
@@ -61,6 +61,7 @@ public class IndicationScraper implements AbstractWebScraper{
                 DrugSubstance drugSubstance = (DrugSubstance) currentDrug;
                 UseIndication newUseIndication = new UseIndication();
                 newUseIndication.setName(indication);
+                newUseIndication.setDrugs(parsedDrugs);
                 drugSubstance.addUseIndication(newUseIndication);
             }
             else {
