@@ -2,6 +2,7 @@ package nl.bioinf.minorapplicationdesign.ontpillen;
 
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.InMemoryDrugDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.UseIndication;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.web_interaction.User;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.web_interaction.UserType;
 import org.springframework.context.annotation.Bean;
@@ -29,5 +30,12 @@ public class MyApplicationContextConfiguration{
     public UserType userType() {
         UserType userType = new UserType();
         return userType;
+    }
+
+    @Bean
+    @Scope
+    public UseIndication useIndication() {
+        UseIndication useIndication = new UseIndication();
+        return useIndication;
     }
 }
