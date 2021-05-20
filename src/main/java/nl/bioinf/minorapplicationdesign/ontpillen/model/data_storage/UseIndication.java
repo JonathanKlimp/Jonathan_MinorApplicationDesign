@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class UseIndication {
     private String name;
-    private List<String> drugs;
+    private List<Drug> drugs;
 
     public void setName(String useIndication) {
         this.name = useIndication;
@@ -18,7 +18,7 @@ public class UseIndication {
 
     public String getName() {return name;}
 
-    public List<String> getDrugs() {
+    public List<Drug> getDrugs() {
         return Collections.unmodifiableList(drugs);
     }
 
