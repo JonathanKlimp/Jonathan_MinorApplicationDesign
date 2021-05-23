@@ -18,6 +18,7 @@ public class WebScrapeExecutor {
     private ApotheekWebScraper apotheekWebScraper;
     private GgzStandaardenWebScraper ggzStandaardenWebScraper;
     private RichtlijnenNhgWebScraper richtlijnenNhgWebScraper;
+    private IndicationScraper indicationScraper;
     private static final Logger LOGGER = LoggerFactory.getLogger(WebScrapeExecutor.class);
 
     @Autowired
@@ -45,12 +46,18 @@ public class WebScrapeExecutor {
         this.richtlijnenNhgWebScraper = richtlijnenNhgWebScraper;
     }
 
+    @Autowired
+    public void setIndicationScraper(IndicationScraper indicationScraper) {
+        this.indicationScraper = indicationScraper;
+    }
+
     public void runWebcrawlers() throws IOException {
         LOGGER.info("Running all webcrawlers");
         //Bypass certificate security for all connections after this point
         SSLHelper.bypassSSL();
-        this.drugFetcher.parseHtml();
 
+        this.drugFetcher.parseHtml();
+        this.indicationScraper.parseHtml();
         this.farmacoWebScraper.parseHtml();
     }
 }
