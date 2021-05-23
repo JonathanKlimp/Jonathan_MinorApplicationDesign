@@ -15,5 +15,5 @@ public interface AbstractWebScraper {
      * After this method is run the html page is processed and the data is saved in the dao
      * @throws IOException
      */
-    void parseHtml() throws IOException;
+    void parseHtml() throws Exception;
 }
