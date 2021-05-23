@@ -1,6 +1,7 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
 
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.side_effects.SideEffects;
 import org.jsoup.helper.Validate;
 
 
@@ -15,6 +16,7 @@ import org.jsoup.helper.Validate;
 public abstract class Drug {
     protected String name;
     protected Drug parent;
+    protected SideEffects sideEffects;
     protected boolean isSubstance;
 
     public Drug(String name) {

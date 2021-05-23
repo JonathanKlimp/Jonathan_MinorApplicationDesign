@@ -23,22 +23,15 @@ import java.util.Objects;
 @Controller
 public class WebController {
     DrugDao drugDao;
-    UserType userType;
 
     @Autowired
     public void setDrugDao(DrugDao drugDao) {
         this.drugDao = drugDao;
     }
 
-    @Autowired
-    void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
     @ModelAttribute
     public void addAttributes(Model model) {
         model.addAttribute("drugDao", this.drugDao);
-        model.addAttribute("userType", this.userType);
     }
 
     @GetMapping("/")
@@ -46,8 +39,8 @@ public class WebController {
         HttpSession session = request.getSession();
 
 //        If there is no userType set in the session, set t he userType to "gebruiker"
-        if (Objects.isNull(session.getAttribute("userType"))) {
-            session.setAttribute("userType", "gebruiker");
+        if (session.getAttribute("userType") == null) {
+            session.setAttribute("userType", UserType.valueOf("PATIENT"));
         }
 
         model.addAttribute("user", new User());
@@ -56,34 +49,59 @@ public class WebController {
 
     @PostMapping({"/", "/zoekresultaten/{searchQuery}", "/medicijn/{drugName}"})
     public RedirectView changeFrontEnd(HttpServletRequest request) {
-        String newUserType = request.getParameter("user-type");
-        this.userType.setUserType(newUserType);
+        HttpSession session = request.getSession();
+        UserType newUserType = UserType.valueOf(request.getParameter("user-type"));
+        session.setAttribute("userType", newUserType);
 
         String requestOrigin = request.getRequestURI();
-
         return new RedirectView(requestOrigin);
     }
 
     @GetMapping("/zoekresultaten/{searchQuery}")
-    public String showSearchResults(Model model, @PathVariable String searchQuery) {
-//        System.out.println(searchQuery);
+    public String showSearchResults(Model model, @PathVariable String searchQuery, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        //        If there is no userType set in the session, set t he userType to "gebruiker"
+        if (session.getAttribute("userType") == null) {
+            session.setAttribute("userType", "gebruiker");
+        }
+
         return "search_result";
     }
 
     @GetMapping("/list")
-    public String showResult(Model model, @ModelAttribute User user) {
+    public String showResult(Model model, @ModelAttribute User user, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        //        If there is no userType set in the session, set t he userType to "gebruiker"
+        if (session.getAttribute("userType") == null) {
+            session.setAttribute("userType", "gebruiker");
+        }
+
         model.addAttribute("user", user);
         return "result_test";
     }
 
     @GetMapping("/medicijn/{drugName}")
-    public String showDrugPage(Model model, @PathVariable String drugName) {
-//        System.out.println(drugName);
+    public String showDrugPage(Model model, @PathVariable String drugName, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        //        If there is no userType set in the session, set t he userType to "gebruiker"
+        if (session.getAttribute("userType") == null) {
+            session.setAttribute("userType", "gebruiker");
+        }
         return "drugPage";
     }
 
     @PostMapping("/zoeken")
     public RedirectView zoeken(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        //        If there is no userType set in the session, set t he userType to "gebruiker"
+        if (session.getAttribute("userType") == null) {
+            session.setAttribute("userType", "gebruiker");
+        }
+
         String searchQuery = request.getParameter("search-query");
         return new RedirectView(("zoekresultaten/" + searchQuery));
     }
