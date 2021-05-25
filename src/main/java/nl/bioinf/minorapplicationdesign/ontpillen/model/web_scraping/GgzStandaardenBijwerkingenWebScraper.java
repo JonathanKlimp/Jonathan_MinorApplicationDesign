@@ -4,6 +4,8 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -78,6 +80,22 @@ public class GgzStandaardenBijwerkingenWebScraper implements AbstractWebScraper 
 
                 Document doc = Jsoup.parse(driver.getPageSource());
                 System.out.println(doc.select("#main-content h1.heading").text());
+                Elements elements = doc.select(".chapter-content");
+
+
+                for (Element element : elements) {
+
+                    if (element.text().contains("6.2 Vroege onderkenning en preventie")) {
+                        System.out.println("Element");
+                        System.out.println(element);
+                        Elements subElements = element.select(".chapter-content");
+//                        for (Element subElement : subElements) {
+//                            System.out.println("subELement:");
+//                            System.out.println(subElement.text());
+//                        }
+                    }
+                }
+                break;
             }
         }
 

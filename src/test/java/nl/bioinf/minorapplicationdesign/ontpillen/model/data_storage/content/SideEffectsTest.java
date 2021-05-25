@@ -1,4 +1,4 @@
-package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.side_effects;
+package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content;
 
 import org.springframework.boot.test.context.SpringBootTest;
 

@@ -1,7 +1,7 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
 
-import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.side_effects.SideEffects;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.SideEffects;
 import org.jsoup.helper.Validate;
 
 
@@ -16,7 +16,7 @@ import org.jsoup.helper.Validate;
 public abstract class Drug {
     protected String name;
     protected Drug parent;
-    protected SideEffects sideEffects;
+    protected SideEffects sideEffects = new SideEffects();
     protected boolean isSubstance;
 
     public Drug(String name) {
@@ -38,6 +38,10 @@ public abstract class Drug {
 
     public void setParent(Drug parent) {
         this.parent = parent;
+    }
+
+    public SideEffects getSideEffects() {
+        return sideEffects;
     }
 
     public void setIsSubstance(boolean newBool) {
