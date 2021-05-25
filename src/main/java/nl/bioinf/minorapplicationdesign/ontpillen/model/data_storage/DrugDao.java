@@ -1,9 +1,6 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
-import org.springframework.stereotype.Component;
-
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -30,24 +27,6 @@ public interface DrugDao {
      * @return Drug object
      */
     Drug getDrugByName(String drugName);
-
-    /**
-     * Method that will return a DrugSubstance object given a drug name
-     * that is in the Dao. If the drug is not found
-     * it will throw an IllegalArgumentException.
-     * @param drugName Name of the drug to be returned
-     * @return DrugSubstance object
-     */
-    DrugSubstance getDrugSubstanceByName(String drugName);
-
-    /**
-     * Method that will return a DrugGroup object given a drug name
-     * that is in the Dao. If the drug is not found
-     * it will throw an IllegalArgumentException.
-     * @param drugName Name of the drug to be returned
-     * @return DrugGroup object
-     */
-    DrugGroup getDrugGroupByName(String drugName);
 
     /**
      * Method that will return all drug substances in the Dao.

@@ -57,30 +57,6 @@ public class InMemoryDrugDao implements DrugDao {
         return allDrugs.get(drugName);
     }
 
-    /**
-     * Method that will return a DrugSubstance object given a drug name.
-     * It checks if the drugs exists if it does not exist an IllegalArgumentException is thrown
-     * @param drugName Name of the drug to be returned
-     * @return DrugSubstance object
-     */
-    //    TODO what happens if drug is in dao but not a substance (but a group)?
-    @Override
-    public DrugSubstance getDrugSubstanceByName(String drugName) {
-        return (DrugSubstance) getDrugByName(drugName);
-    }
-
-    /**
-     * Method that will return a DrugGroup object given a drug name.
-     * It checks if the drugs exists if it does not exist an IllegalArgumentException is thrown
-     * @param drugName Name of the drug to be returned
-     * @return DrugGroup object
-     */
-    //    TODO what happens if drug is in dao but not a group (but a substance)?
-    @Override
-    public DrugGroup getDrugGroupByName(String drugName) {
-        return (DrugGroup) getDrugByName(drugName);
-    }
-
     @Override
     public List<Drug> getAllDrugs() {
         return new ArrayList<>(allDrugs.values());
