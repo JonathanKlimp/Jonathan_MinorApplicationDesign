@@ -56,8 +56,9 @@ public class WebScrapeExecutor {
         //Bypass certificate security for all connections after this point
         SSLHelper.bypassSSL();
 
-        this.drugFetcher.parseHtml();
+        this.drugFetcher.parseHtml(); // needs to run first
         this.indicationScraper.parseHtml();
-        this.farmacoWebScraper.parseHtml();
+        this.farmacoWebScraper.parseHtml(); // needs to run before apotheek
+        this.apotheekWebScraper.parseHtml();
     }
 }

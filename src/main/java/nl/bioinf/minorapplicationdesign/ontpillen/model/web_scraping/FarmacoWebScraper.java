@@ -56,7 +56,7 @@ public class FarmacoWebScraper implements AbstractWebScraper {
             DrugSubstance drugsubstance = (DrugSubstance) currentDrug;
             drugsubstance.setDescriptionPsychiatrist(drugDescription);
             drugsubstance.setSideEffectsPsychiatrist(sideEffects);
-            drugsubstance.setInteractions(interactions);
+            drugsubstance.setInteractionsPsychiatrist(interactions);
 
             LOGGER.debug("Side effects for drug: " + drugName + "Side effects: " + sideEffects);
             LOGGER.debug("DrugDescription for drug: " + drugName + "Drug description: " + drugDescription);

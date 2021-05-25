@@ -20,9 +20,13 @@ public class DrugSubstance extends Drug {
         put("patient", new ArrayList<>());
         put("psychiatrist", new ArrayList<>());
     }};
+    private Map<String, List<String>> interactions = new HashMap<>() {{
+        put("patient", new ArrayList<>());
+        put("psychiatrist", new ArrayList<>());
+    }};
     private List<UseIndication> useIndications = new ArrayList<>();
     private List<StopIndication>  stopIndications;
-    private List<String> interactions;
+
 
     public DrugSubstance(String name) {
         super(name);
@@ -54,6 +58,14 @@ public class DrugSubstance extends Drug {
 
     public void setStopIndications(List<StopIndication> stopIndications){
         this.stopIndications = stopIndications;
+    }
+
+    public void setInteractionsPatient(List<String> interactionsPatient) {
+        this.interactions.put("patient", interactionsPatient);
+    }
+
+    public void setInteractionsPsychiatrist(List<String> interactionsPsychiatrist) {
+        this.interactions.put("psychiatrist", interactionsPsychiatrist);
     }
 
     public String getName() {
@@ -101,11 +113,11 @@ public class DrugSubstance extends Drug {
         return Collections.unmodifiableList(stopIndications);
     }
 
-    public List<String> getInteractions() {
-        return Collections.unmodifiableList(interactions);
+    public List<String> getInteractionsPatient() {
+        return Collections.unmodifiableList(interactions.get("patient"));
     }
 
-    public void setInteractions(List<String> interactions) {
-        this.interactions = interactions;
+    public List<String> getInteractionsPsychiatrist() {
+        return Collections.unmodifiableList(interactions.get("psychiatrist"));
     }
 }
