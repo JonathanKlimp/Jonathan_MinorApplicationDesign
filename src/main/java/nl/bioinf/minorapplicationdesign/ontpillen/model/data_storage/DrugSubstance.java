@@ -12,7 +12,10 @@ import java.util.*;
  */
 public class DrugSubstance extends Drug {
     private List<String> brandNames = new ArrayList<>();
-    private List<String> description;
+    private Map<String, List<String>> description = new HashMap<>() {{
+        put("patient", new ArrayList<>());
+        put("psychiatrist", new ArrayList<>());
+    }};
     private Map<String, List<String>> sideEffects = new HashMap<>() {{
         put("patient", new ArrayList<>());
         put("psychiatrist", new ArrayList<>());
@@ -25,10 +28,12 @@ public class DrugSubstance extends Drug {
         super(name);
     }
 
-    // Description needs to be changed. There no is no option to add description for patient or psychiatrist
-    // maybe a hashmap with patient, psychiatrist with each having a list with their description
-    public void setDescription(List<String> Description){
-        this.description = Description;
+    public void setDescriptionPatient(List<String> descriptionPatient) {
+        this.description.put("patient", descriptionPatient);
+    }
+
+    public void setDescriptionPsychiatrist(List<String> descriptionPsychiatrist) {
+        this.description.put("psychiatrist", descriptionPsychiatrist);
     }
 
     public void addBrandName(String brandName){
@@ -68,8 +73,12 @@ public class DrugSubstance extends Drug {
     }
 
     // TODO add javadoc
-    public List<String> getDescription() {
-        return Collections.unmodifiableList(description);
+    public List<String> getDescriptionPatient() {
+        return Collections.unmodifiableList(description.get("patient"));
+    }
+
+    public List<String> getDescriptionPsychiatrist() {
+        return Collections.unmodifiableList(description.get("psychiatrist"));
     }
 
     public List<String> getSideEffectsPatient() {

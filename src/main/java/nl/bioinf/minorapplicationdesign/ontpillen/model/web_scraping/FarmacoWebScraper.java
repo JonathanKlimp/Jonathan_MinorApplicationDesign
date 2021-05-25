@@ -54,7 +54,7 @@ public class FarmacoWebScraper implements AbstractWebScraper {
             List<String> interactions = h2Tags.select(":contains(interacties)").nextAll().eachText();
             Drug currentDrug = drugDao.getDrugByName(drugName);
             DrugSubstance drugsubstance = (DrugSubstance) currentDrug;
-            drugsubstance.setDescription(drugDescription);
+            drugsubstance.setDescriptionPsychiatrist(drugDescription);
             drugsubstance.setSideEffectsPsychiatrist(sideEffects);
             drugsubstance.setInteractions(interactions);
 
