@@ -7,7 +7,7 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.web_interaction;
  */
 public class User {
     private int age;
-    private String gender;
+    private Gender gender;
 
     public int getAge() {
         return age;
@@ -17,11 +17,11 @@ public class User {
         this.age = age;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
     public void setGender(String gender) {
-        this.gender = gender;
+        this.gender = Gender.valueOf(gender);
     }
 }

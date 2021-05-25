@@ -3,6 +3,8 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.Drug;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentLeaf;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.SideEffects;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -54,9 +56,11 @@ public class FarmacoWebScraper implements AbstractWebScraper {
             List<String> interactions = h2Tags.select(":contains(interacties)").nextAll().eachText();
             Drug currentDrug = drugDao.getDrugByName(drugName);
             DrugSubstance drugsubstance = (DrugSubstance) currentDrug;
+
             drugsubstance.setDescription(drugDescription);
-            drugsubstance.setSideEffectsPsychiatrist(sideEffects);
             drugsubstance.setInteractions(interactions);
+
+            this.addSideEffectsToDrug(drugsubstance, "PARAGRAPH", sideEffects);
 
             LOGGER.debug("Side effects for drug: " + drugName + "Side effects: " + sideEffects);
             LOGGER.debug("DrugDescription for drug: " + drugName + "Drug description: " + drugDescription);
@@ -76,5 +80,25 @@ public class FarmacoWebScraper implements AbstractWebScraper {
         String completeUrl = (this.basicUrl + medicine.charAt(0) + "/" + medicine).toLowerCase(Locale.ROOT);
         LOGGER.debug("Connecting to: " + completeUrl);
         return Jsoup.connect(completeUrl).get();
+    }
+
+    /**
+     * @param drugSubstance The drug to add the side effect to
+     * @param contentType The type of content that is going to be stored,
+     *                    can be either PARAGRAPH or LIST (a value of the ContentType enum)
+     * @param content A list store as content. If the type is PARAGRAPH the items in the list will be separate paragraphs,
+     *                if the type is LIST the items in the list will be the separate list items
+     */
+    private void addSideEffectsToDrug(DrugSubstance drugSubstance, String contentType, List<String> content) {
+//        Get the SideEffects Object that belongs to specific drug
+        SideEffects sideEffectsOfDrug = drugSubstance.getSideEffects();
+
+//        Create a ContentLeaf object and store the scraped content in it
+        ContentLeaf sideEffectContent = new ContentLeaf();
+        sideEffectContent.setContentType(contentType);
+        sideEffectContent.setContent(content);
+
+//        Add the newly created SideEffectContent to the SideEffect of the drug
+        sideEffectsOfDrug.addSideEffectPractitioner("SideEffectsFk", sideEffectContent);
     }
 }

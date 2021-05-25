@@ -2,6 +2,7 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.Content;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,7 +70,14 @@ class FarmacoWebScraperTest {
         List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
 
         for (DrugSubstance drugSubstance: drugSubstances) {
-            assertNotNull(drugSubstance.getSideEffectsPsychiatrist());
+            assertNotNull(drugSubstance.getSideEffects().getSideEffectsPractitioner());
+        }
+
+        for (DrugSubstance drugSubstance: drugSubstances) {
+            for (Content content : drugSubstance.getSideEffects().getSideEffectsPractitioner()) {
+                assertNotNull(content);
+                System.out.println(content);
+            }
         }
     }
 
