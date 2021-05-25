@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.print.Doc;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,24 +39,35 @@ public class ApotheekWebScraper implements AbstractWebScraper {
     public void parseHtml() throws IOException {
         LOGGER.info("Parsing html");
         List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
-
+        List<String> drugNotOnWebsite = Arrays.asList("thiamine", "coffeïne", "esketamine (nasaal)","esketamine" , "valproïnezuur", "guanfacine");
+        List<String> drugWithDifferentStructure = Arrays.asList("mianserine", "imipramine", "acamprosaat", "buprenorfine (bij verslaving)", "methadon",
+                "prazepam", "paliperidon", "penfluridol", "periciazine", "pimozide", "pipamperon", "valeriaan");
         for (DrugSubstance drug: drugSubstances) {
-            Document doc = getDrugWebpage(drug.getName());
-            getDescription(doc, drug);
-            getSideEffects(doc, drug);
-            getInteractions(doc, drug);
-
+            System.out.println("CURRENT DRUG: " + drug.getName());
+            if (drugNotOnWebsite.contains(drug.getName())) {
+                drug.setDescriptionPatient(drug.getDescriptionPsychiatrist());
+                drug.setSideEffectsPatient(drug.getSideEffectsPsychiatrist());
+                drug.setInteractionsPatient(drug.getInteractionsPatient());
+            } else if (drugWithDifferentStructure.contains(drug.getName())) {
+                Document doc = getDrugWebpage(drug.getName());
+                getSideEffectsFromList(doc, drug);
+            } else {
+                Document doc = getDrugWebpage(drug.getName());
+                getDescription(doc, drug);
+                getSideEffects(doc, drug);
+                getInteractions(doc, drug);
+            }
             // code to log the description of the Dao
             LOGGER.debug("Drug: " + drug);
-            LOGGER.debug("Description in the dao: " + drug.getDescription());
-            LOGGER.debug("Interactions in the dao: " + drug.getInteractions());
+            LOGGER.debug("Description in the dao: " + drug.getDescriptionPatient());
+            LOGGER.debug("Interactions in the dao: " + drug.getInteractionsPatient());
             LOGGER.debug("SideEffects in the dao: " + drug.getSideEffectsPatient());
         }
     }
 
     private void getInteractions(Document doc, DrugSubstance drug) {
         Elements interactions = doc.getElementsByAttributeValueContaining("data-print", "andere medicijnen gebruiken").select(".listItemContent_text__otIdg ");
-        drug.setInteractions(interactions.eachText());
+        drug.setInteractionsPatient(interactions.eachText());
         LOGGER.debug("Interactions: " + interactions.eachText());
     }
 
@@ -62,12 +75,15 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         return null;
     }
 
-    private String getSideEffects(Document doc, DrugSubstance drug) {
-
+    private void getSideEffects(Document doc, DrugSubstance drug) {
+        System.out.println("DRUG::: " + drug.getName());
         Elements sideEffectsHtmlLocation = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen");
         List<String> sideEffectsIntro = sideEffectsHtmlLocation.select(".listItemContent_text__otIdg p, p.listItemContent_text__otIdg").eachText();
         LOGGER.debug("side effects intro: " + sideEffectsIntro);
+        System.out.println(sideEffectsHtmlLocation.select(".listItemContent_text__otIdg "));
+        System.out.println(sideEffectsIntro);
         Element frequencyAndSideEffect = sideEffectsHtmlLocation.select(".sideEffects_sideEffects__sczbd").get(0);
+        System.out.println(frequencyAndSideEffect.getElementsByTag("h3"));
         Elements frequency = frequencyAndSideEffect.getElementsByTag("h3");
         for (Element element: frequency) {
             Elements sideEffects = element.nextElementSibling().getElementsByClass("sideEffectsItem_button__V-L1C");
@@ -78,29 +94,37 @@ public class ApotheekWebScraper implements AbstractWebScraper {
             }
         }
         //TODO Add to datamodel
-        return null;
+    }
+
+    private void getSideEffectsFromList(Document doc, DrugSubstance drug) {
+        // zoeken op tekst zoals ZELDEN, dan de structuur verder zoeken. Anders is het gwn 1 node.
+        System.out.println("DRUG JONGE: " + drug.getName());
+        Elements sideEffectsHtmlLocation = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen");
+        Elements sideEffectElements =  sideEffectsHtmlLocation.select(".listItemContent_text__otIdg ");
+        for (Element element : sideEffectElements) {
+//            System.out.println(element.getElementsByTag("li"));
+            Elements test = element.getElementsByTag("ul");
+            List<String> sideEffectsIntro = element.getElementsByTag("ul").eachText();
+            List<String> sideEffectsDescription = element.getElementsByTag("p").eachText();
+            System.out.println(element.getElementsByTag("ul").eachText());
+            System.out.println(element.getElementsByTag("p"));
+        }
+
     }
 
     private void getDescription(Document doc, DrugSubstance drug) {
         Element useIndicationTag = doc.getElementsByAttributeValueContaining("data-print", "waarbij gebruik").select(".listItemContent_text__otIdg").get(0);
-        drug.setDescription(useIndicationTag.children().eachText());
+        drug.setDescriptionPatient(useIndicationTag.children().eachText());
     }
 
-    private Document getDrugWebpage(String medicine) throws IOException {
-        //TODO Temporarily solution to pass the test, needs to be figured out what to do with these medicines.
-        if (medicine.equals("coffeïne") || medicine.contains("esketamine")){
-            medicine = "citalopram";
+    private Document getDrugWebpage(String drugName) throws IOException {
+        if (drugName.contains("(")){
+            drugName = drugName.replaceAll("\\((.*?)\\)", "");
         }
-        if (medicine.contains("(")){
-            medicine = medicine.replaceAll("\\((.*?)\\)", "");
-            System.out.println("in if statement" +  medicine);
-
+        if (drugName.contains("/")){
+            drugName = drugName.replace("/", "-met-");
         }
-        if (medicine.contains("/")){
-            medicine = medicine.replace("/", "-met-");
-        }
-        String completeUrl = basicUrl + medicine.toLowerCase();
-        Document doc = Jsoup.connect(completeUrl).get();
-        return doc;
+        String completeUrl = basicUrl + drugName.toLowerCase();
+        return Jsoup.connect(completeUrl).get();
     }
 }
