@@ -1,5 +1,7 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 import java.util.Set;
 
@@ -63,18 +65,18 @@ public interface DrugDao {
      * Method that will return all drugs in the Dao.
      * @return List of all drugs
      */
-    public List<Drug> getAllDrugs();
+    List<Drug> getAllDrugs();
 
     /**
      * Method that will return all drug names in the Dao.
      * @return List of all drug names
      */
-    public List<String> getAllDrugNames();
+    List<String> getAllDrugNames();
 
     /**
      * Method that will remove all drugs in the Dao
      */
-    public void removeAllDrugs();
+    void removeAllDrugs();
 
 
     /**
@@ -82,5 +84,5 @@ public interface DrugDao {
      * @param drugName String name of the drug
      * @return a boolean, true if a drug with this name is present in the DAO.
      */
-    public boolean drugInDrugDao(String drugName);
+    boolean drugInDrugDao(String drugName);
 }

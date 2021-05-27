@@ -1,5 +1,7 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.Map;
  * to search the hashmap on substance or groups.
  * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
  */
+@Component
 public class InMemoryDrugDao implements DrugDao {
     static private List<String> drugSubstances = new ArrayList<>();
     static private List<String> mainDrugGroups = new ArrayList<>();

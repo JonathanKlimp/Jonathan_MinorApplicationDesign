@@ -31,9 +31,6 @@ class IndicationScraperTest {
     IndicationScraper indicationScraper;
 
     @Autowired
-    UseIndication useIndication;
-
-    @Autowired
     DrugFetcher drugFetcher;
 
     @BeforeEach

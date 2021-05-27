@@ -26,10 +26,9 @@
 
 <!--                        This block will be inserted if the drug is not a DrugSubstance (but rather a DrugGroup)-->
                         <th:block th:unless="${drugDao.getDrugByName(drugName).getIsSubstance()}">
-                            <p th:text="${drugDao.getDrugGroupByName(drugName).getDescription()}">__offline short description/tags__</p>
+                            <p th:text="${drugDao.getDrugGroupByName(drugName).getChildren()}">__offline short description/tags__</p>
                         </th:block>
 
-<!--                        <p th:text="${drugDao.getDrugByName(drugName)}">__offline short description/tags__</p>-->
                     </div>
                 </div>
 
