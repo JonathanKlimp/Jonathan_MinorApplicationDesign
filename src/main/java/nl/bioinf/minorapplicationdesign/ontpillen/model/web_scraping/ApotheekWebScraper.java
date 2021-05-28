@@ -1,6 +1,5 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
-import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.Drug;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.Content;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.print.Doc;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -46,24 +44,25 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         List<String> drugWithDifferentStructure = Arrays.asList("mianserine", "imipramine", "acamprosaat", "buprenorfine (bij verslaving)", "methadon",
                 "prazepam", "paliperidon", "penfluridol", "periciazine", "pimozide", "pipamperon", "valeriaan");
         for (DrugSubstance drug: drugSubstances) {
+            Document doc = getDrugWebpage(drug.getName());
             if (drugNotOnWebsite.contains(drug.getName())) {
                 drug.setDescriptionPatient(drug.getDescriptionPsychiatrist());
                 drug.setSideEffectsPatient(drug.getSideEffectsPsychiatrist());
                 drug.setInteractionsPatient(drug.getInteractionsPatient());
             } else if (drugWithDifferentStructure.contains(drug.getName())) {
-                Document doc = getDrugWebpage(drug.getName());
                 getSideEffectsFromList(doc, drug);
             } else {
-                Document doc = getDrugWebpage(drug.getName());
-                getDescription(doc, drug);
-                getSideEffects(doc, drug);
-                getInteractions(doc, drug);
+//                getDescription(doc, drug);
+//                getSideEffects(doc, drug);
+//                getInteractions(doc, drug);
+                getStopIndication(doc, drug);
             }
             // code to log the description of the Dao
             LOGGER.debug("Drug: " + drug);
             LOGGER.debug("Description in the dao: " + drug.getDescriptionPatient());
             LOGGER.debug("Interactions in the dao: " + drug.getInteractionsPatient());
             LOGGER.debug("SideEffects in the dao: " + drug.getSideEffectsPatient());
+            LOGGER.debug("Stop indication in the dao " + drug.getStopIndications());
         }
     }
 
@@ -73,8 +72,9 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         LOGGER.debug("Interactions: " + interactions.eachText());
     }
 
-    private String getStopIndication() {
-        return null;
+    private void getStopIndication(Document doc, DrugSubstance drug) {
+        Elements stopIndicationLocation = doc.getElementsByAttributeValueContaining("data-print", "Mag ik zomaar met dit medicijn stoppen?");
+        drug.setStopIndications(stopIndicationLocation.eachText());
     }
 
     private void getSideEffects(Document doc, DrugSubstance drug) {
