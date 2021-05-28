@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,26 +44,41 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         List<String> drugNotOnWebsite = Arrays.asList("thiamine", "coffeïne", "esketamine (nasaal)","esketamine" , "valproïnezuur", "guanfacine");
         List<String> drugWithDifferentStructure = Arrays.asList("mianserine", "imipramine", "acamprosaat", "buprenorfine (bij verslaving)", "methadon",
                 "prazepam", "paliperidon", "penfluridol", "periciazine", "pimozide", "pipamperon", "valeriaan");
+        List<String> defaultStopIndication = Collections.singletonList("Op de website is geen informatie gevonden");
+        System.out.println(drugDao.getDrugByName("mirtazapine").getName());
+        for (DrugSubstance drug1 : drugSubstances) {
+            //FIXME dit print NIET 2 keer null?
+            System.out.println("ALLE DRUGS: " + drug1.getName());
+        }
+
         for (DrugSubstance drug: drugSubstances) {
-            Document doc = getDrugWebpage(drug.getName());
+            //FIXME dit print 2 keer null? 1 keer tussen mianserine en mirtazepine, en tussen valeriaan en valproïnezuur hoe
+            System.out.println("DRUG: " + drug.getName());
+
             if (drugNotOnWebsite.contains(drug.getName())) {
                 drug.setDescriptionPatient(drug.getDescriptionPsychiatrist());
                 drug.setSideEffectsPatient(drug.getSideEffectsPsychiatrist());
                 drug.setInteractionsPatient(drug.getInteractionsPatient());
+                drug.setStopIndications(defaultStopIndication);
             } else if (drugWithDifferentStructure.contains(drug.getName())) {
+                Document doc = getDrugWebpage(drug.getName());
+                System.out.println("HEEFT RARE STRUCTUUR");
                 getSideEffectsFromList(doc, drug);
             } else {
-//                getDescription(doc, drug);
-//                getSideEffects(doc, drug);
-//                getInteractions(doc, drug);
+                System.out.println("GEWOON NORMAAl");
+                Document doc = getDrugWebpage(drug.getName());
+                getDescription(doc, drug);
+                getSideEffects(doc, drug);
+                getInteractions(doc, drug);
                 getStopIndication(doc, drug);
             }
             // code to log the description of the Dao
-            LOGGER.debug("Drug: " + drug);
+            LOGGER.debug("Drug: " + drug.getName());
             LOGGER.debug("Description in the dao: " + drug.getDescriptionPatient());
             LOGGER.debug("Interactions in the dao: " + drug.getInteractionsPatient());
             LOGGER.debug("SideEffects in the dao: " + drug.getSideEffectsPatient());
-            LOGGER.debug("Stop indication in the dao " + drug.getStopIndications());
+
+//            LOGGER.debug("Stop indication in the dao " + drug.getStopIndications());
         }
     }
 
@@ -95,11 +111,9 @@ public class ApotheekWebScraper implements AbstractWebScraper {
     }
 
     private void getSideEffectsFromList(Document doc, DrugSubstance drug) {
-        System.out.println("DRUG: " + drug.getName());
         Elements sideEffectsHtmlLocation = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen");
         Element sideEffectElements =  sideEffectsHtmlLocation.select(".listItemContent_text__otIdg ").get(0);
 
-        System.out.println("SIZE: " + sideEffectElements.select(":contains(Soms)").size());
 
         List<String> keyWords = Arrays.asList("Zelden", "Soms", "Zeer zelden", "Regelmatig");
         // TODO buprenorfine (bij verslaving) probably still not saves correctly fix this

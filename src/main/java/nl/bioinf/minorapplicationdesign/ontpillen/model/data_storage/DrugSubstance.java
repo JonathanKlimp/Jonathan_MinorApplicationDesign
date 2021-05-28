@@ -101,8 +101,8 @@ public class DrugSubstance extends Drug {
         return Collections.unmodifiableList(sideEffects.get("psychiatrist"));
     }
 
-    public HashMap<String, List<String>> getAllSideEffects() {
-        return (HashMap<String, List<String>>) Collections.unmodifiableMap(sideEffects);
+    public Map<String, List<String>> getAllSideEffects() {
+        return Collections.unmodifiableMap(sideEffects);
     }
 
     public List<UseIndication> getUseIndications() {
