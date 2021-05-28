@@ -25,7 +25,7 @@ public class DrugSubstance extends Drug {
         put("psychiatrist", new ArrayList<>());
     }};
     private List<UseIndication> useIndications = new ArrayList<>();
-    private List<StopIndication>  stopIndications;
+    private List<String>  stopIndications;
 
 
     public DrugSubstance(String name) {
@@ -56,7 +56,7 @@ public class DrugSubstance extends Drug {
         this.useIndications.add(useIndication);
     }
 
-    public void setStopIndications(List<StopIndication> stopIndications){
+    public void setStopIndications(List<String> stopIndications){
         this.stopIndications = stopIndications;
     }
 
@@ -109,7 +109,7 @@ public class DrugSubstance extends Drug {
         return Collections.unmodifiableList(useIndications);
     }
 
-    public List<StopIndication> getStopIndications() {
+    public List<String> getStopIndications() {
         return Collections.unmodifiableList(stopIndications);
     }
 
