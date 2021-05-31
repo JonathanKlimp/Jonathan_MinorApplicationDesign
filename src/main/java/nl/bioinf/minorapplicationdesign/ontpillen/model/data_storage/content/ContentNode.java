@@ -6,14 +6,19 @@ import java.util.List;
 
 public class ContentNode implements Content {
     private String contentTitle;
-    protected List<Content> content = new ArrayList<>();
-    int id;
+    private List<Content> content = new ArrayList<>();
+    private ContentNode parent;
+    private int id;
 
-    public void setContent(List<Content> content) {
-        this.content = content;
+    public void setContent(List<Content> contentList) {
+        for (Content content : contentList) {
+            content.setParent(this);
+        }
+        this.content = contentList;
     }
 
     public void addContent(Content newContent){
+        newContent.setParent(this);
         this.content.add(newContent);
     }
 
@@ -34,6 +39,16 @@ public class ContentNode implements Content {
     @Override
     public String getContentClass() {
         return this.getClass().toString();
+    }
+
+    @Override
+    public Content getParent() {
+        return this.parent;
+    }
+
+    @Override
+    public void setParent(ContentNode parent) {
+        this.parent = parent;
     }
 
     @Override

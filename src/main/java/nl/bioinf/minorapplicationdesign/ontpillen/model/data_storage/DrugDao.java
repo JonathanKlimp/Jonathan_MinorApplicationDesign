@@ -1,5 +1,7 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.UseIndication;
+
 import java.util.List;
 
 
@@ -64,4 +66,10 @@ public interface DrugDao {
      * @return a boolean, true if a drug with this name is present in the DAO.
      */
     boolean drugInDrugDao(String drugName);
+
+    UseIndication getUseIndication(String indicationName);
+
+    List<UseIndication> getAllUseIndications();
+
+    void addUseIndication(UseIndication useIndication);
 }

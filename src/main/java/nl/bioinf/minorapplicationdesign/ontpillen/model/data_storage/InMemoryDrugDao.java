@@ -1,11 +1,9 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.UseIndication;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -22,6 +20,7 @@ public class InMemoryDrugDao implements DrugDao {
     static private List<String> drugSubstances = new ArrayList<>();
     static private List<String> mainDrugGroups = new ArrayList<>();
     static private Map<String, Drug> allDrugs = new HashMap<>();
+    static private Map<String, UseIndication> useIndications = new HashMap<>();
 
     /**
      * Method that will add drug to the dao.
@@ -51,8 +50,8 @@ public class InMemoryDrugDao implements DrugDao {
      */
     @Override
     public Drug getDrugByName(String drugName) {
-        if (!allDrugs.containsKey(drugName)) {
-            throw new IllegalArgumentException(drugName + " does not exist.");
+        if (!allDrugs.containsKey(drugName.toLowerCase())) {
+            throw new IllegalArgumentException(drugName.toLowerCase() + " does not exist.");
         }
         return allDrugs.get(drugName);
     }
@@ -90,12 +89,30 @@ public class InMemoryDrugDao implements DrugDao {
         return allDrugs.containsKey(drugName);
     }
 
+    @Override
+//    TODO IIlligal Argument exception toevoegen
+    public UseIndication getUseIndication(String indicationName) {
+        return this.useIndications.get(indicationName);
+    }
+
+    @Override
+    public void addUseIndication(UseIndication useIndication) {
+        this.useIndications.put(useIndication.getName(), useIndication);
+    }
+
+
+    @Override
+    public List<UseIndication> getAllUseIndications() {
+        return new ArrayList<>(this.useIndications.values());
+    }
+
     /**
      * Method that will remove all drugs in the dao
      */
     public void removeAllDrugs() {
-        drugSubstances.clear();
-        mainDrugGroups.clear();
-        allDrugs.clear();
+        this.drugSubstances.clear();
+        this.mainDrugGroups.clear();
+        this.allDrugs.clear();
+        this.useIndications.clear();
     }
 }

@@ -1,5 +1,7 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.UseIndication;
+
 import java.util.*;
 
 /**

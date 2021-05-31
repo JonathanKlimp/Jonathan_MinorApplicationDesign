@@ -19,14 +19,16 @@
                     <div class="col border-bottom pb-3 mb-5">
                         <a th:href="@{'~/medicijn/' + ${drugName}}" href="#"><h3 th:text="${drugName.substring(0,1).toUpperCase() + drugName.substring(1)}">__offline search item title__</h3></a>
 
+                        <th:block th:switch="${drugDao.getDrugByName(drugName).class}">
 <!--                        Block will be inserted if the drug is a DrugSubstance-->
-                        <th:block th:if="${drugDao.getDrugByName(drugName).getIsSubstance()}">
-                            <p th:text="${drugDao.getDrugSubstanceByName(drugName).getDescription()}">__offline short description/tags__</p>
-                        </th:block>
+                            <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance)}">
+                                <p th:text="${drugDao.getDrugByName(drugName).getDescription()}">__offline short description/tags__</p>
+                            </th:block>
 
 <!--                        This block will be inserted if the drug is not a DrugSubstance (but rather a DrugGroup)-->
-                        <th:block th:unless="${drugDao.getDrugByName(drugName).getIsSubstance()}">
-                            <p th:text="${drugDao.getDrugGroupByName(drugName).getChildren()}">__offline short description/tags__</p>
+                            <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugGroup)}">
+                                <p th:text="${drugDao.getDrugByName(drugName).getChildren()}">__offline short description/tags__</p>
+                            </th:block>
                         </th:block>
 
                     </div>

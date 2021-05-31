@@ -1,7 +1,9 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.Drug;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -41,7 +43,7 @@ public class GgzStandaardenBijwerkingenWebScraper implements AbstractWebScraper 
     private WebDriver driver;
 
     private GgzStandaardenBijwerkingenWebScraper(
-            @Value("${ggz.generieke.module.bijwerkingen}") String url,
+            @Value("${ggz.generieke.module.bijwerkingen.url}") String url,
             @Value("${csv.group.between.websites.combiner}") String csvFile) {
         this.url = url;
         this.csvFileLocation = csvFile;
@@ -59,17 +61,20 @@ public class GgzStandaardenBijwerkingenWebScraper implements AbstractWebScraper 
         this.getDriver();
         this.openWebsiteInDriver(this.url, "#chapter-detail-paragraph-5b04514a-050f-44e6-836f-80a7cd1d2d3f .ul-level-0");
 
+//        for (int i = 0; i < drugGroupNames.get("ontpillen").size(); i++) {
+//            continue;
+//        }
+
+//        int i;
+//        for (String drugGroup : drugGroupNames.get("ontpillen")) {
+//            i = drugGroupNames.get("ontpillen").indexOf(drugGroup);
+//            this.drugDao.getDrugByName()
+//        }
+//for (String linkText : this.drugGroupNames.get("ggzstandaarden"))
         for (int i = 0; i < drugGroupNames.get("ontpillen").size(); i++) {
-            continue;
-        }
-
-        int i;
-        for (String drugGroup : drugGroupNames.get("ontpillen")) {
-            i = drugGroupNames.get("ontpillen").indexOf(drugGroup);
-            continue;
-        }
-
-        for (String linkText : this.drugGroupNames.get("ggzstandaarden")) {
+            Drug drug = this.drugDao.getDrugByName(drugGroupNames.get("ontpillen").get(i));
+            System.out.println(drug.getName());
+            String linkText = drugGroupNames.get("ggzstandaarden").get(i);
             openWebsiteInDriver(this.url, "#chapter-detail-paragraph-5b04514a-050f-44e6-836f-80a7cd1d2d3f .ul-level-0");
             List<WebElement> hyperLink = driver.findElements(By.linkText(linkText));
 
@@ -85,21 +90,35 @@ public class GgzStandaardenBijwerkingenWebScraper implements AbstractWebScraper 
 
                 for (Element element : elements) {
 
-                    if (element.text().contains("6.2 Vroege onderkenning en preventie")) {
+                    if (element.text().contains("Vroege onderkenning en preventie")) {
                         System.out.println("Element");
-                        System.out.println(element);
+//                        System.out.println(element);
                         Elements subElements = element.select(".chapter-content");
-//                        for (Element subElement : subElements) {
-//                            System.out.println("subELement:");
-//                            System.out.println(subElement.text());
-//                        }
+                        for (Element subElement : subElements.subList(1, subElements.size())) {
+                            System.out.println("subELement:");
+//                            System.out.println(subElement);
+                            ContentNode contentNode = new ContentNode();
+                            String title = subElement.select("h3").text();
+                            contentNode.setContentTitle(title.substring(title.indexOf(" ") + 1));
+
+                            createContent(contentNode, subElement.select("h3").get(0));
+
+                        }
                     }
                 }
-                break;
             }
         }
 
         this.driver.close();
+    }
+
+    private void createContent(ContentNode initialContent, Element jSoupElement) {
+        System.out.println(initialContent.getContentTitle());
+        for (Element element : jSoupElement.parent().select(".editor-content").get(0).children()) {
+            System.out.println("test");
+            System.out.println(element);
+            System.out.println();
+        }
     }
 
 //
@@ -156,5 +175,6 @@ public class GgzStandaardenBijwerkingenWebScraper implements AbstractWebScraper 
                 TimeUnit.SECONDS.sleep(1);
             }
         }
+        System.out.println(done);
     }
 }
