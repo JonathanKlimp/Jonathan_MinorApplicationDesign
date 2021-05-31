@@ -92,11 +92,27 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         LOGGER.debug("side effects intro: " + sideEffectsIntro);
         Element frequencyAndSideEffect = sideEffectsHtmlLocation.select(".sideEffects_sideEffects__sczbd").get(0);
         Elements frequency = frequencyAndSideEffect.getElementsByTag("h3");
+        ContentNode mainContentNode = new ContentNode();
+        mainContentNode.setContentTitle("Side Effects");
+
+        ContentLeaf newContentLeaf = new ContentLeaf();
+        newContentLeaf.setContentType("PARAGRAPH");
+        newContentLeaf.setContent(sideEffectsIntro);
+        mainContentNode.addContent(newContentLeaf);
+
         for (Element element: frequency) {
             Elements sideEffects = element.nextElementSibling().getElementsByClass("sideEffectsItem_button__V-L1C");
+            ContentNode newContentNode = new ContentNode();
+            newContentNode.setContentTitle("Chance of side effect");
+//            newContentNode.setContent();
+            System.out.println("DIT IS TEXT " + element.text());
+            System.out.println("DIT IS each text: " + sideEffects.eachText());
             LOGGER.debug("Chance of side effect: " + element.text() + sideEffects.eachText());
             for (Element sideEffect: sideEffects) {
+                ContentLeaf newContentLeaf1 = new ContentLeaf();
+
                 Elements sideEffectDescription = sideEffect.nextElementSibling().select(".sideEffectsItem_content__10s1c");
+                newContentLeaf1.setContent(Collections.singletonList(sideEffect.text() + sideEffectDescription.eachText()));
                 LOGGER.debug("side effects: " + sideEffect.text() + sideEffectDescription.eachText());
             }
         }
@@ -109,17 +125,24 @@ public class ApotheekWebScraper implements AbstractWebScraper {
 
 
         List<String> keyWords = Arrays.asList("Zelden", "Soms", "Zeer zelden", "Regelmatig");
+
+        ContentNode mainContentNode = new ContentNode();
         // TODO buprenorfine (bij verslaving) probably still not saves correctly fix this
         if (sideEffectElements.select(":contains(Soms)").size() > 0) {
 
             for (Element element : sideEffectElements.select(":contains(Soms)")) {
 
-                if (element.tagName().equals("ul")) {
-
-//                    contentLeaf.setContentType("LIST");
-//                    contentLeaf.setContent(element.getElementsByTag("li").eachText());
-                } else if (element.tagName().equals("p")) {
+                if (element.tagName().equals("p")) {
+                    mainContentNode.setContentTitle("Side effects");
+//                    mainContentNode.addContent(element.getElementsByTag("li").eachText());/
+                    ContentLeaf newContentLeaf = new ContentLeaf();
+                    newContentLeaf.setContentType("PARAGRAPH");
+                    newContentLeaf.setContent(Collections.singletonList(element.text()));
 //                    contentNode.setContentTitle(element.text());
+
+                } else if (element.tagName().equals("ul")) {
+//                      contentLeaf.setContentType("LIST");
+////                    contentLeaf.setContentm(element.getElementsByTag("li").eachText());
                 }
 
 //                drug.getSideEffects().addSideEffectPatient("apotheek", maincontentNode);

@@ -21,7 +21,7 @@ public class OntpillenApplication {
 
     @Autowired
     public void setWebScrapeExecutor(WebScrapeExecutor webScrapeExecutor) {
-        this.webScrapeExecutor = webScrapeExecutor;
+        OntpillenApplication.webScrapeExecutor = webScrapeExecutor;
     }
 
     public static void main(String[] args) throws IOException {
