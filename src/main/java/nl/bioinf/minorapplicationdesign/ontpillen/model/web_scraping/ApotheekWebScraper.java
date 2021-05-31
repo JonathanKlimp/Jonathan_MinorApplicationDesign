@@ -30,7 +30,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
     private String basicUrl;
     private static final Logger LOGGER = LoggerFactory.getLogger(ApotheekWebScraper.class);
 
-    private ApotheekWebScraper(@Value("${apotheek.site}") String url) {this.basicUrl = url;}
+    private ApotheekWebScraper(@Value("${apotheek.url}") String url) {this.basicUrl = url;}
 
     @Autowired
     public void setDrugDao(DrugDao drugDao) {
@@ -103,20 +103,24 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         for (Element element: frequency) {
             Elements sideEffects = element.nextElementSibling().getElementsByClass("sideEffectsItem_button__V-L1C");
             ContentNode newContentNode = new ContentNode();
-            newContentNode.setContentTitle("Chance of side effect");
-//            newContentNode.setContent();
-            System.out.println("DIT IS TEXT " + element.text());
-            System.out.println("DIT IS each text: " + sideEffects.eachText());
+            newContentNode.setContentTitle(element.text());
+
+            ContentNode newContentNode1 = new ContentNode();
+            newContentNode1.setContentTitle(String.valueOf(sideEffects.eachText()));
+
             LOGGER.debug("Chance of side effect: " + element.text() + sideEffects.eachText());
             for (Element sideEffect: sideEffects) {
+                Elements sideEffectDescription = sideEffect.nextElementSibling().select(".sideEffectsItem_content__10s1c");
                 ContentLeaf newContentLeaf1 = new ContentLeaf();
 
-                Elements sideEffectDescription = sideEffect.nextElementSibling().select(".sideEffectsItem_content__10s1c");
-                newContentLeaf1.setContent(Collections.singletonList(sideEffect.text() + sideEffectDescription.eachText()));
+                newContentLeaf1.setContentType("PARAGRAPH");
+                newContentLeaf1.setContent(sideEffectDescription.eachText());
+
+                newContentNode.addContent(newContentLeaf1);
                 LOGGER.debug("side effects: " + sideEffect.text() + sideEffectDescription.eachText());
             }
+            mainContentNode.addContent(newContentNode);
         }
-        //TODO Add to datamodel
     }
 
     private void getSideEffectsFromList(Document doc, DrugSubstance drug) {
