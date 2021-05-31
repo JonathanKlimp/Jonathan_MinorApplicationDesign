@@ -10,8 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
-class GgzStandaardenBijwerkingenWebScraperTest {
+class RichtlijnenNhgWebScraperTest {
+
     @Autowired
     DrugDao drugDao;
 
@@ -19,12 +22,16 @@ class GgzStandaardenBijwerkingenWebScraperTest {
     DrugFetcher drugFetcher;
 
     @Autowired
-    GgzStandaardenBijwerkingenWebScraper ggzStandaardenBijwerkingenWebScraperTest;
+    IndicationScraper indicationScraper;
+
+    @Autowired
+    RichtlijnenNhgWebScraper richtlijnenNhgWebScraper;
 
     @BeforeEach
     public void bypassSSL() throws IOException {
         SSLHelper.bypassSSL();
         this.drugFetcher.parseHtml();
+        this.indicationScraper.parseHtml();
     }
 
     @AfterEach
@@ -32,8 +39,9 @@ class GgzStandaardenBijwerkingenWebScraperTest {
         drugDao.removeAllDrugs();
     }
 
+
     @Test
-    void parseHtml() throws Exception {
-        ggzStandaardenBijwerkingenWebScraperTest.parseHtml();
+    void parseHtml() throws IOException {
+        this.richtlijnenNhgWebScraper.parseHtml();
     }
 }

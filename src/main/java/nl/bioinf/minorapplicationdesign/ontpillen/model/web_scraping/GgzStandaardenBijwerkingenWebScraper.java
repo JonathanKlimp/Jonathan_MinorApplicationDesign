@@ -121,7 +121,7 @@ public class GgzStandaardenBijwerkingenWebScraper implements AbstractWebScraper 
         }
     }
 
-    //
+//
     private void fillDrugGroupNamesWithCsv() throws IOException {
         String row;
 
@@ -163,7 +163,7 @@ public class GgzStandaardenBijwerkingenWebScraper implements AbstractWebScraper 
         waitForPageLoad(cssSelectorCheck);
     }
 
-    //    TODO what sould happen if maxSecondsToTry runs out? Add maxSecondsToTry to application.propperties?
+//    TODO what sould happen if maxSecondsToTry runs out? Add maxSecondsToTry to application.propperties?
     private void waitForPageLoad(String cssSelectorCheck) throws InterruptedException {
         int maxSecondToTry = 10;
         boolean done = false;
