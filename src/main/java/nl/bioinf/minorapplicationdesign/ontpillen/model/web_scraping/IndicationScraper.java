@@ -3,7 +3,7 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.Drug;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance;
-import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.UseIndication;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.UseIndication;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -34,7 +34,7 @@ public class IndicationScraper implements AbstractWebScraper{
     private String url;
     private static final Logger LOGGER = LoggerFactory.getLogger(IndicationScraper.class);
 
-    private IndicationScraper(@Value("${farmaco.medicines.site}") String url) {
+    private IndicationScraper(@Value("${farmaco.medicines.url}") String url) {
         this.url = url;
     }
 
@@ -60,12 +60,13 @@ public class IndicationScraper implements AbstractWebScraper{
 
     private void addUseIndication(List<String> parsedDrugs, String indication){
         List<Drug> drugList = fetchDrugsFromDao(parsedDrugs);
+        UseIndication newUseIndication = new UseIndication();
+        newUseIndication.setName(indication);
+        newUseIndication.setDrugs(drugList);
+        this.drugDao.addUseIndication(newUseIndication);
         for (String drug: parsedDrugs) {
             Drug currentDrug = drugDao.getDrugByName(drug);
             DrugSubstance drugSubstance = (DrugSubstance) currentDrug;
-            UseIndication newUseIndication = new UseIndication();
-            newUseIndication.setName(indication);
-            newUseIndication.setDrugs(drugList);
             drugSubstance.addUseIndication(newUseIndication);
         }
     }

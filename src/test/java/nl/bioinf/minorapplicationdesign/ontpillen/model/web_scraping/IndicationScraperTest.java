@@ -1,16 +1,15 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
-import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.Drug;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance;
-import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.UseIndication;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.UseIndication;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +36,12 @@ class IndicationScraperTest {
     public void storeDrugs() throws IOException {
         SSLHelper.bypassSSL();
         drugFetcher.parseHtml();
+        indicationScraper.parseHtml();
+    }
+
+    @AfterEach
+    public void cleanUpTest() {
+        drugDao.removeAllDrugs();
     }
 
     /**
@@ -44,6 +49,7 @@ class IndicationScraperTest {
      * It loops trough all drug substances present in the dao, then gets the use indication(s) of that drug.
      * after that there is another loop through the use indications of that drug which is then used to check if
      * for that use indication the specific drug is present in the useIndicationsExpected hashmap
+     *
      * @throws IOException
      */
     @Test
@@ -60,7 +66,7 @@ class IndicationScraperTest {
         useIndicationsExpected.put("stoppen met roken", Arrays.asList("bupropion", "nicotine", "nortriptyline", "varenicline"));
 
 //        String[] IndicationNamesArray = {"ADHD bij kinderen", "angststoornissen", "bipolaire stoornis", "delier", "depressie", "psychose", "slapeloosheid", "stoornissen bij het gebruik van alcohol", "stoppen met roken"};
-        indicationScraper.parseHtml();
+//        indicationScraper.parseHtml();
 
         List<DrugSubstance> allDrugs = drugDao.getDrugSubstances();
         for (DrugSubstance drug1 : allDrugs) {

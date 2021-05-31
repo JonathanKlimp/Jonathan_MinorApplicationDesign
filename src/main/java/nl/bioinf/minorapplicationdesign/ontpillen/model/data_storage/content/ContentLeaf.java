@@ -10,8 +10,9 @@ import java.util.stream.Collectors;
 public class ContentLeaf implements Content {
     protected ContentType contentType;
     private String contentTitle;
-    protected List<String> content = new ArrayList<>();
-    int id;
+    private List<String> content = new ArrayList<>();
+    private ContentNode parent;
+    private int id;
 
     public void setContentType(String contentType) {
         if (!Arrays.stream(ContentType.values()).anyMatch(str -> str.name().equals(contentType))) {
@@ -51,6 +52,16 @@ public class ContentLeaf implements Content {
     @Override
     public String getContentClass() {
         return null;
+    }
+
+    @Override
+    public Content getParent() {
+        return this.parent;
+    }
+
+    @Override
+    public void setParent(ContentNode parent) {
+        this.parent = parent;
     }
 
     @Override

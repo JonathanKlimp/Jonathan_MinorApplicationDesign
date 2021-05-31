@@ -10,6 +10,10 @@ public interface Content {
 
     String getContentClass();
 
+    Content getParent();
+
+    void setParent(ContentNode parent);
+
     int getId();
 
     void setId(int id);
