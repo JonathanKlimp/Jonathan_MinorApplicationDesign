@@ -7,7 +7,7 @@ import java.util.*;
  * DrugSubstance is a child class of abstract class Drug
  * It contains all necessary information about the drug substance
  * that needs to be presented on the website. Which are:
- * the brand names, the description, side effects, use and stop indications
+ * the brand names, the description, use and stop indications
  * and interactions with other drugs.
  * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
  */
@@ -15,18 +15,14 @@ public class DrugSubstance extends Drug {
     private List<String> brandNames = new ArrayList<>();
     private Map<String, List<String>> description = new HashMap<>() {{
         put("patient", new ArrayList<>());
-        put("psychiatrist", new ArrayList<>());
-    }};
-    private Map<String, List<String>> sideEffects = new HashMap<>() {{
-        put("patient", new ArrayList<>());
-        put("psychiatrist", new ArrayList<>());
+        put("practitioner", new ArrayList<>());
     }};
     private Map<String, List<String>> interactions = new HashMap<>() {{
         put("patient", new ArrayList<>());
-        put("psychiatrist", new ArrayList<>());
+        put("practitioner", new ArrayList<>());
     }};
     private List<UseIndication> useIndications = new ArrayList<>();
-    private List<String>  stopIndications;
+    private List<String>  stopIndications = new ArrayList<>();
 
 
     public DrugSubstance(String name) {
@@ -37,20 +33,12 @@ public class DrugSubstance extends Drug {
         this.description.put("patient", descriptionPatient);
     }
 
-    public void setDescriptionPsychiatrist(List<String> descriptionPsychiatrist) {
-        this.description.put("psychiatrist", descriptionPsychiatrist);
+    public void setDescriptionPractitioner(List<String> descriptionPsychiatrist) {
+        this.description.put("practitioner", descriptionPsychiatrist);
     }
 
     public void addBrandName(String brandName){
         this.brandNames.add(brandName);
-    }
-
-    public void setSideEffectsPatient(List<String> sideEffectsPatient) {
-        this.sideEffects.put("patient", sideEffectsPatient);
-    }
-
-    public void setSideEffectsPsychiatrist(List<String> sideEffectsPatient) {
-        this.sideEffects.put("psychiatrist", sideEffectsPatient);
     }
 
     public void addUseIndication(UseIndication useIndication){
@@ -65,8 +53,8 @@ public class DrugSubstance extends Drug {
         this.interactions.put("patient", interactionsPatient);
     }
 
-    public void setInteractionsPsychiatrist(List<String> interactionsPsychiatrist) {
-        this.interactions.put("psychiatrist", interactionsPsychiatrist);
+    public void setInteractionsPractitioner(List<String> interactionsPsychiatrist) {
+        this.interactions.put("practitioner", interactionsPsychiatrist);
     }
 
     public String getName() {
@@ -90,21 +78,10 @@ public class DrugSubstance extends Drug {
         return Collections.unmodifiableList(description.get("patient"));
     }
 
-    public List<String> getDescriptionPsychiatrist() {
-        return Collections.unmodifiableList(description.get("psychiatrist"));
+    public List<String> getDescriptionPractitioner() {
+        return Collections.unmodifiableList(description.get("practitioner"));
     }
 
-    public List<String> getSideEffectsPatient() {
-        return Collections.unmodifiableList(sideEffects.get("patient"));
-    }
-
-    public List<String> getSideEffectsPsychiatrist() {
-        return Collections.unmodifiableList(sideEffects.get("psychiatrist"));
-    }
-
-    public Map<String, List<String>> getAllSideEffects() {
-        return Collections.unmodifiableMap(sideEffects);
-    }
 
     public List<UseIndication> getUseIndications() {
         return Collections.unmodifiableList(useIndications);
