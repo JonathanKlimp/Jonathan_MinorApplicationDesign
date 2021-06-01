@@ -5,6 +5,7 @@ import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstan
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.Content;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentLeaf;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.SideEffects;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -47,21 +48,23 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         List<String> defaultStopIndication = Collections.singletonList("Op de website is geen informatie gevonden");
 
         for (DrugSubstance drug: drugSubstances) {
-            System.out.println("DRUG: " + drug.getName());
+//            System.out.println("DRUG: " + drug.getName());
 
             if (drugNotOnWebsite.contains(drug.getName())) {
-                drug.setDescriptionPatient(drug.getDescriptionPsychiatrist());
-                drug.setSideEffectsPatient(drug.getSideEffectsPsychiatrist());
+                drug.setDescriptionPatient(drug.getDescriptionPractitioner());
+                for (Content content : drug.getSideEffects().getSideEffectsPractitioner()) {
+                    drug.getSideEffects().addSideEffectPatient("apotheek", content);
+                }
                 drug.setInteractionsPatient(drug.getInteractionsPatient());
                 drug.setStopIndications(defaultStopIndication);
             } else if (drugWithDifferentStructure.contains(drug.getName())) {
                 Document doc = getDrugWebpage(drug.getName());
-                System.out.println("HEEFT RARE STRUCTUUR");
+//                System.out.println("HEEFT RARE STRUCTUUR");
                 getSideEffectsFromList(doc, drug);
             } else {
                 Document doc = getDrugWebpage(drug.getName());
                 getDescription(doc, drug);
-                getSideEffects(doc);
+                getSideEffects(doc, drug);
                 getInteractions(doc, drug);
                 getStopIndication(doc, drug);
             }
@@ -69,8 +72,8 @@ public class ApotheekWebScraper implements AbstractWebScraper {
             LOGGER.debug("Drug: " + drug.getName());
             LOGGER.debug("Description in the dao: " + drug.getDescriptionPatient());
             LOGGER.debug("Interactions in the dao: " + drug.getInteractionsPatient());
-            LOGGER.debug("SideEffects in the dao: " + drug.getSideEffectsPatient());
-//            LOGGER.debug("Stop indication in the dao " + drug.getStopIndications());
+            LOGGER.debug("SideEffects in the dao: " + drug.getSideEffects().getSideEffectsPatient());
+            LOGGER.debug("Stop indication in the dao " + drug.getStopIndications());
         }
     }
 
@@ -85,12 +88,14 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         drug.setStopIndications(stopIndicationLocation.eachText());
     }
 
-    private void getSideEffects(Document doc) {
+    private void getSideEffects(Document doc, DrugSubstance drug) {
         Elements sideEffectsHtmlLocation = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen");
         List<String> sideEffectsIntro = sideEffectsHtmlLocation.select(".listItemContent_text__otIdg p, p.listItemContent_text__otIdg").eachText();
         LOGGER.debug("side effects intro: " + sideEffectsIntro);
         Element frequencyAndSideEffect = sideEffectsHtmlLocation.select(".sideEffects_sideEffects__sczbd").get(0);
         Elements frequency = frequencyAndSideEffect.getElementsByTag("h3");
+        SideEffects sideEffectsDao = new SideEffects();
+
         ContentNode mainContentNode = new ContentNode();
         mainContentNode.setContentTitle("Side Effects");
 
@@ -120,39 +125,38 @@ public class ApotheekWebScraper implements AbstractWebScraper {
             }
             mainContentNode.addContent(newContentNode);
         }
+        drug.getSideEffects().addSideEffectPatient("apotheek", mainContentNode);
     }
 
     private void getSideEffectsFromList(Document doc, DrugSubstance drug) {
         Elements sideEffectsHtmlLocation = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen");
         Element sideEffectElements =  sideEffectsHtmlLocation.select(".listItemContent_text__otIdg ").get(0);
 
-
-        List<String> keyWords = Arrays.asList("Zelden", "Soms", "Zeer zelden", "Regelmatig");
-
         ContentNode mainContentNode = new ContentNode();
         mainContentNode.setContentTitle("Side effects");
         // TODO buprenorfine (bij verslaving) probably still not saves correctly fix this
         // TODO items here may not have the correct structure while saving
-            System.out.println("??" + sideEffectElements);
+
+//            System.out.println("??" + sideEffectElements);
 
             for (Element element : sideEffectElements.getAllElements()) {
                 if (element.tagName().equals("p")) {
-                    System.out.println("P VALUE: " + element.text());
+//                    System.out.println("P VALUE: " + element.text());
 
                     ContentLeaf newContentLeaf = new ContentLeaf();
                     newContentLeaf.setContentType("PARAGRAPH");
                     newContentLeaf.setContent(Collections.singletonList(element.text()));
                     mainContentNode.addContent(newContentLeaf);
 
-
                 } else if (element.tagName().equals("ul")) {
-                    System.out.println("UL value: " + element.getElementsByTag("ul").eachText());
+//                    System.out.println("UL value: " + element.getElementsByTag("ul").eachText());
                     ContentLeaf newContentLeaf = new ContentLeaf();
                     newContentLeaf.setContentType("LIST");
                     newContentLeaf.setContent(element.getElementsByTag("li").eachText());
                     mainContentNode.addContent(newContentLeaf);
                 }
             }
+            drug.getSideEffects().addSideEffectPatient("apotheek" ,mainContentNode);
     }
 
     private void getDescription(Document doc, DrugSubstance drug) {
