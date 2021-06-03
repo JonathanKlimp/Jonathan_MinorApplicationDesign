@@ -93,7 +93,7 @@ class FarmacoWebScraperTest {
         List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
 
         for (DrugSubstance drugSubstance: drugSubstances) {
-            assertNotNull(drugSubstance.getInteractionsPsychiatrist());
+            assertNotNull(drugSubstance.getInteractionsPractitioner());
         }
     }
 }
