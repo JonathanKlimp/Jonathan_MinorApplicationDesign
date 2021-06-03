@@ -82,7 +82,6 @@ public class DrugSubstance extends Drug {
         return Collections.unmodifiableList(description.get("practitioner"));
     }
 
-
     public List<UseIndication> getUseIndications() {
         return Collections.unmodifiableList(useIndications);
     }
@@ -95,7 +94,7 @@ public class DrugSubstance extends Drug {
         return Collections.unmodifiableList(interactions.get("patient"));
     }
 
-    public List<String> getInteractionsPsychiatrist() {
-        return Collections.unmodifiableList(interactions.get("psychiatrist"));
+    public List<String> getInteractionsPractitioner() {
+        return Collections.unmodifiableList(interactions.get("practitioner"));
     }
 }

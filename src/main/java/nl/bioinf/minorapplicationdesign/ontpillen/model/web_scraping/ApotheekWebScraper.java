@@ -48,8 +48,6 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         List<String> defaultStopIndication = Collections.singletonList("Op de website is geen informatie gevonden");
 
         for (DrugSubstance drug: drugSubstances) {
-//            System.out.println("DRUG: " + drug.getName());
-
             if (drugNotOnWebsite.contains(drug.getName())) {
                 drug.setDescriptionPatient(drug.getDescriptionPractitioner());
                 for (Content content : drug.getSideEffects().getSideEffectsPractitioner()) {
@@ -59,7 +57,6 @@ public class ApotheekWebScraper implements AbstractWebScraper {
                 drug.setStopIndications(defaultStopIndication);
             } else if (drugWithDifferentStructure.contains(drug.getName())) {
                 Document doc = getDrugWebpage(drug.getName());
-//                System.out.println("HEEFT RARE STRUCTUUR");
                 getSideEffectsFromList(doc, drug);
             } else {
                 Document doc = getDrugWebpage(drug.getName());
@@ -96,13 +93,14 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         Elements frequency = frequencyAndSideEffect.getElementsByTag("h3");
         SideEffects sideEffectsDao = new SideEffects();
 
-        ContentNode mainContentNode = new ContentNode();
-        mainContentNode.setContentTitle("Side Effects");
+//        ContentNode mainContentNode = new ContentNode();
+//        mainContentNode.setContentTitle("Side Effects");
 
         ContentLeaf newContentLeaf = new ContentLeaf();
         newContentLeaf.setContentType("PARAGRAPH");
         newContentLeaf.setContent(sideEffectsIntro);
-        mainContentNode.addContent(newContentLeaf);
+        drug.getSideEffects().addSideEffectPatient("apotheek", newContentLeaf);
+//        mainContentNode.addContent(newContentLeaf);
 
         for (Element element: frequency) {
             Elements sideEffects = element.nextElementSibling().getElementsByClass("sideEffectsItem_button__V-L1C");
@@ -123,9 +121,11 @@ public class ApotheekWebScraper implements AbstractWebScraper {
                 newContentNode.addContent(newContentLeaf1);
                 LOGGER.debug("side effects: " + sideEffect.text() + sideEffectDescription.eachText());
             }
-            mainContentNode.addContent(newContentNode);
+            drug.getSideEffects().addSideEffectPatient("apotheek", newContentNode);
+//            mainContentNode.addContent(newContentNode);
         }
-        drug.getSideEffects().addSideEffectPatient("apotheek", mainContentNode);
+        System.out.println(drug.getName() + ":  " + drug.getSideEffects().getSideEffectsPatient());
+//        drug.getSideEffects().addSideEffectPatient("apotheek", mainContentNode);
     }
 
     private void getSideEffectsFromList(Document doc, DrugSubstance drug) {
