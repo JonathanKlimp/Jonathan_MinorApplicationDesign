@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -91,40 +92,43 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         LOGGER.debug("side effects intro: " + sideEffectsIntro);
         Element frequencyAndSideEffect = sideEffectsHtmlLocation.select(".sideEffects_sideEffects__sczbd").get(0);
         Elements frequency = frequencyAndSideEffect.getElementsByTag("h3");
-        SideEffects sideEffectsDao = new SideEffects();
-
-//        ContentNode mainContentNode = new ContentNode();
-//        mainContentNode.setContentTitle("Side Effects");
 
         ContentLeaf newContentLeaf = new ContentLeaf();
         newContentLeaf.setContentType("PARAGRAPH");
         newContentLeaf.setContent(sideEffectsIntro);
         drug.getSideEffects().addSideEffectPatient("apotheek", newContentLeaf);
-//        mainContentNode.addContent(newContentLeaf);
 
         for (Element element: frequency) {
             Elements sideEffects = element.nextElementSibling().getElementsByClass("sideEffectsItem_button__V-L1C");
             ContentNode newContentNode = new ContentNode();
             newContentNode.setContentTitle(element.text());
 
-            ContentNode newContentNode1 = new ContentNode();
-            newContentNode1.setContentTitle(String.valueOf(sideEffects.eachText()));
+//            ContentNode newContentNode1 = new ContentNode();
+//            newContentNode1.setContentTitle(String.valueOf(sideEffects.eachText()));
 
             LOGGER.debug("Chance of side effect: " + element.text() + sideEffects.eachText());
-            for (Element sideEffect: sideEffects) {
-                Elements sideEffectDescription = sideEffect.nextElementSibling().select(".sideEffectsItem_content__10s1c");
-                ContentLeaf newContentLeaf1 = new ContentLeaf();
 
+            List<ContentNode> contentList = new ArrayList<>();
+            for (int i = 0; i < sideEffects.eachText().size(); i++) {
+                contentList.add(new ContentNode());
+                contentList.get(i).setContentTitle(sideEffects.eachText().get(i));
+                newContentNode.addContent(contentList.get(i));
+            }
+            int i = 0;
+            for (Element sideEffect: sideEffects) {
+
+                Elements sideEffectDescription = sideEffect.nextElementSibling().select(".sideEffectsItem_content__10s1c");
+
+                ContentLeaf newContentLeaf1 = new ContentLeaf();
                 newContentLeaf1.setContentType("PARAGRAPH");
                 newContentLeaf1.setContent(sideEffectDescription.eachText());
 
-                newContentNode.addContent(newContentLeaf1);
+                contentList.get(i).addContent(newContentLeaf1);
                 LOGGER.debug("side effects: " + sideEffect.text() + sideEffectDescription.eachText());
+                i += 1;
             }
             drug.getSideEffects().addSideEffectPatient("apotheek", newContentNode);
-//            mainContentNode.addContent(newContentNode);
         }
-//        drug.getSideEffects().addSideEffectPatient("apotheek", mainContentNode);
     }
 
     private void getSideEffectsFromList(Document doc, DrugSubstance drug) {
@@ -135,6 +139,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         mainContentNode.setContentTitle("Side effects");
         // TODO buprenorfine (bij verslaving) probably still not saves correctly fix this
         // TODO items here may not have the correct structure while saving
+        // TODO make content nodes just like the method getSideEffects
 
 //            System.out.println("??" + sideEffectElements);
 
