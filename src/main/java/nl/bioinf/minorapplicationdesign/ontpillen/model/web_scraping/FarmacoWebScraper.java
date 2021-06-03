@@ -61,7 +61,6 @@ public class FarmacoWebScraper implements AbstractWebScraper {
             drugsubstance.setInteractionsPractitioner(interactions);
 
             this.addSideEffectsToDrug(drugsubstance, "PARAGRAPH", sideEffects);
-            System.out.println(drugName + ": " + drug.getSideEffects().getSideEffectsPractitioner());
 
             LOGGER.debug("Side effects for drug: " + drugName + "Side effects: " + sideEffects);
             LOGGER.debug("DrugDescription for drug: " + drugName + "Drug description: " + drugDescription);

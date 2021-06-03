@@ -124,7 +124,6 @@ public class ApotheekWebScraper implements AbstractWebScraper {
             drug.getSideEffects().addSideEffectPatient("apotheek", newContentNode);
 //            mainContentNode.addContent(newContentNode);
         }
-        System.out.println(drug.getName() + ":  " + drug.getSideEffects().getSideEffectsPatient());
 //        drug.getSideEffects().addSideEffectPatient("apotheek", mainContentNode);
     }
 
