@@ -1,5 +1,6 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
+import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.nhg.RichtlijnenNhgWebScraper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

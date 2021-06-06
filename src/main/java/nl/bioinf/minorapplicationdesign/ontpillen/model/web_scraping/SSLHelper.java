@@ -11,7 +11,7 @@ import java.security.cert.X509Certificate;
  * @author StackOverflow, Larissa Bouwknegt
  */
 public class SSLHelper {
-    static void bypassSSL(){
+    public static void bypassSSL(){
         TrustManager[] trustAllCertificates = new TrustManager[]{
                 new X509TrustManager() {
                     @Override
