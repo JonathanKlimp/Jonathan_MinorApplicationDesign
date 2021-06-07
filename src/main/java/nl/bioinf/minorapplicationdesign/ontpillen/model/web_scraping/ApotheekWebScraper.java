@@ -142,7 +142,6 @@ public class ApotheekWebScraper implements AbstractWebScraper {
             LOGGER.debug("side effects: " + sideEffect.text() + sideEffectDescription.eachText());
             i++;
         }
-
     }
 
     private void getSideEffectsFromList(Document doc, DrugSubstance drug) {
