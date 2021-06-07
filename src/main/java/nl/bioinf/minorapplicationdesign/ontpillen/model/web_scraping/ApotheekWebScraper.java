@@ -105,42 +105,44 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         Element frequencyAndSideEffect = sideEffectsHtmlLocation.select(".sideEffects_sideEffects__sczbd").get(0);
         Elements frequency = frequencyAndSideEffect.getElementsByTag("h3");
 
-        ContentLeaf newContentLeaf = new ContentLeaf();
-        newContentLeaf.setContentType("PARAGRAPH");
-        newContentLeaf.setContent(sideEffectsIntro);
-        drug.getSideEffects().addSideEffectPatient("apotheek", newContentLeaf);
-
+        List<ContentNode> contentList = new ArrayList<>();
+        for (int i = 0; i < frequency.size(); i++) {
+            contentList.add(new ContentNode());
+        }
+        int i = 0;
         for (Element element: frequency) {
             Elements sideEffects = element.nextElementSibling().getElementsByClass("sideEffectsItem_button__V-L1C");
-            ContentNode newContentNode = new ContentNode();
-            newContentNode.setContentTitle(element.text());
+            contentList.get(i).setContentTitle(element.text());
+            LOGGER.debug("Chance of side effect: " + element.text() +  sideEffects.eachText());
 
-            addContentValues(sideEffects, newContentNode);
-            drug.getSideEffects().addSideEffectPatient("apotheek", newContentNode);
-            LOGGER.debug("Chance of side effect: " + element.text() + sideEffects.eachText());
+            addContentValues(sideEffects, contentList.get(i));
+            drug.getSideEffects().addSideEffectPatient("apotheek", contentList.get(i));
+            System.out.println("grootte: " + i  + " " + frequency.size() + " hm");
+            i++;
         }
     }
 
-    private void addContentValues(Elements sideEffects, ContentNode newContentNode) {
+    private void addContentValues(Elements sideEffects, ContentNode contentNode) {
         List<ContentNode> contentList = new ArrayList<>();
         for (int i = 0; i < sideEffects.eachText().size(); i++) {
             contentList.add(new ContentNode());
-            contentList.get(i).setContentTitle(sideEffects.eachText().get(i));
-            newContentNode.addContent(contentList.get(i));
         }
         int i = 0;
         for (Element sideEffect: sideEffects) {
 
             Elements sideEffectDescription = sideEffect.nextElementSibling().select(".sideEffectsItem_content__10s1c");
 
-            ContentLeaf newContentLeaf1 = new ContentLeaf();
-            newContentLeaf1.setContentType("PARAGRAPH");
-            newContentLeaf1.setContent(sideEffectDescription.eachText());
+            ContentLeaf newContentLeaf = new ContentLeaf();
+            newContentLeaf.setContentType("PARAGRAPH");
+            newContentLeaf.setContentTitle(sideEffect.text());
+            newContentLeaf.setContent(sideEffectDescription.eachText());
 
-            contentList.get(i).addContent(newContentLeaf1);
+            contentList.get(i).addContent(newContentLeaf);
+            contentNode.addContent(contentList.get(i));
             LOGGER.debug("side effects: " + sideEffect.text() + sideEffectDescription.eachText());
-            i += 1;
+            i++;
         }
+
     }
 
     private void getSideEffectsFromList(Document doc, DrugSubstance drug) {
@@ -149,20 +151,22 @@ public class ApotheekWebScraper implements AbstractWebScraper {
 
         // TODO buprenorfine (bij verslaving) probably still not saves correctly fix this
 
-            for (Element element : sideEffectElements.getAllElements()) {
-                if (element.tagName().equals("p")) {
-                    ContentLeaf newContentLeaf = new ContentLeaf();
-                    newContentLeaf.setContentType("PARAGRAPH");
-                    newContentLeaf.setContent(Collections.singletonList(element.text()));
-                    drug.getSideEffects().addSideEffectPatient("apotheek", newContentLeaf);
+        for (Element element : sideEffectElements.getAllElements()) {
+            if (element.tagName().equals("p")) {
+                ContentLeaf newContentLeaf = new ContentLeaf();
+                newContentLeaf.setContentType("PARAGRAPH");
+                newContentLeaf.setContent(Collections.singletonList(element.text()));
+                drug.getSideEffects().addSideEffectPatient("apotheek", newContentLeaf);
+                LOGGER.debug("P element from getSideEffectsFromList: " + element.text());
 
-                } else if (element.tagName().equals("ul")) {
-                    ContentLeaf newContentLeaf = new ContentLeaf();
-                    newContentLeaf.setContentType("LIST");
-                    newContentLeaf.setContent(element.getElementsByTag("li").eachText());
-                    drug.getSideEffects().addSideEffectPatient("apotheek", newContentLeaf);
-                }
+            } else if (element.tagName().equals("ul")) {
+                ContentLeaf newContentLeaf = new ContentLeaf();
+                newContentLeaf.setContentType("LIST");
+                newContentLeaf.setContent(element.getElementsByTag("li").eachText());
+                drug.getSideEffects().addSideEffectPatient("apotheek", newContentLeaf);
+                LOGGER.debug("UL element from getSideEffectsFromList: " + element.getElementsByTag("li").eachText());
             }
+        }
     }
 
 
