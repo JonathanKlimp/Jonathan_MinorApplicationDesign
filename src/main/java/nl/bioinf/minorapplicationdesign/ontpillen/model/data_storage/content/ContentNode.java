@@ -1,14 +1,18 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
+/**
+ * @author Naomi Hindriks
+ */
 public class ContentNode implements Content {
+    protected ContentType contentType;
     private String contentTitle;
     private List<Content> content = new ArrayList<>();
     private ContentNode parent;
     private int id;
+    private Map<String, String> attributes = new HashMap<>();
 
     public void setContent(List<Content> contentList) {
         for (Content content : contentList) {
@@ -20,6 +24,20 @@ public class ContentNode implements Content {
     public void addContent(Content newContent){
         newContent.setParent(this);
         this.content.add(newContent);
+    }
+
+    @Override
+    public void setContentType(String contentType) {
+        if (!Arrays.stream(ContentType.values()).anyMatch(str -> str.name().equals(contentType))) {
+            List<String> newList = Arrays.stream(ContentType.values()).map(Enum::name).collect(Collectors.toList());
+            String message = "contentType is not any of the allowed values, the allowed values are: " + String.join(", ", newList);
+            throw new IllegalArgumentException(message);
+        }
+        this.contentType = ContentType.valueOf(contentType);
+    }
+
+    public ContentType getContentType() {
+        return contentType;
     }
 
     public List<Content> getContent() {
@@ -37,12 +55,7 @@ public class ContentNode implements Content {
     }
 
     @Override
-    public String getContentClass() {
-        return this.getClass().toString();
-    }
-
-    @Override
-    public Content getParent() {
+    public ContentNode getParent() {
         return this.parent;
     }
 
@@ -61,4 +74,13 @@ public class ContentNode implements Content {
         this.id = id;
     }
 
+    @Override
+    public void addAttribute(String attributeName, String attributeValue) {
+        this.attributes.put(attributeName, attributeValue);
+    }
+
+    @Override
+    public Map<String, String> getAttributes() {
+        return Collections.unmodifiableMap(this.attributes);
+    }
 }
