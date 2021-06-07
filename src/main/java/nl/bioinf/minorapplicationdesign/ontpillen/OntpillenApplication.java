@@ -4,7 +4,6 @@ import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.WebScrapeEx
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
 import org.slf4j.Logger;
@@ -21,7 +20,7 @@ public class OntpillenApplication {
 
     @Autowired
     public void setWebScrapeExecutor(WebScrapeExecutor webScrapeExecutor) {
-        this.webScrapeExecutor = webScrapeExecutor;
+        OntpillenApplication.webScrapeExecutor = webScrapeExecutor;
     }
 
     public static void main(String[] args) throws IOException {

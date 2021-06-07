@@ -30,7 +30,7 @@ public class FarmacoWebScraper implements AbstractWebScraper {
     private String basicUrl;
     private static final Logger LOGGER = LoggerFactory.getLogger(FarmacoWebScraper.class);
 
-    private FarmacoWebScraper(@Value("${farmaco.basic.site}") String url) {
+    private FarmacoWebScraper(@Value("${farmaco.basic.url}") String url) {
         this.basicUrl = url;
     }
 

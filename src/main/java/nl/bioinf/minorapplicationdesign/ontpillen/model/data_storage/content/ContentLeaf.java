@@ -1,18 +1,21 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * @author Naomi Hindriks
+ */
 public class ContentLeaf implements Content {
     protected ContentType contentType;
     private String contentTitle;
-    protected List<String> content = new ArrayList<>();
-    int id;
+    private List<String> content = new ArrayList<>();
+    private ContentNode parent;
+    private int id;
+    private Map<String, String> attributes = new HashMap<>();
 
+    @Override
     public void setContentType(String contentType) {
         if (!Arrays.stream(ContentType.values()).anyMatch(str -> str.name().equals(contentType))) {
             List<String> newList = Arrays.stream(ContentType.values()).map(Enum::name).collect(Collectors.toList());
@@ -49,8 +52,13 @@ public class ContentLeaf implements Content {
     }
 
     @Override
-    public String getContentClass() {
-        return null;
+    public ContentNode getParent() {
+        return this.parent;
+    }
+
+    @Override
+    public void setParent(ContentNode parent) {
+        this.parent = parent;
     }
 
     @Override
@@ -61,5 +69,15 @@ public class ContentLeaf implements Content {
     @Override
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public void addAttribute(String attributeName, String attributeValue) {
+        this.attributes.put(attributeName, attributeValue);
+    }
+
+    @Override
+    public Map<String, String> getAttributes() {
+        return Collections.unmodifiableMap(this.attributes);
     }
 }

@@ -1,6 +1,5 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping;
 
-import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.Drug;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance;
 import org.jsoup.Jsoup;
@@ -26,7 +25,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
     private String basicUrl;
     private static final Logger LOGGER = LoggerFactory.getLogger(ApotheekWebScraper.class);
 
-    private ApotheekWebScraper(@Value("${apotheek.site}") String url) {this.basicUrl = url;}
+    private ApotheekWebScraper(@Value("${apotheek.url}") String url) {this.basicUrl = url;}
 
     @Autowired
     public void setDrugDao(DrugDao drugDao) {
@@ -48,7 +47,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
             LOGGER.debug("Drug: " + drug);
             LOGGER.debug("Description in the dao: " + drug.getDescription());
             LOGGER.debug("Interactions in the dao: " + drug.getInteractions());
-            LOGGER.debug("SideEffects in the dao: " + drug.getSideEffectsPatient());
+            LOGGER.debug("SideEffects in the dao: " + drug.getSideEffects().getSideEffectsPatient());
         }
     }
 

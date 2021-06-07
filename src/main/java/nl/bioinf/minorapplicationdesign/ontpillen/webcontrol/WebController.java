@@ -63,7 +63,7 @@ public class WebController {
 
         //        If there is no userType set in the session, set t he userType to "gebruiker"
         if (session.getAttribute("userType") == null) {
-            session.setAttribute("userType", "gebruiker");
+            session.setAttribute("userType", UserType.valueOf("PATIENT"));
         }
 
         return "search_result";
@@ -75,7 +75,7 @@ public class WebController {
 
         //        If there is no userType set in the session, set t he userType to "gebruiker"
         if (session.getAttribute("userType") == null) {
-            session.setAttribute("userType", "gebruiker");
+            session.setAttribute("userType", UserType.valueOf("PATIENT"));
         }
 
         model.addAttribute("user", user);
@@ -88,7 +88,7 @@ public class WebController {
 
         //        If there is no userType set in the session, set t he userType to "gebruiker"
         if (session.getAttribute("userType") == null) {
-            session.setAttribute("userType", "gebruiker");
+            session.setAttribute("userType", UserType.valueOf("PATIENT"));
         }
         return "drugPage";
     }
@@ -99,7 +99,7 @@ public class WebController {
 
         //        If there is no userType set in the session, set t he userType to "gebruiker"
         if (session.getAttribute("userType") == null) {
-            session.setAttribute("userType", "gebruiker");
+            session.setAttribute("userType", UserType.valueOf("PATIENT"));
         }
 
         String searchQuery = request.getParameter("search-query");

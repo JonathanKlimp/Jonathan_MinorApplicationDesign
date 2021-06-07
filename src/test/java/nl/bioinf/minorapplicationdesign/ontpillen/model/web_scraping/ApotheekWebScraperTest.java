@@ -71,7 +71,7 @@ class ApotheekWebScraperTest {
         List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
 
         for (DrugSubstance drugSubstance: drugSubstances) {
-            assertNotNull(drugSubstance.getSideEffectsPatient());
+            assertNotNull(drugSubstance.getSideEffects().getSideEffectsPatient());
         }
     }
 
@@ -117,7 +117,7 @@ class ApotheekWebScraperTest {
         List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
 
         for (DrugSubstance drugSubstance: drugSubstances) {
-            assertNotNull(drugSubstance.getSideEffectsPatient());
+            assertNotNull(drugSubstance.getSideEffects().getSideEffectsPatient());
         }
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -27,7 +28,7 @@ public class DrugFetcher implements AbstractWebScraper {
     private String url;
     private static final Logger LOGGER = LoggerFactory.getLogger(DrugFetcher.class);
 
-    private DrugFetcher(@Value("${farmaco.medicines.site}") String url) {
+    private DrugFetcher(@Value("${farmaco.medicines.url}") String url) {
         this.url = url;
     }
 
@@ -81,12 +82,13 @@ public class DrugFetcher implements AbstractWebScraper {
      */
     private void storeDrugsInDao(List<Element> drugGroups){
         Element currentDrugElement = drugGroups.get(0);
+        String currentDrugName = currentDrugElement.text().toLowerCase();
         DrugGroup currentDrug;
 
-        if (!drugDao.getAllDrugNames().contains(currentDrugElement.text())) {
-            drugDao.addDrug(new DrugGroup(currentDrugElement.text()));
+        if (!drugDao.getAllDrugNames().contains(currentDrugName)) {
+            drugDao.addDrug(new DrugGroup(currentDrugName));
         }
-        currentDrug = (DrugGroup) drugDao.getDrugByName(currentDrugElement.text());
+        currentDrug = (DrugGroup) drugDao.getDrugByName(currentDrugName);
 
         addDrugs(drugGroups, currentDrugElement, currentDrug);
         drugGroups.remove(0);
@@ -125,6 +127,7 @@ public class DrugFetcher implements AbstractWebScraper {
             Elements nextGroupSiblings = currentDrugElement.nextElementSiblings().select(query);
 
             List<String> childrenNames = nextGroupSiblings.eachText();
+            childrenNames = childrenNames.stream().map(str -> str.toLowerCase()).collect(Collectors.toList());
 
             LOGGER.debug("Adding: " + currentDrugGroup.getName() + " to DrugGroups");
             addDrugGroup(currentDrugGroup, childrenNames);
@@ -145,7 +148,7 @@ public class DrugFetcher implements AbstractWebScraper {
 
     private void addDrugSubstances(DrugGroup parentDrug, List<String> drugSubstances) {
         for (String childName: drugSubstances) {
-            DrugSubstance newDrugSubstance = new DrugSubstance(childName);
+            DrugSubstance newDrugSubstance = new DrugSubstance(childName.toLowerCase());
             newDrugSubstance.setParent(parentDrug);
             newDrugSubstance.setIsSubstance(true);
             parentDrug.addChild(newDrugSubstance);
