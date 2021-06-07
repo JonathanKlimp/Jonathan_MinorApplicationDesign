@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -200,6 +201,37 @@ class RichtlijnenNhgWebScraperTest {
     }
 
     @Test
+    void processTitleElement_inputNotATitle(){
+        String htmlToTest =
+                "<h1>This a title</h1>" +
+                "<p id='test-title'>This a fake title element</p>";
+        
+        Element elementToTest = Jsoup.parse(htmlToTest).select("#test-title").get(0);
+
+        ContentNode testNode = new ContentNode();
+
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> {this.richtlijnenNhgWebScraper.processTitleElement(testNode, elementToTest);}
+        );
+    }
+
+    @Test
+    void processTitleElement_noPrecedingTitle(){
+        String htmlToTest =
+                "<p>This not a title element</p>" +
+                "<h1 id='test-title'>This a title element without a preceding title element</h1>";
+
+        Element elementToTest = Jsoup.parse(htmlToTest).select("#test-title").get(0);
+        ContentNode testNode = new ContentNode();
+
+        this.richtlijnenNhgWebScraper.processTitleElement(testNode, elementToTest);
+        ContentLeaf createdLeaf = (ContentLeaf) testNode.getContent().get(0);
+
+        assertEquals("This a title element without a preceding title element", createdLeaf.getContentTitle());
+    }
+
+    @Test
     void processList_sunnyDay() {
         String htmlToTest =
                 "<ul id='test-list'>" +
@@ -229,10 +261,10 @@ class RichtlijnenNhgWebScraperTest {
                     "<li>list 1 element 1</li>" +
                     "<li>list 1 element 2</li>" +
                     "<li>" +
-                        "<ul>" +
+                        "<ol>" +
                             "<li>list 2 element 1</li>" +
                             "<li>list 2 element 2</li>" +
-                        "</ul>" +
+                        "</ol>" +
                     "</li>" +
                 "</ul>";
 
@@ -264,6 +296,24 @@ class RichtlijnenNhgWebScraperTest {
     }
 
     @Test
+    void processList_inutNotAList() {
+        String htmlToTest =
+                "<div id='test-list'>" +
+                    "<p>Fake list element 1</p>" +
+                    "<p>Fake list element 2</p>" +
+                    "<p>Fake list element 3</p>" +
+                "</div>";
+        Element elementToTest = Jsoup.parse(htmlToTest).select("#test-list").get(0);
+
+        ContentNode testNode = new ContentNode();
+
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> {this.richtlijnenNhgWebScraper.processList(testNode, elementToTest);}
+        );
+    }
+
+    @Test
     void processParagraph_sunnyDay() {
         String htmlToTest =
                 "<p id='test-paragraph'>This is a paragraph<p>";
@@ -278,6 +328,107 @@ class RichtlijnenNhgWebScraperTest {
         ContentLeaf paragraphLeaf = (ContentLeaf) paragraphContent;
 
         assertArrayEquals(new String[]{"This is a paragraph"}, paragraphLeaf.getContent().toArray());
+    }
+
+    @Test
+    void processParagraph_withSubElements() {
+        String htmlToTest =
+                "<p id='test-paragraph'>" +
+                    "This is text in a paragraph. " +
+                    "<a>This is a link. </a>" +
+                    "<span>This is a span. </span>" +
+                    "<em>This text is emphasized. </em>" +
+                    "<sub>This is subtext.</sub>" +
+                "</p>";
+        Element elementToTest = Jsoup.parse(htmlToTest).select("#test-paragraph").get(0);
+
+        ContentNode testNode = new ContentNode();
+        this.richtlijnenNhgWebScraper.processParagraph(testNode, elementToTest);
+
+        Content paragraphContent = testNode.getContent().get(0);
+        assertEquals(ContentLeaf.class, paragraphContent.getClass());
+
+        ContentLeaf paragraphLeaf = (ContentLeaf) paragraphContent;
+
+        assertArrayEquals(new String[]{"This is text in a paragraph. This is a link. This is a span. This text is emphasized. This is subtext."}, paragraphLeaf.getContent().toArray());
+    }
+
+    @Test
+    void processParagraph_inputNotAParagraph() {
+        String htmlToTest =
+                "<div id='test-paragraph'>" +
+                    "This is not a paragraph. " +
+                    "<p>This is a paragraph. </p>" +
+                "</div>";
+        Element elementToTest = Jsoup.parse(htmlToTest).select("#test-paragraph").get(0);
+
+        ContentNode testNode = new ContentNode();
+
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> {this.richtlijnenNhgWebScraper.processParagraph(testNode, elementToTest);}
+        );
+    }
+
+    @Test
+    void processDiv_leaf() {
+        String htmlToTest =
+                "<div id='test-div'>" +
+                    "<p>element 1</p>" +
+                    "<p>element 2</p>" +
+                    "<p>element 3</p>" +
+                "</div>";
+
+        Element elementToTest = Jsoup.parse(htmlToTest).select("#test-div").get(0);
+
+        ContentNode testNode = new ContentNode();
+        this.richtlijnenNhgWebScraper.processDiv(testNode, elementToTest);
+
+        ContentLeaf createdLeaf = (ContentLeaf) testNode.getContent().get(0);
+
+        assertArrayEquals(new String[]{"element 1", "element 2", "element 3"}, createdLeaf.getContent().toArray());
+
+    }
+
+    @Test
+    void processDiv_leafWithTextInDiv() {
+        String htmlToTest =
+                "<div id='test-div'>" +
+                    "This is also part of the leaf" +
+                    "<p>element 1</p>" +
+                    "<p>element 2</p>" +
+                    "<p>element 3</p>" +
+                "</div>";
+
+        Element elementToTest = Jsoup.parse(htmlToTest).select("#test-div").get(0);
+
+        ContentNode testNode = new ContentNode();
+        this.richtlijnenNhgWebScraper.processDiv(testNode, elementToTest);
+
+        ContentLeaf createdLeaf = (ContentLeaf) testNode.getContent().get(0);
+
+        assertArrayEquals(new String[]{"This is also part of the leaf", "element 1", "element 2", "element 3"}, createdLeaf.getContent().toArray());
+    }
+
+    @Test
+    void processDiv_node() {
+        String htmlToTest =
+                "<div id='test-div'>" +
+                    "div 1 element 2" +
+                    "<p>div 1 element 2</p>" +
+                    "<div>" +
+                        "<p>div 2 element 1</p>" +
+                    "</div>" +
+                "</div>";
+
+        Element elementToTest = Jsoup.parse(htmlToTest).select("#test-div").get(0);
+
+        ContentNode testNode = new ContentNode();
+        this.richtlijnenNhgWebScraper.processDiv(testNode, elementToTest);
+
+        ContentLeaf createdLeaf = (ContentLeaf) testNode.getContent().get(0);
+
+        assertArrayEquals(new String[]{"This is also part of the leaf", "element 1", "element 2", "element 3"}, createdLeaf.getContent().toArray());
     }
 
     @Test

@@ -188,6 +188,10 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
      * @return a boolean indicating if a new node has been started, if false the title of the currentContentNode has been set
      */
     protected boolean processTitleElement(ContentNode currentContentNode, Element element) {
+        if (!this.elementIsTitle(element)) {
+            String message = "element should be a title element, if the element is given as paremeter to the method elementIsTitle, it should return true";
+            throw new IllegalArgumentException(message);
+        }
         if (element.elementSiblingIndex() != 0) {
             try {
                 Element prevTitleElement = this.getPrevTitleElement(element);
@@ -200,8 +204,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
                     this.createNewLeafOrNodeWithTitle(currentContentNode.getParent(), element);
                 }
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-                System.out.println("No preceding title element");
+                this.createNewLeafOrNodeWithTitle(currentContentNode, element);
             }
         } else {
             if (currentContentNode.getContentTitle() != null) {
@@ -236,6 +239,10 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
     }
 
     protected void processList(ContentNode currentContentNode, Element element) {
+        if (!(element.tagName().equals("ul") || element.tagName().equals("ol"))) {
+            throw new IllegalArgumentException("element should be an element of the tag <ul> or <ol>");
+        }
+
 //        remove the <span> and <a> children of <li> elements before getting the maxdepth
         Element copyOfElement = element.clone();
         copyOfElement.select("li a, li span, li em, li sub").remove();
@@ -259,18 +266,23 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
     }
 
     protected void processParagraph(ContentNode currentContentNode, Element element) {
+        if (!element.tagName().equals("p")) {
+            throw new IllegalArgumentException("element should be an element of the tag <p>");
+        }
         ContentLeaf newLeaf = new ContentLeaf();
         newLeaf.setContentType("PARAGRAPH");
         newLeaf.addContent(element.text());
         currentContentNode.addContent(newLeaf);
     }
 
-    private void processDiv(ContentNode currentContentNode, Element element) {
+    protected void processDiv(ContentNode currentContentNode, Element element) {
+        String looseDivText = this.getLooseDivText(element);
+
         if (element.childrenSize() == 0) {
-            if (element.text().length() > 0) {
+            if (looseDivText.length() > 0) {
                 ContentLeaf newLeaf = new ContentLeaf();
                 newLeaf.setContentType("PARAGRAPH");
-                newLeaf.addContent(element.text());
+                newLeaf.addContent(looseDivText);
                 currentContentNode.addContent(newLeaf);
             }
         } else if (element.childrenSize() == 1) {
@@ -278,14 +290,32 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
             this.processContentOfInterest(currentContentNode, element.children());
         } else if (this.getMaxDepth(element) == 2) {
             ContentLeaf newLeaf = new ContentLeaf();
-            newLeaf.setContentTitle(element.text());
-            newLeaf.setContent(element.nextElementSiblings().eachText());
+            if (looseDivText.length() > 0) {
+                newLeaf.addContent(looseDivText);
+                for (String contentToAdd : element.children().eachText()) {
+                    newLeaf.addContent(contentToAdd);
+                }
+            } else {
+                newLeaf.setContent(element.children().eachText());
+            }
+            currentContentNode.addContent(newLeaf);
         } else {
 //            If we come here we know the maxdepth is bigger than 2 and the element has more than 1 child, a new node needs to be made
             ContentNode newNode = new ContentNode();
+            if (looseDivText.length() > 0) {
+                ContentLeaf newLeaf = new ContentLeaf();
+                newLeaf.addContent(looseDivText);
+                newNode.addContent(newLeaf);
+            }
             currentContentNode.addContent(newNode);
             this.processContentOfInterest(newNode, element.children());
         }
+    }
+
+    protected String getLooseDivText(Element element) {
+        Element copyWithoutChildren = element.clone();
+        copyWithoutChildren.children().remove();
+        return copyWithoutChildren.text();
     }
 
     protected void processListElement(ContentNode currentContentNode, Element element) {
