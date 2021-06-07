@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,6 +37,8 @@ public class ApotheekWebScraper implements AbstractWebScraper {
     private DrugDao drugDao;
     private String basicUrl;
     private static final Logger LOGGER = LoggerFactory.getLogger(ApotheekWebScraper.class);
+    public final List<String> drugWithDifferentStructure = Arrays.asList("mianserine", "imipramine", "acamprosaat", "buprenorfine (bij verslaving)", "methadon",
+            "prazepam", "paliperidon", "penfluridol", "periciazine", "pimozide", "pipamperon", "valeriaan");
 
     private ApotheekWebScraper(@Value("${apotheek.url}") String url) {this.basicUrl = url;}
 
@@ -49,8 +52,6 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         LOGGER.info("Parsing html");
         List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
         List<String> drugNotOnWebsite = Arrays.asList("thiamine", "coffeïne", "esketamine (nasaal)","esketamine" , "valproïnezuur", "guanfacine");
-        List<String> drugWithDifferentStructure = Arrays.asList("mianserine", "imipramine", "acamprosaat", "buprenorfine (bij verslaving)", "methadon",
-                "prazepam", "paliperidon", "penfluridol", "periciazine", "pimozide", "pipamperon", "valeriaan");
         List<String> defaultStopIndication = Collections.singletonList("Op de website is geen informatie gevonden");
 
         for (DrugSubstance drug: drugSubstances) {
@@ -114,6 +115,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         for (Element element: frequency) {
             Elements sideEffects = element.nextElementSibling().getElementsByClass("sideEffectsItem_button__V-L1C");
             contentList.get(i).setContentTitle(element.text());
+            contentList.get(i).setContentType("PARAGRAPH");
             LOGGER.debug("Chance of side effect: " + element.text() +  sideEffects.eachText());
 
             addContentValues(sideEffects, contentList.get(i));
@@ -134,8 +136,9 @@ public class ApotheekWebScraper implements AbstractWebScraper {
             Elements sideEffectDescription = sideEffect.nextElementSibling().select(".sideEffectsItem_content__10s1c");
 
             ContentLeaf newContentLeaf = new ContentLeaf();
-            newContentLeaf.setContentType("PARAGRAPH");
+            newContentLeaf.setContentType("LIST");
             newContentLeaf.setContentTitle(sideEffect.text());
+            System.out.println("HIERHIERHIER" + sideEffect.text());
             newContentLeaf.setContent(sideEffectDescription.eachText());
 
             contentList.get(i).addContent(newContentLeaf);
@@ -148,25 +151,27 @@ public class ApotheekWebScraper implements AbstractWebScraper {
     private void getSideEffectsFromList(Document doc, DrugSubstance drug) {
         Elements sideEffectsHtmlLocation = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen");
         Element sideEffectElements =  sideEffectsHtmlLocation.select(".listItemContent_text__otIdg ").get(0);
-
+        ContentNode mainContentNode = new ContentNode();
         // TODO buprenorfine (bij verslaving) probably still not saves correctly fix this
 
         for (Element element : sideEffectElements.getAllElements()) {
             if (element.tagName().equals("p")) {
                 ContentLeaf newContentLeaf = new ContentLeaf();
                 newContentLeaf.setContentType("PARAGRAPH");
+                System.out.println("HIER ZIJN WE DAN: " + element.text());
                 newContentLeaf.setContent(Collections.singletonList(element.text()));
-                drug.getSideEffects().addSideEffectPatient("apotheek", newContentLeaf);
+                mainContentNode.addContent(newContentLeaf);
                 LOGGER.debug("P element from getSideEffectsFromList: " + element.text());
 
             } else if (element.tagName().equals("ul")) {
                 ContentLeaf newContentLeaf = new ContentLeaf();
                 newContentLeaf.setContentType("LIST");
                 newContentLeaf.setContent(element.getElementsByTag("li").eachText());
-                drug.getSideEffects().addSideEffectPatient("apotheek", newContentLeaf);
+                mainContentNode.addContent(newContentLeaf);
                 LOGGER.debug("UL element from getSideEffectsFromList: " + element.getElementsByTag("li").eachText());
             }
         }
+        drug.getSideEffects().addSideEffectPatient("apotheek", mainContentNode);
     }
 
 
