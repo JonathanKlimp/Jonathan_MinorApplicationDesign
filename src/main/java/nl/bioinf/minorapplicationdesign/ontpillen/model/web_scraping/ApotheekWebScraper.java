@@ -104,6 +104,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         LOGGER.debug("side effects intro: " + sideEffectsIntro);
         Element frequencyAndSideEffect = sideEffectsHtmlLocation.select(".sideEffects_sideEffects__sczbd").get(0);
         Elements frequency = frequencyAndSideEffect.getElementsByTag("h3");
+        ContentNode mainContentNode = new ContentNode();
 
         List<ContentNode> contentList = new ArrayList<>();
         for (int i = 0; i < frequency.size(); i++) {
@@ -116,10 +117,10 @@ public class ApotheekWebScraper implements AbstractWebScraper {
             LOGGER.debug("Chance of side effect: " + element.text() +  sideEffects.eachText());
 
             addContentValues(sideEffects, contentList.get(i));
-            drug.getSideEffects().addSideEffectPatient("apotheek", contentList.get(i));
-            System.out.println("grootte: " + i  + " " + frequency.size() + " hm");
+            mainContentNode.addContent(contentList.get(i));
             i++;
         }
+        drug.getSideEffects().addSideEffectPatient("apotheek", mainContentNode);
     }
 
     private void addContentValues(Elements sideEffects, ContentNode contentNode) {
