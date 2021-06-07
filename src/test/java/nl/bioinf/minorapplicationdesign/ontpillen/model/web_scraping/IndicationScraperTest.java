@@ -49,6 +49,7 @@ class IndicationScraperTest {
      * It loops trough all drug substances present in the dao, then gets the use indication(s) of that drug.
      * after that there is another loop through the use indications of that drug which is then used to check if
      * for that use indication the specific drug is present in the useIndicationsExpected hashmap
+     *
      * @throws IOException
      */
     @Test
