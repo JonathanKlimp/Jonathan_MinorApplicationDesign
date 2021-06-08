@@ -35,7 +35,7 @@
                         </ul>
 
                     </th:block>
-                    <th:block th:if="${not content.getContent.isEmpty}">
+                    <th:block th:if="${not content.getContent.isEmpty()}">
                     <div th:each="sideEffect : ${content.getContent()}">
                         <ul>
                             <dt th:text="${content.getContentTitle()}"></dt>

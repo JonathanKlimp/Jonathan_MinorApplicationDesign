@@ -16,7 +16,10 @@
                 <div>
                     <h5>Beschrijving:</h5>
                     <p th:each="data: ${drug.getDescriptionPatient()}" th:text="${data}"></p>
-                    <h5>Interacties met andere medicijnen:</h5>
+                    <th:block th:if="${not drug.getInteractionsPatient().isEmpty()}">
+                        <h5>Interacties met andere medicijnen:</h5>
+                        <p th:each="data: ${drug.getInteractionsPatient()}" th:text="${data}"></p>
+                    </th:block>
                     <p th:each="data: ${drug.getInteractionsPatient()}" th:text="${data}"></p>
                     <h5>Stop indicaties:</h5>
                     <p th:each="data: ${drug.getStopIndications()}" th:text="${data}"></p>
@@ -38,8 +41,10 @@
                 <div>
                     <h5>Beschrijving:</h5>
                     <p th:each="data: ${drug.getDescriptionPractitioner()}" th:text="${data}"></p>
-                    <h5>Interacties met andere medicijnen:</h5>
-                    <p th:each="data: ${drug.getInteractionsPractitioner()}" th:text="${data}"></p>
+                    <th:block th:if="${not drug.getInteractionsPractitioner().isEmpty()}">
+                        <h5>Interacties met andere medicijnen:</h5>
+                        <p th:each="data: ${drug.getInteractionsPractitioner()}" th:text="${data}"></p>
+                    </th:block>
                     <h5>Stop indicaties:</h5>
                     <p th:each="data: ${drug.getStopIndications()}" th:text="${data}"></p>
                     <p>Gebruik indicaties:</p>
