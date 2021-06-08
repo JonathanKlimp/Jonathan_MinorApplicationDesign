@@ -3,7 +3,7 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content;
 import java.util.Map;
 
 /**
- * @author Naomi Hindiks
+ * @author Naomi Hindriks
  */
 public interface Content {
 

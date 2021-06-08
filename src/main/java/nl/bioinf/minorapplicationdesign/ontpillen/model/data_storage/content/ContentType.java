@@ -10,6 +10,7 @@ public enum ContentType {
     TABLE,
     THEAD,
     TBODY,
+    TFOOT,
     TR,
     TH,
     TD

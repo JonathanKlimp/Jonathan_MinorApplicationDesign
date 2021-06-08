@@ -11,41 +11,45 @@
 
 <th:block th:with="drug = ${drugDao.getDrugByName(drugName)}">
     <th:block th:if="${#session.getAttribute('userType').toString()} == 'PATIENT'">
+
         <th:block th:switch="${drug.class}">
+
             <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance)}">
                 <div>
-                    <h5>Beschrijving:</h5>
+                    <h3>Beschrijving:</h3>
                     <p th:each="data: ${drug.getDescriptionPatient()}" th:text="${data}"></p>
-                    <th:block th:if="${not drug.getInteractionsPatient().isEmpty()}">
-                        <h5>Interacties met andere medicijnen:</h5>
+                    <th:block th:unless="${drug.getInteractionsPatient().isEmpty()}">
+                        <h3>Interacties met andere medicijnen:</h3>
                         <p th:each="data: ${drug.getInteractionsPatient()}" th:text="${data}"></p>
                     </th:block>
-                    <p th:each="data: ${drug.getInteractionsPatient()}" th:text="${data}"></p>
-                    <h5>Stop indicaties:</h5>
+                    <h3>Stop indicaties:</h3>
                     <p th:each="data: ${drug.getStopIndications()}" th:text="${data}"></p>
-                    <p>Gebruik indicaties:</p>
+                    <h3>Gebruik indicaties:</h3>
                     <ul>
                         <li th:each="data : ${drug.getUseIndications()}" th:text="${data.getName()}"></li>
                     </ul>
                 </div>
                 <th:block th:replace="sideEffectTemplate :: sideEffects(${drug})"></th:block>
             </th:block>
+
             <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugGroup)}">
                 <th:block th:replace="sideEffectTemplate :: sideEffects(${drug})"></th:block>
             </th:block>
+
         </th:block>
     </th:block>
+
     <th:block th:if="${#session.getAttribute('userType').toString()} == 'PRACTITIONER'">
         <th:block th:switch="${drug.class}">
             <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance)}">
                 <div>
-                    <h5>Beschrijving:</h5>
+                    <h3>Beschrijving:</h3>
                     <p th:each="data: ${drug.getDescriptionPractitioner()}" th:text="${data}"></p>
                     <th:block th:if="${not drug.getInteractionsPractitioner().isEmpty()}">
-                        <h5>Interacties met andere medicijnen:</h5>
+                        <h3>Interacties met andere medicijnen:</h3>
                         <p th:each="data: ${drug.getInteractionsPractitioner()}" th:text="${data}"></p>
                     </th:block>
-                    <h5>Stop indicaties:</h5>
+                    <h3>Stop indicaties:</h3>
                     <p th:each="data: ${drug.getStopIndications()}" th:text="${data}"></p>
                     <p>Gebruik indicaties:</p>
                     <ul>
