@@ -49,7 +49,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
     public void parseHtml() throws IOException {
         LOGGER.info("Parsing html");
         List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
-        List<String> drugNotOnWebsite = Arrays.asList("thiamine", "coffeïne", "esketamine (nasaal)","esketamine" , "valproïnezuur", "guanfacine");
+        List<String> drugNotOnWebsite = Arrays.asList("thiamine", "coffeïne", "esketamine (nasaal)","esketamine" , "guanfacine");
         List<String> drugWithDifferentStructure = Arrays.asList("mianserine", "imipramine", "acamprosaat", "buprenorfine (bij verslaving)", "methadon",
                 "prazepam", "paliperidon", "penfluridol", "periciazine", "pimozide", "pipamperon", "valeriaan");
         List<String> defaultStopIndication = Collections.singletonList("Op de website is geen informatie gevonden");
@@ -182,6 +182,9 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         }
         if (drugName.contains("/")){
             drugName = drugName.replace("/", "-met-");
+        }
+        if (drugName.contains("ï")) {
+            drugName = drugName.replace("ï", "i");
         }
         String completeUrl = basicUrl + drugName.toLowerCase();
         return Jsoup.connect(completeUrl).get();

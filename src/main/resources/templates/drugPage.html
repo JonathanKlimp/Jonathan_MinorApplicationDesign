@@ -9,7 +9,52 @@
 
 <section th:replace="template :: subheader('breadcrumb', ${drugName.substring(0,1).toUpperCase() + drugName.substring(1)}, 'true')"></section>
 
-<p>Test</p>
+<th:block th:with="drug = ${drugDao.getDrugByName(drugName)}">
+    <th:block th:if="${#session.getAttribute('userType').toString()} == 'PATIENT'">
+        <th:block th:switch="${drug.class}">
+            <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance)}">
+                <div>
+                    <h5>Beschrijving:</h5>
+                    <p th:each="data: ${drug.getDescriptionPatient()}" th:text="${data}"></p>
+                    <h5>Interacties met andere medicijnen:</h5>
+                    <p th:each="data: ${drug.getInteractionsPatient()}" th:text="${data}"></p>
+                    <h5>Stop indicaties:</h5>
+                    <p th:each="data: ${drug.getStopIndications()}" th:text="${data}"></p>
+                    <p>Gebruik indicaties:</p>
+                    <ul>
+                        <li th:each="data : ${drug.getUseIndications()}" th:text="${data.getName()}"></li>
+                    </ul>
+                </div>
+                <th:block th:replace="sideEffectTemplate :: sideEffects(${drug})"></th:block>
+            </th:block>
+            <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugGroup)}">
+                <th:block th:replace="sideEffectTemplate :: sideEffects(${drug})"></th:block>
+            </th:block>
+        </th:block>
+    </th:block>
+    <th:block th:if="${#session.getAttribute('userType').toString()} == 'PRACTITIONER'">
+        <th:block th:switch="${drug.class}">
+            <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance)}">
+                <div>
+                    <h5>Beschrijving:</h5>
+                    <p th:each="data: ${drug.getDescriptionPractitioner()}" th:text="${data}"></p>
+                    <h5>Interacties met andere medicijnen:</h5>
+                    <p th:each="data: ${drug.getInteractionsPractitioner()}" th:text="${data}"></p>
+                    <h5>Stop indicaties:</h5>
+                    <p th:each="data: ${drug.getStopIndications()}" th:text="${data}"></p>
+                    <p>Gebruik indicaties:</p>
+                    <ul>
+                        <li th:each="data : ${drug.getUseIndications()}" th:text="${data.getName()}"></li>
+                    </ul>
+                </div>
+                <th:block th:replace="sideEffectTemplate :: sideEffects(${drug})"></th:block>
+            </th:block>
+            <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugGroup)}">
+                <th:block th:replace="sideEffectTemplate :: sideEffects(${drug})"></th:block>
+            </th:block>
+        </th:block>
+    </th:block>
+</th:block>
 
 <footer th:replace="template :: footer"></footer>
 

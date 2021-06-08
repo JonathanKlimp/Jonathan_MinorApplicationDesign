@@ -22,7 +22,7 @@
                         <th:block th:switch="${drugDao.getDrugByName(drugName).class}">
 <!--                        Block will be inserted if the drug is a DrugSubstance-->
                             <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance)}">
-                                <p th:text="${drugDao.getDrugByName(drugName).getDescription()}">__offline short description/tags__</p>
+                                <p th:text="${drugDao.getDrugByName(drugName).getDescriptionPatient()}">__offline short description/tags__</p>
                             </th:block>
 
 <!--                        This block will be inserted if the drug is not a DrugSubstance (but rather a DrugGroup)-->
