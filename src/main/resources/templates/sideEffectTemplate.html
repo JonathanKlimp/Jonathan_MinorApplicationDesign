@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+
+<!--SideEffects fragment-->
+<th:block th:fragment="sideEffects(drug)">
+    <th:block th:if="${#session.getAttribute('userType').toString()} == 'PRACTITIONER'">
+        <th:block th:each="sideEffect : ${drug.getSideEffects().getSideEffectsPractitioner()}">
+            <h4>Bijwerkingen content behandelaar:</h4>
+            <th:block th:replace="sideEffectTemplate :: contentFragment(${sideEffect})"></th:block>
+        </th:block>
+    </th:block>
+    <th:block th:if="${#session.getAttribute('userType').toString()} == 'PATIENT'">
+        <th:block th:each="sideEffect : ${drug.getSideEffects().getSideEffectsPatient()}">
+            <h4>Bijwerkingen content Gebruiker:</h4>
+            <th:block th:replace="sideEffectTemplate :: contentFragment(${sideEffect})"></th:block>
+        </th:block>
+    </th:block>
+</th:block>
+
+
+<!--contentFragment-->
+<th:block th:fragment="contentFragment(content)">
+    <th:block th:switch="${content.class}">
+        <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentLeaf)}">
+            <th:block th:switch="${content.getContentType}">
+                <th:block th:case="'PARAGRAPH'">
+                    <div th:each="contentText : ${content.getContent()}">
+                        <p th:text="${contentText}"></p>
+                    </div>
+                </th:block>
+                <th:block th:case="'LIST'">
+                    <div th:each="sideEffect : ${content.getContent()}">
+                        <ul>
+                            <dt th:text="${content.getContentTitle()}"></dt>
+                            <dd th:text="${sideEffect}"></dd>
+                        </ul>
+                    </div>
+                </th:block>
+            </th:block>
+        </th:block>
+        <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode)}">
+                <p th:text="${content.getContentTitle()}"></p>
+            <th:block th:each="subContent : ${content.getContent()}">
+                <div th:replace ="sideEffectTemplate :: contentFragment(${subContent})"></div>
+            </th:block>
+        </th:block>
+    </th:block>
+</th:block>
+</html>
