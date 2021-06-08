@@ -30,10 +30,11 @@
                 </th:block>
                 <th:block th:case="'LIST'">
                     <th:block th:if="${content.getContent.isEmpty()}">
-                        <ul>
-                            <li th:text="${content.getContentTitle()}"></li>
-                        </ul>
-
+                        <th:block th:if="content.getContentTitle() != null">
+                            <ul>
+                                <li th:text="${content.getContentTitle()}"></li>
+                            </ul>
+                        </th:block>
                     </th:block>
                     <th:block th:if="${not content.getContent.isEmpty()}">
                     <div th:each="sideEffect : ${content.getContent()}">
@@ -47,7 +48,9 @@
             </th:block>
         </th:block>
         <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode)}">
+            <th:block th:if="${content.getContentTitle() != null}">
                 <p th:text="${content.getContentTitle()}"></p>
+            </th:block>
             <th:block th:each="subContent : ${content.getContent()}">
                 <div th:replace ="sideEffectTemplate :: contentFragment(${subContent})"></div>
             </th:block>
