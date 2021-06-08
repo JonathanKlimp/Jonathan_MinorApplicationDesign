@@ -13,14 +13,8 @@ import java.util.*;
  */
 public class DrugSubstance extends Drug {
     private List<String> brandNames = new ArrayList<>();
-    private Map<String, List<String>> description = new HashMap<>() {{
-        put("patient", new ArrayList<>());
-        put("practitioner", new ArrayList<>());
-    }};
-    private Map<String, List<String>> interactions = new HashMap<>() {{
-        put("patient", new ArrayList<>());
-        put("practitioner", new ArrayList<>());
-    }};
+    private Map<String, List<String>> description = Map.of("patient",new ArrayList<>(), "practitioner", new ArrayList<>());
+    private Map<String, List<String>> interactions = Map.of("patient",new ArrayList<>(), "practitioner", new ArrayList<>());
     private List<UseIndication> useIndications = new ArrayList<>();
     private List<String>  stopIndications = new ArrayList<>();
 
@@ -73,7 +67,6 @@ public class DrugSubstance extends Drug {
         return Collections.unmodifiableList(brandNames);
     }
 
-    // TODO add javadoc
     public List<String> getDescriptionPatient() {
         return Collections.unmodifiableList(description.get("patient"));
     }

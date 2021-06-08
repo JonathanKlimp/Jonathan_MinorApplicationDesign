@@ -129,7 +129,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-* Larrisa Bouwknegt  - l.bouwknegt@st.hanze.nl
 * Naomi Hindriks - n.j.hindriks@st.hanze.nl
 * Jonathan Klimp - j.klimp@st.hanze.nl
 

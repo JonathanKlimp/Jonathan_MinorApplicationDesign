@@ -60,7 +60,7 @@ public class FarmacoWebScraper implements AbstractWebScraper {
             drugsubstance.setDescriptionPractitioner(drugDescription);
             drugsubstance.setInteractionsPractitioner(interactions);
 
-            this.addSideEffectsToDrug(drugsubstance, "PARAGRAPH", sideEffects);
+            this.addSideEffectsToDrug(drugsubstance, sideEffects);
 
             LOGGER.debug("Side effects for drug: " + drugName + "Side effects: " + sideEffects);
             LOGGER.debug("DrugDescription for drug: " + drugName + "Drug description: " + drugDescription);
@@ -84,18 +84,15 @@ public class FarmacoWebScraper implements AbstractWebScraper {
 
     /**
      * @param drugSubstance The drug to add the side effect to
-     * @param contentType The type of content that is going to be stored,
-     *                    can be either PARAGRAPH or LIST (a value of the ContentType enum)
      * @param content A list store as content. If the type is PARAGRAPH the items in the list will be separate paragraphs,
-     *                if the type is LIST the items in the list will be the separate list items
      */
-    private void addSideEffectsToDrug(DrugSubstance drugSubstance, String contentType, List<String> content) {
+    private void addSideEffectsToDrug(DrugSubstance drugSubstance, List<String> content) {
 //        Get the SideEffects Object that belongs to specific drug
         SideEffects sideEffectsOfDrug = drugSubstance.getSideEffects();
 
 //        Create a ContentLeaf object and store the scraped content in it
         ContentLeaf sideEffectContent = new ContentLeaf();
-        sideEffectContent.setContentType(contentType);
+        sideEffectContent.setContentType("PARAGRAPH");
         sideEffectContent.setContent(content);
 
 //        Add the newly created SideEffectContent to the SideEffect of the drug
