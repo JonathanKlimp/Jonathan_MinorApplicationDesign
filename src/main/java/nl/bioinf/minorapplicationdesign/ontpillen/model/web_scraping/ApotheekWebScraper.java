@@ -154,7 +154,6 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         Elements sideEffectsHtmlLocation = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen");
         Element sideEffectElements =  sideEffectsHtmlLocation.select(".listItemContent_text__otIdg ").get(0);
         ContentNode mainContentNode = new ContentNode();
-        // TODO buprenorfine (bij verslaving) probably still not saves correctly fix this
 
         for (Element element : sideEffectElements.getAllElements()) {
             if (element.tagName().equals("p")) {

@@ -29,12 +29,20 @@
                     </div>
                 </th:block>
                 <th:block th:case="'LIST'">
+                    <th:block th:if="${content.getContent.isEmpty()}">
+                        <ul>
+                            <li th:text="${content.getContentTitle()}"></li>
+                        </ul>
+
+                    </th:block>
+                    <th:block th:if="${not content.getContent.isEmpty}">
                     <div th:each="sideEffect : ${content.getContent()}">
                         <ul>
                             <dt th:text="${content.getContentTitle()}"></dt>
                             <dd th:text="${sideEffect}"></dd>
                         </ul>
                     </div>
+                    </th:block>
                 </th:block>
             </th:block>
         </th:block>
