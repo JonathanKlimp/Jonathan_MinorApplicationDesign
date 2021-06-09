@@ -37,8 +37,6 @@ public class ApotheekWebScraper implements AbstractWebScraper {
     private DrugDao drugDao;
     private String basicUrl;
     private static final Logger LOGGER = LoggerFactory.getLogger(ApotheekWebScraper.class);
-    public final List<String> drugWithDifferentStructure = Arrays.asList("mianserine", "imipramine", "acamprosaat", "buprenorfine (bij verslaving)", "methadon",
-            "prazepam", "paliperidon", "penfluridol", "periciazine", "pimozide", "pipamperon", "valeriaan");
 
     private ApotheekWebScraper(@Value("${apotheek.url}") String url) {this.basicUrl = url;}
 
@@ -47,30 +45,18 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         this.drugDao = drugDao;
     }
 
+
     @Override
     public void parseHtml() throws IOException {
         LOGGER.info("Parsing html");
         List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
-        List<String> drugNotOnWebsite = Arrays.asList("thiamine", "coffeïne", "esketamine (nasaal)","esketamine" , "valproïnezuur", "guanfacine");
-        List<String> defaultStopIndication = Collections.singletonList("Op de website is geen informatie gevonden");
+        List<String> drugNotOnWebsite = Arrays.asList("thiamine", "coffeïne", "esketamine (nasaal)","esketamine" , "guanfacine");
 
         for (DrugSubstance drug: drugSubstances) {
             if (drugNotOnWebsite.contains(drug.getName())) {
-                drug.setDescriptionPatient(drug.getDescriptionPractitioner());
-                for (Content content : drug.getSideEffects().getSideEffectsPractitioner()) {
-                    drug.getSideEffects().addSideEffectPatient("apotheek", content);
-                }
-                drug.setInteractionsPatient(drug.getInteractionsPatient());
-                drug.setStopIndications(defaultStopIndication);
-            } else if (drugWithDifferentStructure.contains(drug.getName())) {
-                Document doc = getDrugWebpage(drug.getName());
-                getSideEffectsFromList(doc, drug);
+                addInformationFromFarmaco(drug);
             } else {
-                Document doc = getDrugWebpage(drug.getName());
-                getDescription(doc, drug);
-                getSideEffects(doc, drug);
-                getInteractions(doc, drug);
-                getStopIndication(doc, drug);
+                getInformation(drug);
             }
             // code to log the description of the Dao
             LOGGER.debug("Drug: " + drug.getName());
@@ -81,11 +67,13 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         }
     }
 
+
     private void getInteractions(Document doc, DrugSubstance drug) {
         Elements interactions = doc.getElementsByAttributeValueContaining("data-print", "andere medicijnen gebruiken").select(".listItemContent_text__otIdg ");
         drug.setInteractionsPatient(interactions.eachText());
         LOGGER.debug("Interactions: " + interactions.eachText());
     }
+
 
     private void getStopIndication(Document doc, DrugSubstance drug) {
         Elements stopIndicationLocation = doc.getElementsByAttributeValueContaining("data-print", "Mag ik zomaar met dit medicijn stoppen?");
@@ -93,11 +81,13 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         LOGGER.debug("Stop indications: " + stopIndicationLocation.eachText());
     }
 
+
     private void getDescription(Document doc, DrugSubstance drug) {
         Element useIndicationTag = doc.getElementsByAttributeValueContaining("data-print", "waarbij gebruik").select(".listItemContent_text__otIdg").get(0);
         drug.setDescriptionPatient(useIndicationTag.children().eachText());
         LOGGER.debug("Description: " + useIndicationTag.children().eachText());
     }
+
 
     private void getSideEffects(Document doc, DrugSubstance drug) {
         Elements sideEffectsHtmlLocation = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen");
@@ -125,6 +115,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         drug.getSideEffects().addSideEffectPatient("apotheek", mainContentNode);
     }
 
+
     private void addContentValues(Elements sideEffects, ContentNode contentNode) {
         List<ContentNode> contentList = new ArrayList<>();
         for (int i = 0; i < sideEffects.eachText().size(); i++) {
@@ -138,7 +129,6 @@ public class ApotheekWebScraper implements AbstractWebScraper {
             ContentLeaf newContentLeaf = new ContentLeaf();
             newContentLeaf.setContentType("LIST");
             newContentLeaf.setContentTitle(sideEffect.text());
-            System.out.println("HIERHIERHIER" + sideEffect.text());
             newContentLeaf.setContent(sideEffectDescription.eachText());
 
             contentList.get(i).addContent(newContentLeaf);
@@ -148,17 +138,16 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         }
     }
 
+
     private void getSideEffectsFromList(Document doc, DrugSubstance drug) {
         Elements sideEffectsHtmlLocation = doc.getElementsByAttributeValueContaining("data-print", "bijwerkingen");
         Element sideEffectElements =  sideEffectsHtmlLocation.select(".listItemContent_text__otIdg ").get(0);
         ContentNode mainContentNode = new ContentNode();
-        // TODO buprenorfine (bij verslaving) probably still not saves correctly fix this
 
         for (Element element : sideEffectElements.getAllElements()) {
             if (element.tagName().equals("p")) {
                 ContentLeaf newContentLeaf = new ContentLeaf();
                 newContentLeaf.setContentType("PARAGRAPH");
-                System.out.println("HIER ZIJN WE DAN: " + element.text());
                 newContentLeaf.setContent(Collections.singletonList(element.text()));
                 mainContentNode.addContent(newContentLeaf);
                 LOGGER.debug("P element from getSideEffectsFromList: " + element.text());
@@ -175,12 +164,42 @@ public class ApotheekWebScraper implements AbstractWebScraper {
     }
 
 
+    private void addInformationFromFarmaco(DrugSubstance drug) {
+        List<String> defaultStopIndication = Collections.singletonList("Op de website apotheek.nl is geen informatie gevonden voor dit medicijn");
+        drug.setDescriptionPatient(drug.getDescriptionPractitioner());
+        for (Content content : drug.getSideEffects().getSideEffectsPractitioner()) {
+            drug.getSideEffects().addSideEffectPatient("apotheek", content);
+        }
+        drug.setInteractionsPatient(drug.getInteractionsPatient());
+        drug.setStopIndications(defaultStopIndication);
+    }
+
+
+    private void getInformation(DrugSubstance drug) throws IOException {
+        List<String> drugWithDifferentStructure = Arrays.asList("mianserine", "imipramine", "acamprosaat", "buprenorfine (bij verslaving)", "methadon",
+                "prazepam", "paliperidon", "penfluridol", "periciazine", "pimozide", "pipamperon", "valeriaan");
+        Document doc = getDrugWebpage(drug.getName());
+        getDescription(doc, drug);
+        getInteractions(doc, drug);
+        getStopIndication(doc, drug);
+        if (drugWithDifferentStructure.contains(drug.getName())) {
+            getSideEffectsFromList(doc, drug);
+
+        } else {
+            getSideEffects(doc, drug);
+        }
+    }
+
+
     private Document getDrugWebpage(String drugName) throws IOException {
         if (drugName.contains("(")){
             drugName = drugName.replaceAll("\\((.*?)\\)", "");
         }
         if (drugName.contains("/")){
             drugName = drugName.replace("/", "-met-");
+        }
+        if (drugName.contains("ï")) {
+            drugName = drugName.replace("ï", "i");
         }
         String completeUrl = basicUrl + drugName.toLowerCase();
         return Jsoup.connect(completeUrl).get();
