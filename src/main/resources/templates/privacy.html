@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+
+<head th:replace="template :: head('Privacy', 'true')"></head>
+
+<body>
+
+<div class="wrapper">
+    <nav th:replace="template :: header-nav"></nav>
+    <section th:replace="template :: subheader('', 'Privacy', 'false')"></section>
+
+    <section class="page py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p>
+                        Op de website is de mogelijkheid om uw leeftijd en geslacht aan tegeven. Dit wordt alleen gebruikt voor
+                        het laten zien van relevante informatie aan de hand van uw leeftijd/geslacht.
+                        Uw gegevens worden NIET opgeslagen of gebruikt voor andere (commerciële) doeleinden.
+                        De gegevens worden verwijderd nadat u de pagina afsluit.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer th:replace="template :: footer"></footer>
+
+</div>
+
+<div th:replace="template :: scripts"></div>
+<script th:src="@{~/js/footer_at_bottom.js}" src="../static/js/footer_at_bottom.js"></script>
+
+</body>
+</html>

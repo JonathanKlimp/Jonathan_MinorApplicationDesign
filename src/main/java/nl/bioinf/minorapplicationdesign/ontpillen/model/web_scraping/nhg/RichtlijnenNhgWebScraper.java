@@ -12,6 +12,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import org.jsoup.select.NodeVisitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -49,6 +51,8 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         put("ontpillen", new ArrayList<>());
         put("nhgrichtlijnen", new ArrayList<>());
     }};
+    private static final Logger LOGGER = LoggerFactory.getLogger(RichtlijnenNhgWebScraper.class);
+
 
     @Autowired
     public void setDrugDao(DrugDao drugDao) {
@@ -65,6 +69,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
     @Override
     public void parseHtml() throws IOException {
         this.readDrugIndicationsNamesFromCsv();
+        LOGGER.info("Parsing html");
 
         for (int i = 0; i < this.drugIndicationsNames.get("ontpillen").size(); i++) {
             String ontpillenIndicationName = this.drugIndicationsNames.get("ontpillen").get(i).strip();
@@ -112,75 +117,59 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
 
     private void process(ContentNode currentContentNode, Elements elementsToProcess) {
         for (Element element : elementsToProcess) {
-            if (element.hasClass("summary-main-text-crosslink") || element.hasClass("embedded-entity literature")) {
+            if (element.classNames().contains("summary-main-text-crosslink") || (element.classNames().contains("embedded-entity") &&  element.classNames().contains("literature"))) {
 //                If the element has the class summary-main-text-crosslink or the classes embedded-entity and literature, skip this element
+                LOGGER.debug("Skipping element");
                 continue;
             } else if(this.elementIsTitle(element)) {
 //                If the element is a title element execute this block
-                if (!this.processTitleElement(currentContentNode, element)) {
+                LOGGER.debug("Processing title element");
+                if (this.processTitleElement(currentContentNode, element)) {
                     break;
                 }
             } else {
                 switch(element.tagName()) {
                     case "ul":
                     case "ol":
+                        LOGGER.debug("Processing list");
                         this.processList(currentContentNode, element);
                         break;
                     case "p":
+                        LOGGER.debug("Processing paragraph");
                         processParagraph(currentContentNode, element);
                         break;
                     case "div":
+                        LOGGER.debug("Processing div");
                         processDiv(currentContentNode, element);
                         break;
                     case "li":
+                        LOGGER.debug("Processing list element");
                         processListElement(currentContentNode, element);
                         break;
                     case "table":
+                        LOGGER.debug("Processing table");
                         processTable(currentContentNode, element);
                         break;
                     case "thead":
                     case "tbody":
                     case "tfoot":
+                        LOGGER.debug("Processing table section");
                         processTableSection(currentContentNode, element);
                         break;
                     case "tr":
+                        LOGGER.debug("Processing table row");
                         processTableRow(currentContentNode, element);
                         break;
                     case "th":
                     case "td":
+                        LOGGER.debug("Processing td/th element");
                         processTableElement(currentContentNode, element);
                         break;
                     default:
-                        System.out.println("Element = " + element);
-//                        TODO throw exception
-                        System.out.println("Exception");
-
+                        LOGGER.error("not able to process: " + element);
+                        throw new IllegalArgumentException("Unable to process element with tag " + element.tagName() + " and classes " + element.classNames());
                 }
             }
-
-
-//
-//            if (element.tagName().equals("ul") || element.tagName().equals("ol")) {
-//                this.processList(currentContentNode, element);
-//            } else if (element.tagName().equals("p")) {
-//                processParagraph(currentContentNode, element);
-//            } else if (element.tagName().equals("div")) {
-//                processDiv(currentContentNode, element);
-//            } else if (element.tagName().equals("li")) {
-//                processListElement(currentContentNode, element);
-//            } else if (element.tagName().equals("table")) {
-//                processTable(currentContentNode, element);
-//
-//            } else if(element.tagName().equals("thead") || element.tagName().equals("tbody") || element.tagName().equals("tfoot")) {
-//                processTableSection(currentContentNode, element);
-//            } else if  (element.tagName().equals("tr")) {
-//                processTableRow(currentContentNode, element);
-//            } else if(element.tagName().equals("th") || element.tagName().equals("td")) {
-//                processTableElement(currentContentNode, element);
-//            }else {
-////                TODO throw exception
-//                System.out.println("Exception");
-//            }
         }
     }
 
@@ -203,7 +192,8 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
                 if (compareValue < 0) {
                     this.createNewLeafOrNodeWithTitle(currentContentNode, element);
                 } else if (compareValue > 0) {
-                    throw new UnsupportedOperationException("new title node can not be bigger than previous title node");
+                    ContentNode higherNode = this.getContentNodeOfPrevTitleOfSameHeightOrHigher(element, currentContentNode);
+                    this.createNewLeafOrNodeWithTitle(higherNode, element);
                 } else {
                     this.createNewLeafOrNodeWithTitle(currentContentNode.getParent(), element);
                 }
@@ -211,13 +201,13 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
                 this.createNewLeafOrNodeWithTitle(currentContentNode, element);
             }
         } else {
-            if (currentContentNode.getContentTitle() != null) {
-                this.createNewLeafOrNodeWithTitle(currentContentNode, element);
-            } else {
-                currentContentNode.setContentTitle(element.text());
-                return false;
+                if (currentContentNode.getContentTitle() != null) {
+                    this.createNewLeafOrNodeWithTitle(currentContentNode, element);
+                } else {
+                    currentContentNode.setContentTitle(element.text());
+                    return false;
+                }
             }
-        }
         return true;
     }
 
@@ -243,7 +233,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
     }
 
     protected void processList(ContentNode currentContentNode, Element element) {
-        if (!(element.tagName().equals("ul") || element.tagName().equals("ol"))) {
+        if (!(element.tagName().equals("ul") || element.tagName().equals("ol") || element.childrenSize() == 0)) {
             throw new IllegalArgumentException("element should be an element of the tag <ul> or <ol>");
         }
 
@@ -251,19 +241,18 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         Element copyOfElement = element.clone();
         copyOfElement.select("li a, li span, li em, li sub").remove();
 
-        if (this.getMaxDepth(copyOfElement) == 2) {
-//            If the depth is 2 it is a list with list elements that can be translated to a node
-            ContentLeaf newLeaf = new ContentLeaf();
-            newLeaf.setContentType("LIST");
-            newLeaf.setContent(element.children().eachText());
-            currentContentNode.addContent(newLeaf);
-        } else if (this.getMaxDepth(copyOfElement) > 2) {
+        if (this.getMaxDepth(copyOfElement) > 2) {
 //            If the depth is more than 2, (at least one of) the list elements will have children and therefore
 //            this will be a node that needs further processing
             ContentNode newNode = new ContentNode();
             newNode.setContentType("LIST");
             currentContentNode.addContent(newNode);
             this.process(newNode, element.children());
+        } else if (this.getMaxDepth(copyOfElement) >= 1) {
+            ContentLeaf newLeaf = new ContentLeaf();
+            newLeaf.setContentType("LIST");
+            newLeaf.setContent(element.children().eachText());
+            currentContentNode.addContent(newLeaf);
         } else {
             throw new IllegalArgumentException("Given element (" + element + ") is not a valid ul or ol, it does not have children.");
         }
@@ -307,7 +296,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         } else if (element.childrenSize() == 1) {
 //            Go deeper without making new node for this div to prevent making a node contianing a single node.
             this.process(currentContentNode, element.children());
-        } else if (this.getMaxDepth(element) == 2) {
+        } else if (this.getMaxDepth(element) == 2 && this.allElementsAreOfTags(element.children(), new String[]{"p"})) {
             ContentLeaf newLeaf = new ContentLeaf();
             if (looseDivText.length() > 0) {
                 newLeaf.addContent(looseDivText);
@@ -334,6 +323,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
     protected String getLooseTextFromElement(Element element) {
         Element copyWithoutChildren = element.clone();
         copyWithoutChildren.children().remove();
+
         return copyWithoutChildren.text();
     }
 
@@ -544,6 +534,56 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         throw new IllegalArgumentException("Element does not have a previous title element.");
     }
 
+    private ContentNode getContentNodeOfPrevTitleOfSameHeightOrHigher(Element element, ContentNode currentContentNode) {
+        if (!this.elementIsTitle(element)) {
+            String message = "Element has te be a title element, given element (" + element.tagName() + " with classes " + element.classNames() + ") is not a title element";
+            throw new IllegalArgumentException(message);
+        }
+
+
+        try {
+            Element sameOrHigherTitleElement = this.findSameOrHigherTitleElement(element, element);
+            return this.findParentContentWithTitle(sameOrHigherTitleElement.text(), currentContentNode);
+        } catch (IllegalArgumentException e) {
+            ContentNode parentNode = currentContentNode;
+            while (parentNode.getParent() != null) {
+                parentNode = parentNode.getParent();
+            }
+            return parentNode;
+        }
+    }
+
+    private Element findSameOrHigherTitleElement(Element element, Element titleElement) {
+        while (titleElement != null) {
+            try {
+                titleElement = this.getPrevTitleElement(element);
+                int compareValue = TitleElementComparerNhg.compareTo(element, titleElement);
+                if (compareValue == 0 || compareValue > 0) {
+                    return titleElement;
+                }
+            } catch (IllegalArgumentException e) {
+                if (titleElement.hasParent()) {
+                    this.findSameOrHigherTitleElement(element, titleElement.parent());
+                } else {
+                    throw new IllegalArgumentException("There is no title element in the previous part of the html document with same or higher height.");
+                }
+            }
+        }
+        return null;
+    }
+
+    private ContentNode findParentContentWithTitle(String titleToLookFor, ContentNode currentContentNode) {
+        ContentNode parentNode = currentContentNode;
+        while (parentNode.getParent() != null) {
+            String parentTitle = parentNode.getContentTitle();
+            if (titleToLookFor.toLowerCase().equals(parentTitle.toLowerCase())) {
+                return parentNode;
+            }
+            parentNode = parentNode.getParent();
+        }
+        throw new IllegalArgumentException("No parent ContentNode found with given title");
+    }
+
     /**
      * @param element Jsoup Element to find the maximum node depth of.
      * @return an integer presenting the maximmum node depth of the element, including the element itself (if it is
@@ -691,6 +731,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
      * @throws IOException
      */
     private void readDrugIndicationsNamesFromCsv() throws IOException {
+        LOGGER.info("Reading csv file with indication names");
         String row;
 
         BufferedReader csvReader = new BufferedReader(new FileReader(this.csvFileLocation));

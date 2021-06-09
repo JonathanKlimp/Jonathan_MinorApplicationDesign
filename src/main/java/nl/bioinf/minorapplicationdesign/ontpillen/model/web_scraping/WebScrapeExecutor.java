@@ -61,6 +61,7 @@ public class WebScrapeExecutor {
         this.indicationScraper.parseHtml(); // needs to run before RichtlijnenNhgWebScraper
         this.farmacoWebScraper.parseHtml(); // needs to run before ApotheekWebScraper
         this.apotheekWebScraper.parseHtml();
+        this.richtlijnenNhgWebScraper.parseHtml();
         LOGGER.info("Done with parsing html");
     }
 }

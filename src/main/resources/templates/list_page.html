@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+
+<head th:replace="template :: head('lijst', 'true')"></head>
+
+<body>
+<div class="wrapper">
+    <nav th:replace="template :: header-nav"></nav>
+    <section th:replace="template :: subheader('', 'Geneesmiddel lijst', 'false')"></section>
+
+
+    <section class="page py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p>Maak een lijst</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer th:replace="template :: footer"></footer>
+</div>
+
+<div th:replace="template :: scripts"></div>
+<script th:src="@{~/js/footer_at_bottom.js}" src="../static/js/footer_at_bottom.js"></script>
+
+</body>
+</html>

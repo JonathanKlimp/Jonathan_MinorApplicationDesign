@@ -11,11 +11,13 @@ public interface Content {
 
     String getContentTitle();
 
-    Content getParent();
+    ContentNode getParent();
 
     void setParent(ContentNode parent);
 
     void setContentType(String contentType);
+
+    String getContentType();
 
     int getId();
 

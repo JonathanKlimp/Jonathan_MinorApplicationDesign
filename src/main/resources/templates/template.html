@@ -1,7 +1,21 @@
-<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.thymeleaf.org" lang="nl">
 
-<!--Head fragment-->
-<head th:fragment="head(title)">
+<!--
+Index:
+=Head fragment
+=Header fragment
+=Subheader fragment, used for pages, but not homepage
+=Content fragment
+=Content node fragment
+=Content leaf fragment
+=Footer fragment
+=Scripts fragment
+-->
+
+
+
+<!--=Head fragment-->
+<head th:fragment="head(title, isPage)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Naomi Hindriks">
@@ -11,11 +25,13 @@
 
     <!--Custom css-->
     <link th:href="@{~/css/main.css}" href="../static/css/main.css" rel="stylesheet">
+    <link th:if="${isPage.equals('true')}" th:href="@{~/css/page.css}" href="../static/css/page.css" rel="stylesheet">
+
     <title th:text="${title}">__Offline title__</title>
 </head>
 
 
-<!--Header fragment-->
+<!--=Header fragment-->
 <nav th:fragment="header-nav" class="navbar navbar-dark navbar-expand-lg" id="header">
     <div class="container">
 
@@ -30,12 +46,12 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item px-lg-4">
-                    <a class="nav-link" href="#">Lijst maken</a>
+                    <a class="nav-link" th:href="@{~/lijst}">Lijst maken</a>
                 </li>
                 <li class="nav-item px-lg-4">
                     <form method="POST">
-                        <button th:if="${#session.getAttribute('userType').toString()} == 'PATIENT'" type="submit" class="btn btn-link" name="user-type" value="PRACTITIONER">Voor behandelaren</button>
-                        <button th:if="${#session.getAttribute('userType').toString()} == 'PRACTITIONER'" type="submit" class="btn btn-link" name="user-type" value="PATIENT">Voor gebruiker</button>
+                        <button th:if="${#session.getAttribute('userType').toString()} == 'PATIENT'" type="submit" class="btn btn-link link-light" name="user-type" value="PRACTITIONER">Voor behandelaren</button>
+                        <button th:if="${#session.getAttribute('userType').toString()} == 'PRACTITIONER'" type="submit" class="btn btn-link link-light" name="user-type" value="PATIENT">Voor gebruiker</button>
                     </form>
                 </li>
             </ul>
@@ -55,7 +71,7 @@
     </div>
 </nav>
 
-<!--Subheader fragment, used for pages, but not homepage-->
+<!--=Subheader fragment, used for pages, but not homepage-->
 <section id="sub-header" th:fragment="subheader(breadcrumb, title, button)">
     <div class="container pt-3 pb-5">
         <div class="row mb-2">
@@ -63,7 +79,7 @@
         </div>
         <div class="row gy-4 mt-3 pt-5 align-items-end">
             <div class="col-md-8">
-                <h2 th:text="${title}">__offline subtitle__</h2>
+                <h2 th:text="${title}" class="text-capitalize">__offline subtitle__</h2>
             </div>
             <div th:if="${button} == 'true'" class="col-md-4">
                 <button class="btn btn-secondary px-5">+ Voeg toe aan lijst</button>
@@ -73,33 +89,189 @@
 </section>
 
 
-<!--Footer fragment-->
+<!--=Content fragment-->
+<th:block th:fragment="contentFragment(content)">
+    <th:block th:switch="${content.class}">
+
+        <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentLeaf)}">
+            <th:block th:replace="template :: contentLeaf(${content})"></th:block>
+        </th:block>
+
+        <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode)}">
+            <th:block th:replace="template :: contentNode(${content})"></th:block>
+        </th:block>
+
+    </th:block>
+</th:block>
+
+<!--=Content node fragment-->
+<th:block th:fragment="contentNode(content)">
+    <th:block th:switch="${content.getContentType()}">
+
+        <th:block th:case="'PARAGRAPH'">
+            <th:block th:if="${content.getContentTitle() != null}">
+                <p th:text="${content.getContentTitle()}"></p>
+            </th:block>
+            <th:block th:each="subContent : ${content.getContent()}">
+                <div th:replace ="template :: contentFragment(${subContent})"></div>
+            </th:block>
+        </th:block>
+
+        <th:block th:case="'LIST'">
+            <th:block th:if="${content.getContentTitle() != null}">
+                <p th:text="${content.getContentTitle()}"></p>
+            </th:block>
+            <ul>
+                <li th:each="subContent : ${content.getContent()}">
+                    <th:block th:replace ="template :: contentFragment(${subContent})"></th:block>
+                </li>
+            </ul>
+        </th:block>
+
+        <th:block th:case="'TABLE'">
+            <table class="table table-bordered">
+                <th:block th:if="${content.getContentTitle() != null}">
+                    <caption th:text="${content.getContentTitle()}"></caption>
+                </th:block>
+                <th:block th:each="subContent : ${content.getContent()}">
+                    <th:block th:replace ="template :: contentFragment(${subContent})"></th:block>
+                </th:block>
+            </table>
+        </th:block>
+
+        <th:block th:case="'THEAD'">
+            <thead>
+                <th:block th:each="subContent : ${content.getContent()}">
+                    <th:block th:replace ="template :: contentFragment(${subContent})"></th:block>
+                </th:block>
+            </thead>
+        </th:block>
+
+        <th:block th:case="'TBODY'">
+            <tbody>
+                <t:block th:each="subContent : ${content.getContent()}">
+                    <th:block th:replace ="template :: contentFragment(${subContent})"></th:block>
+                </t:block>
+            </tbody>
+        </th:block>
+
+        <th:block th:case="'TFOOT'">
+            <tfoot>
+            <th:block th:each="subContent : ${content.getContent()}">
+                <th:block th:replace ="template :: contentFragment(${subContent})"></th:block>
+            </th:block>
+            </tfoot>
+        </th:block>
+
+        <th:block th:case="'TR'">
+            <tr>
+            <th:block th:each="subContent : ${content.getContent()}">
+                <th:block th:replace ="template :: contentFragment(${subContent})"></th:block>
+            </th:block>
+            </tr>
+        </th:block>
+
+        <th:block th:case="'TH'">
+            <th th:colspan="${content.getAttributes().get('colspan')}" th:rowspan="${content.getAttributes().get('rowspan')}">
+                <th:block th:if="${content.getContentTitle() != null}">
+                    <p th:text="${content.getContentTitle()}"></p>
+                </th:block>
+                <th:block th:each="subContent : ${content.getContent()}">
+                    <th:block th:replace ="template :: contentFragment(${subContent})"></th:block>
+                </th:block>
+            </th>
+        </th:block>
+
+        <th:block th:case="'TD'">
+            <td th:colspan="${content.getAttributes().get('colspan')}" th:rowspan="${content.getAttributes().get('rowspan')}">
+                <th:block th:if="${content.getContentTitle() != null}">
+                    <p th:text="${content.getContentTitle()}"></p>
+                </th:block>
+                <th:block th:each="subContent : ${content.getContent()}">
+                    <th:block th:replace ="template :: contentFragment(${subContent})"></th:block>
+                </th:block>
+            </td>
+        </th:block>
+
+    </th:block>
+</th:block>
+
+<!--=Content leaf fragment-->
+<th:block th:fragment="contentLeaf(content)">
+    <th:block th:switch="${content.getContentType()}">
+
+        <th:block th:case="'PARAGRAPH'">
+            <p th:each="contentText : ${content.getContent()}" th:text="${contentText}"></p>
+        </th:block>
+
+        <th:block th:case="'LIST'">
+            <p th:if="${content.getContentTitle()}" th:text="${content.getContentTitle()}"></p>
+            <th:block th:if="${content.getContent}">
+                <ul>
+                    <li th:each="listElement : ${content.getContent()}" th:text="${listElement}"></li>
+                </ul>
+            </th:block>
+        </th:block>
+
+        <th:block th:case="'DESCRIPTION_LIST'">
+            <dl>
+                <dt th:text="${content.getContentTitle()}"></dt>
+                <dd th:each="listElement : ${content.getContent()}" th:text="${listElement}"></dd>
+            </dl>
+        </th:block>
+
+        <th:block th:case="'TH'">
+            <th th:colspan="${content.getAttributes().get('colspan')}" th:rowspan="${content.getAttributes().get('rowspan')}">
+                <th:block th:if="${content.getContentTitle() != null}">
+                    <p th:text="${content.getContentTitle()}"></p>
+                </th:block>
+                <th:block th:each="testContent : ${content.getContent()}">
+                    <p th:text="textContent"></p>
+                </th:block>
+            </th>
+        </th:block>
+
+        <th:block th:case="'TD'">
+            <td th:colspan="${content.getAttributes().get('colspan')}" th:rowspan="${content.getAttributes().get('rowspan')}">
+                <th:block th:if="${content.getContentTitle() != null}">
+                    <p th:text="${content.getContentTitle()}"></p>
+                </th:block>
+                <th:block th:each="textContent : ${content.getContent()}">
+                    <p th:text="textContent"></p>
+                </th:block>
+            </td>
+        </th:block>
+
+    </th:block>
+</th:block>
+
+<!--=Footer fragment-->
 <footer th:fragment="footer">
-    <div class="container py-5">
+    <div class="container pt-4 pb-2">
         <div class="row">
-            <div class="col">
+            <div class="col border-end">
                 <div class="footer-element">
-                    <h5>Site navigatie</h5>
-                    <ul class="list-unstyled">
+                    <h5 class="pb-3">Site navigatie</h5>
+                    <ul class="list-unstyled d-grid gap-2">
                         <li><a href="#" class="footer-link">Geneesmiddelen overzicht</a></li>
                         <li><a href="#" class="footer-link">Algemene adviezen</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="col">
+            <div class="col border-end">
                 <div class="footer-element">
-                    <h5>Informatie</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="footer-link">Privacy</a></li>
-                        <li><a href="#" class="footer-link">Veelgestelde vragen</a></li>
+                    <h5 class="pb-3">Informatie</h5>
+                    <ul class="list-unstyled d-grid gap-2">
+                        <li><a th:href="@{~/privacy}" class="footer-link">Privacy</a></li>
+                        <li><a th:href="@{~/disclaimer}" class="footer-link">Disclaimer</a></li>
                         <li><a href="#" class="footer-link">Over deze site</a></li>
                     </ul>
                 </div>
             </div>
             <div class="col">
                 <div class="footer-element">
-                    <h5>Contact</h5>
-                    <ul class="list-unstyled">
+                    <h5 class="pb-3">Contact</h5>
+                    <ul class="list-unstyled d-grid gap-2">
                         <li><a href="#" class="footer-link">Contact pagina</a></li>
                         <th:block th:each="email : ${@environment.getProperty('web.content.footer.emails').split(',')}">
                             <li><a th:href="${'mailto:' + email}" th:text="${email}" href="#" class="footer-link">__Offline email__</a></li>
@@ -108,11 +280,21 @@
                 </div>
             </div>
         </div>
+
+        <div class="row pt-5">
+            <div class="col-12">
+                <p class="text-center">
+                    <span>&copy; Ontpillen.nl </span>
+                    <span th:text="${#dates.year(#dates.createNow())}"></span>
+                    <span> all rights reserved</span>
+                </p>
+            </div>
+        </div>
     </div>
 </footer>
 
 
-<!--Scripts fragment,
+<!--=Scripts fragment,
     scripts that should be implemented in every page can be placed here-->
 <div th:fragment="scripts">
     <!--jQuery javascript-->

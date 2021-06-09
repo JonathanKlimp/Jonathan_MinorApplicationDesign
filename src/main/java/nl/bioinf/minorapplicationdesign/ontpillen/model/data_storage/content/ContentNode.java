@@ -14,6 +14,19 @@ public class ContentNode implements Content {
     private int id;
     private Map<String, String> attributes = new HashMap<>();
 
+    {
+        attributes.put("colspan", "1");
+        attributes.put("rowspan", "1");
+    }
+
+    public ContentNode() {
+        this(ContentType.PARAGRAPH);
+    }
+
+    private ContentNode(ContentType contentType) {
+        this.contentType = contentType;
+    }
+
     public void setContent(List<Content> contentList) {
         for (Content content : contentList) {
             content.setParent(this);
@@ -36,6 +49,7 @@ public class ContentNode implements Content {
         this.contentType = ContentType.valueOf(contentType);
     }
 
+    @Override
     public String getContentType() {
         return contentType.name();
     }
