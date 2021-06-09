@@ -8,7 +8,7 @@ import java.security.cert.X509Certificate;
 
 /**
  *
- * @author StackOverflow, Larissa Bouwknegt
+ * @author StackOverflow (https://stackoverflow.com/questions/40742380/how-to-resolve-jsoup-error-unable-to-find-valid-certification-path-to-requested), Larissa Bouwknegt
  */
 public class SSLHelper {
     public static void bypassSSL(){

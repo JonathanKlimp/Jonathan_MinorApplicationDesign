@@ -58,9 +58,10 @@ public class WebScrapeExecutor {
         SSLHelper.bypassSSL();
 
         this.drugFetcher.parseHtml(); // needs to run first
-        this.indicationScraper.parseHtml();
-        this.farmacoWebScraper.parseHtml(); // needs to run before apotheek
+        this.indicationScraper.parseHtml(); // needs to run before RichtlijnenNhgWebScraper
+        this.farmacoWebScraper.parseHtml(); // needs to run before ApotheekWebScraper
         this.apotheekWebScraper.parseHtml();
+        this.richtlijnenNhgWebScraper.parseHtml();
         LOGGER.info("Done with parsing html");
     }
 }

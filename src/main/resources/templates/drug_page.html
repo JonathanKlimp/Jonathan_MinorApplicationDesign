@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+
+<head th:replace="template :: head(${drugName}, 'true')"></head>
+
+<body>
+<div class="wrapper">
+
+    <nav th:replace="template :: header-nav"></nav>
+
+    <th:block th:with="drug = ${drugDao.getDrugByName(drugName)}">
+
+        <section th:replace="template :: subheader('', ${drug.getName()}, 'true')"></section>
+
+        <section class="page pb-5">
+
+            <div class="container">
+
+                <div class="row" style="color: #1c1f23">
+
+                    <div class="col-3">
+
+                        <div class="sticky-top pt-5">
+                            <nav class="border-start" id="drug-page-scroll-nav">
+                                <h3 class="h5 ps-2">Navigatie</h3>
+
+                                <ul class="nav flex-column">
+
+                                    <th:block th:switch="${#session.getAttribute('userType').toString()}"}>
+
+                                        <th:block th:case="'PATIENT'">
+                                            <th:block th:switch="${drug.class}">
+
+                                                <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance)}">
+                                                    <li th:unless="${drug.getDescriptionPatient().isEmpty()} or not ${drug.getParent()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#algemeen">Algemeen</a>
+                                                    </li>
+                                                    <li th:unless="${drug.getSideEffects().getSideEffectsPatient().isEmpty()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#bijwerkingen">Bijwerkingen</a>
+                                                    </li>
+                                                    <li th:unless="${drug.getInteractionsPatient().isEmpty()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#interacties">Interacties</a>
+                                                    </li>
+                                                    <li th:unless="${drug.getStopIndications().isEmpty()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#stop-indicaties">Stop indicaties</a>
+                                                    </li>
+                                                    <li th:unless="${drug.getUseIndications().isEmpty()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#gebruik-indicaties">Gebruiks indicaties</a>
+                                                    </li>
+                                                </th:block>
+
+                                                <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugGroup)}">
+                                                    <li th:unless="${drug.getChildren().isEmpty()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#geneesmiddelen-in-deze-groep">Bijwerkingen</a>
+                                                    </li>
+                                                    <li th:unless="${drug.getSideEffects().getSideEffectsPatient().isEmpty()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#bijwerkingen">Bijwerkingen</a>
+                                                    </li>
+                                                </th:block>
+
+                                            </th:block>
+                                        </th:block>
+
+                                        <th:block th:case="'PRACTITIONER'">
+                                            <th:block th:switch="${drug.class}">
+
+                                                <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance)}">
+                                                    <li th:unless="${drug.getDescriptionPractitioner().isEmpty()} or not ${drug.getParent()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#algemeen">Algemeen</a>
+                                                    </li>
+                                                    <li th:unless="${drug.getSideEffects().getSideEffectsPractitioner().isEmpty()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#bijwerkingen">Bijwerkingen</a>
+                                                    </li>
+                                                    <li th:unless="${drug.getInteractionsPractitioner().isEmpty()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#interacties">Interacties</a>
+                                                    </li>
+                                                    <li th:unless="${drug.getStopIndications().isEmpty()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#stop-indicaties">Stop indicaties</a>
+                                                    </li>
+                                                    <li th:unless="${drug.getUseIndications().isEmpty()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#gebruik-indicaties">Gebruiks indicaties</a>
+                                                    </li>
+                                                </th:block>
+
+                                                <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugGroup)}">
+                                                    <li th:unless="${drug.getChildren().isEmpty()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#geneesmiddelen-in-deze-groep">Bijwerkingen</a>
+                                                    </li>
+                                                    <li th:unless="${drug.getSideEffects().getSideEffectsPractitioner().isEmpty()}" class="nav-item">
+                                                        <a class="nav-link ps-2 link-dark" href="#bijwerkingen">Bijwerkingen</a>
+                                                    </li>
+                                                </th:block>
+
+                                            </th:block>
+                                        </th:block>
+
+
+                                    </th:block>
+                                </ul>
+                            </nav>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="col-9 pt-5">
+
+                        <th:block th:switch="${#session.getAttribute('userType').toString()}">
+
+                            <th:block th:case="'PATIENT'">
+                                <th:block th:switch="${drug.class}">
+
+                                    <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance)}">
+                                        <div th:unless="${drug.getDescriptionPatient().isEmpty()} or not ${drug.getParent()}" id="algemeen">
+                                            <h3>Algemeen</h3>
+                                            <p th:each="data: ${drug.getDescriptionPatient()}" th:text="${data}"></p>
+                                            <p th:if="${drug.getParent()}">
+                                                <span th:text="${drug.getName()}" class="text-capitalize"></span>
+                                                <span> behoort tot de </span>
+                                                <span th:text="${drug.getParent().getName()}" class="fst-italic"></span>
+                                                <span>. Wilt u meer weten over deze groep medicijnen, klik dan <a th:href="@{'~/medicijn/' + ${drug.getParent().getName()}}">hier</a>.</span>
+                                            </p>
+                                        </div>
+                                        <div th:unless="${drug.getSideEffects().getSideEffectsPatient().isEmpty()}" id="bijwerkingen">
+                                            <h3>Bijwerkingen</h3>
+                                            <th:block th:each="sideEffect : ${drug.getSideEffects().getSideEffectsPatient()}">
+                                                <th:block th:replace="template :: contentFragment(${sideEffect})"></th:block>
+                                            </th:block>
+                                        </div>
+                                        <div th:unless="${drug.getInteractionsPatient().isEmpty()}" id="interacties">
+                                            <h3>Interacties</h3>
+                                            <p th:each="data: ${drug.getInteractionsPatient()}" th:text="${data}"></p>
+                                        </div>
+                                        <div th:unless="${drug.getStopIndications().isEmpty()}" id="stop-indicaties">
+                                            <h3>Stop indicaties</h3>
+                                            <p th:each="data: ${drug.getStopIndications()}" th:text="${data}"></p>
+                                        </div>
+                                        <div th:unless="${drug.getUseIndications().isEmpty()}" id="gebruik-indicaties">
+                                            <h3>Gebruik indicaties</h3>
+                                            <th:block th:each="indication : ${drug.getUseIndications()}">
+
+                                                <h4 th:text="${indication.getName()}"></h4>
+
+                                                <th:block th:unless="${indication.getContentPatient().isEmpty}">
+                                                    <th:block th:each="content : ${indication.getContentPatient()}">
+                                                        <th:block th:replace="template :: contentFragment(${content})"></th:block>
+                                                    </th:block>
+                                                </th:block>
+                                            </th:block>
+                                        </div>
+                                    </th:block>
+
+                                    <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugGroup)}">
+                                        <div th:if="${drug.getParent()}">
+                                            <h3>Algemeen</h3>
+                                            <p>
+                                                <span th:text="${drug.getName().substring(0,1).toUpperCase() + drug.getName().substring(1)}"></span>
+                                                <span> behoort tot de </span>
+                                                <span th:text="${drug.getParent().getName()}" class="fst-italic"></span>
+                                                <span>. Wilt u meer weten over deze groep medicijnen, klik dan <a th:href="@{'~/medicijn/' + ${drug.getParent().getName()}}">hier</a>.</span>
+                                            </p>
+                                        </div>
+
+                                        <th:block th:unless="${drug.getChildren().isEmpty()}" class="nav-item">
+                                            <h3>Medicijnen die tot deze groep behoren</h3>
+                                            <ul>
+                                                <li th:each="drugChild : ${drug.getChildren()}">
+                                                    <a th:text="${drugChild.getName()}" th:href="@{'~/medicijn/' + ${drugChild.getName()}}"></a>
+                                                </li>
+                                            </ul>
+                                        </th:block>
+
+                                        <th:block th:unless="${drug.getSideEffects().getSideEffectsPatient().isEmpty()}" id="bijwerkingen">
+                                            <h3>Bijwerkingen</h3>
+                                            <th:block th:each="sideEffect : ${drug.getSideEffects().getSideEffectsPatient()}">
+                                                <th:block th:replace="template :: contentFragment(${sideEffect})"></th:block>
+                                            </th:block>
+                                        </th:block>
+                                    </th:block>
+
+                                </th:block>
+                            </th:block>
+
+                            <th:block th:case="'PRACTITIONER'">
+                                <th:block th:switch="${drug.class}">
+
+                                    <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance)}">
+
+                                        <div th:unless="${drug.getDescriptionPractitioner().isEmpty()} or not ${drug.getParent()}" id="algemeen">
+                                            <h3>Algemeen</h3>
+
+                                            <p th:each="data: ${drug.getDescriptionPractitioner()}" th:text="${data}"></p>
+                                            <p th:if="${drug.getParent()}">
+                                                <span th:text="${drug.getName().substring(0,1).toUpperCase() + drug.getName().substring(1)}"></span>
+                                                <span> behoort tot de </span>
+                                                <span th:text="${drug.getParent().getName()}" class="fst-italic"></span>
+                                                <span>. Wilt u meer weten over deze groep medicijnen, klik dan <a th:href="@{'~/medicijn/' + ${drug.getParent().getName()}}">hier</a>.</span>
+                                            </p>
+                                        </div>
+
+                                        <div th:unless="${drug.getSideEffects().getSideEffectsPractitioner().isEmpty()}" id="bijwerkingen">
+                                            <h3>Bijwerkingen</h3>
+                                            <th:block th:each="sideEffect : ${drug.getSideEffects().getSideEffectsPractitioner()}">
+                                                <th:block th:replace="template :: contentFragment(${sideEffect})"></th:block>
+                                            </th:block>
+                                        </div>
+
+                                        <div th:unless="${drug.getInteractionsPractitioner().isEmpty()}" id="interacties">
+                                            <h3>Interactie</h3>
+                                            <p th:each="data: ${drug.getInteractionsPractitioner()}" th:text="${data}"></p>
+                                        </div>
+
+                                        <div th:unless="${drug.getStopIndications().isEmpty()}" id="stop-indicaties">
+                                            <h3>Stop indicaties</h3>
+                                            <p th:each="data: ${drug.getStopIndications()}" th:text="${data}"></p>
+                                        </div>
+
+                                        <div th:unless="${drug.getUseIndications().isEmpty()}" class="accordion accordion-flush" id="gebruik-indicaties">
+                                            <h3>Gebruik indicaties</h3>
+
+                                            <th:block th:each="indication : ${drug.getUseIndications()}">
+                                                <div class="accordion-item">
+                                                    <h4 class="accordion-header">
+                                                        <button th:text="${indication.getName()}" class="accordion-button collapsed text-capitalize" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseOne' + ${indication.getName().split(' ')[0]}"></button>
+                                                    </h4>
+
+                                                    <div th:id="'collapseOne' + ${indication.getName().split(' ')[0]}" class="accordion-collapse collapse">
+
+                                                        <div class="accordion-body">
+                                                            <th:block th:if="${indication.getContentPractitioner().isEmpty}">
+                                                                <p>Geen verdere informatie om weer te geven</p>
+                                                            </th:block>
+                                                            <th:block th:unless="${indication.getContentPractitioner().isEmpty}" th:each="content : ${indication.getContentPractitioner()}">
+                                                                <th:block th:replace="template :: contentFragment(${content})"></th:block>
+                                                            </th:block>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </th:block>
+
+                                    </th:block>
+
+                                    <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugGroup)}">
+
+                                        <div th:if="${drug.getParent()}">
+                                            <h3>Algemeen</h3>
+                                            <p>
+                                                <span th:text="${drug.getName().substring(0,1).toUpperCase() + drug.getName().substring(1)}"></span>
+                                                <span> behoort tot de </span>
+                                                <span th:text="${drug.getParent().getName()}" class="fst-italic"></span>
+                                                <span>. Wilt u meer weten over deze groep medicijnen, klik dan <a th:href="@{'~/medicijn/' + ${drug.getParent().getName()}}">hier</a>.</span>
+                                            </p>
+                                        </div>
+
+                                        <th:block th:unless="${drug.getChildren().isEmpty()}" class="nav-item">
+                                            <h3>Medicijnen die tot deze groep behoren</h3>
+                                            <ul>
+                                                <li th:each="drugChild : ${drug.getChildren()}">
+                                                    <a th:text="${drugChild.getName()}" th:href="@{'~/medicijn/' + ${drugChild.getName()}}"></a>
+                                                </li>
+                                            </ul>
+                                        </th:block>
+
+                                        <th:block th:unless="${drug.getSideEffects().getSideEffectsPractitioner().isEmpty()}" id="bijwerkingen">
+                                            <h3>Bijwerkingen</h3>
+                                            <th:block th:each="sideEffect : ${drug.getSideEffects().getSideEffectsPractitioner()}">
+                                                <th:block th:replace="template :: contentFragment(${sideEffect})"></th:block>
+                                            </th:block>
+                                        </th:block>
+                                    </th:block>
+
+                                </th:block>
+
+                            </th:block>
+
+                        </th:block>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+    </th:block>
+
+    <footer th:replace="template :: footer"></footer>
+</div>
+
+<div th:replace="template :: scripts"></div>
+<script th:src="@{~/js/footer_at_bottom.js}" src="../static/js/footer_at_bottom.js"></script>
+
+</body>
+</html>
