@@ -119,6 +119,7 @@ class ApotheekWebScraperTest {
         List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
 
         for (DrugSubstance drugSubstance: drugSubstances) {
+            System.out.println("Current drug: " + drugSubstance.getName());
             List<Content> contentList = new ArrayList<>();
             for (Content content : drugSubstance.getSideEffects().getSideEffectsPatient()) {
                 System.out.println("Bijna bij get contentText");
@@ -136,12 +137,12 @@ class ApotheekWebScraperTest {
             switch(classType) {
                 case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode":
 //                    System.out.println(((ContentNode) content1).getContent());
-                    System.out.println(content1.getContentTitle());
+                    System.out.println("ContentNode title: " + content1.getContentTitle());
                     getContentText(((ContentNode) content1).getContent());
                     break;
                 case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentLeaf":
-                    System.out.println((content1.getContentTitle()));
-                    System.out.println(((ContentLeaf) content1).getContent());
+                    System.out.println("ContentLeaf title: " + (content1.getContentTitle()));
+                    System.out.println("ContentLeaf content: " + ((ContentLeaf) content1).getContent());
                     break;
             }
         }
