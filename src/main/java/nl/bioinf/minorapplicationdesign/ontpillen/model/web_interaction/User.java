@@ -4,7 +4,7 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.web_interaction;
 /**
  *
  * @author Naomi Hindriks
- */
+ */  //TODO add javadoc
 public class User {
     private int age;
     private Gender gender;

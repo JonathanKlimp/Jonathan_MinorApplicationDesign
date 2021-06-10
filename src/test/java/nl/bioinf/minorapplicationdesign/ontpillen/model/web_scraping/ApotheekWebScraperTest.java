@@ -122,6 +122,7 @@ class ApotheekWebScraperTest {
         }
     }
 
+    //TODO fix test
 
 //    @Test
 //    void parseHtml_SideEffectGetContent_ContainsString() throws IOException {

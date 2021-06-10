@@ -4,7 +4,7 @@ import java.util.Map;
 
 /**
  * @author Naomi Hindriks
- */
+ */ //TODO Add javadoc to interface Content
 public interface Content {
 
     void setContentTitle(String contentTitle);

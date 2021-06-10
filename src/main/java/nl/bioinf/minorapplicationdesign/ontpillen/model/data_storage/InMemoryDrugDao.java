@@ -92,27 +92,27 @@ public class InMemoryDrugDao implements DrugDao {
     @Override
 //    TODO IIlligal Argument exception toevoegen
     public UseIndication getUseIndication(String indicationName) {
-        return this.useIndications.get(indicationName);
+        return useIndications.get(indicationName);
     }
 
     @Override
     public void addUseIndication(UseIndication useIndication) {
-        this.useIndications.put(useIndication.getName(), useIndication);
+        useIndications.put(useIndication.getName(), useIndication);
     }
 
 
     @Override
     public List<UseIndication> getAllUseIndications() {
-        return new ArrayList<>(this.useIndications.values());
+        return new ArrayList<>(useIndications.values());
     }
 
     /**
      * Method that will remove all drugs in the dao
      */
     public void removeAllDrugs() {
-        this.drugSubstances.clear();
-        this.mainDrugGroups.clear();
-        this.allDrugs.clear();
-        this.useIndications.clear();
+        drugSubstances.clear();
+        mainDrugGroups.clear();
+        allDrugs.clear();
+        useIndications.clear();
     }
 }

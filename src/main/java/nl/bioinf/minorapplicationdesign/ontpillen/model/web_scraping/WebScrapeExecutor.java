@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  *
  * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
- */
+ */ //TODO add javadoc
 @Component
 public class WebScrapeExecutor {
     private DrugFetcher drugFetcher;

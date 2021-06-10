@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author Naomi Hindriks
- */
+ */ //TODO add javadoc to ContentNode
 public class ContentNode implements Content {
     protected ContentType contentType;
     private String contentTitle;

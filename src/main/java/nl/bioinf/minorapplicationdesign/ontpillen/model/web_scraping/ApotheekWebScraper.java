@@ -45,7 +45,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         this.drugDao = drugDao;
     }
 
-
+    // TODO add javadoc
     @Override
     public void parseHtml() throws IOException {
         LOGGER.info("Parsing html");
@@ -203,7 +203,6 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         }
         String completeUrl = basicUrl + drugName.toLowerCase();
 
-        Document doc = Jsoup.connect(completeUrl).get();
-        return doc;
+        return Jsoup.connect(completeUrl).get();
     }
 }

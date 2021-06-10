@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  *
  * @ author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
- */
+ */ //TODO add javadoc
 @Component
 @PropertySource("classpath:application.properties")
 public class DrugFetcher implements AbstractWebScraper {

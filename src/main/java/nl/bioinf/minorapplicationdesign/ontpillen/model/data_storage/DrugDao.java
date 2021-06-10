@@ -66,7 +66,7 @@ public interface DrugDao {
      * @return a boolean, true if a drug with this name is present in the DAO.
      */
     boolean drugInDrugDao(String drugName);
-
+    // TODO add javadoc to all methods
     UseIndication getUseIndication(String indicationName);
 
     List<UseIndication> getAllUseIndications();

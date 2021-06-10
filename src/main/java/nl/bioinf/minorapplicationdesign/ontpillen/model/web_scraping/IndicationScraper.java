@@ -24,7 +24,7 @@ import java.util.List;
  * indication. The fetched result is a string with the name of the indication and a list with string of the
  * corresponding drugs. This list is used to fetch the Drug objects from the Dao to create a new list of drug objects.
  * The name and list of drug objects are added to the UseIndication class for each drug on the webpage.
- * @author Larissa Bouwknegt en Jonathan Klimp
+ * @author Larissa Bouwknegt and Jonathan Klimp
  */
 
 @Component

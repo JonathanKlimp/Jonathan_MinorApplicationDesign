@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author Naomi Hindriks
- */
+ */ //TODO add javadoc to ContentLeaf
 public class ContentLeaf implements Content {
     protected ContentType contentType;
     private String contentTitle;
