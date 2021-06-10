@@ -45,7 +45,12 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         this.drugDao = drugDao;
     }
 
-    // TODO add javadoc
+    /**
+     * Method that parses the html. It checks if the drug is present on the website using the drugNotOnWebsite list
+     * if the drug is not present on the website it sets the information for that drug to the information parsed
+     * by FarmacoWebScraper.
+     * @throws IOException IOException
+     */
     @Override
     public void parseHtml() throws IOException {
         LOGGER.info("Parsing html");

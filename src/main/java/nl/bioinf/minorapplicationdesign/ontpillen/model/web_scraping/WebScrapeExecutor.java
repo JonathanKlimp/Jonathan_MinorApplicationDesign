@@ -9,9 +9,13 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
- *
+ * Class WebScrapeExecutor starts all webscrapers.
+ * The order is importent since some information of one scraper is used in another
+ * DrugFetched needs to run first at all times.
+ * IndicationScraper needs to run before RichtlijnenNhgWebScraper and
+ * FarmacoWebScraper needs to run before ApotheekWebScraper.
  * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
- */ //TODO add javadoc
+ */
 @Component
 public class WebScrapeExecutor {
     private DrugFetcher drugFetcher;
