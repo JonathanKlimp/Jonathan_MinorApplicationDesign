@@ -147,10 +147,10 @@
                                                     <div th:id="'collapseOne' + ${indication.getName().split(' ')[0]}" class="accordion-collapse collapse">
 
                                                         <div class="accordion-body">
-                                                            <th:block th:if="${indication.getContentPractitioner().isEmpty}">
+                                                            <th:block th:if="${indication.getContentPatient().isEmpty}">
                                                                 <p>Geen verdere informatie om weer te geven</p>
                                                             </th:block>
-                                                            <th:block th:unless="${indication.getContentPractitioner().isEmpty}" th:each="content : ${indication.getContentPractitioner()}">
+                                                            <th:block th:unless="${indication.getContentPatient().isEmpty}" th:each="content : ${indication.getContentPatient()}">
                                                                 <th:block th:replace="template :: contentFragment(${content})"></th:block>
                                                             </th:block>
                                                         </div>
