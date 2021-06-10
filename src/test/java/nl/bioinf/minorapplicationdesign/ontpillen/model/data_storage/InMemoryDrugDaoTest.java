@@ -1,5 +1,6 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.UseIndication;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,4 +109,36 @@ class InMemoryDrugDaoTest {
             assertEquals("null does not exist.", exception.getMessage());
         }
     }
+
+
+    @Test
+    void getUseIndication_returnUseIndication() {
+        UseIndication testUseIndication = new UseIndication();
+        testUseIndication.setName("testUseIndication");
+        drugDao.addUseIndication(testUseIndication);
+        assertEquals("testUseIndication", drugDao.getUseIndication("testUseIndication").getName());
+    }
+
+    @Test
+    void getUseIndication_nonExistentValue_throwIllegalArgumentException() {
+        try{
+            drugDao.getUseIndication("test");
+        } catch (Exception exception) {
+            assertEquals("test Is not found in the dao", exception.getMessage());
+        }
+    }
+
+    @Test
+    void getAllUseIndications_returnAllUseIndications() {
+        UseIndication testUseIndication = new UseIndication();
+        testUseIndication.setName("testUseIndication");
+        drugDao.addUseIndication(testUseIndication);
+
+        UseIndication testUseIndication2 = new UseIndication();
+        testUseIndication2.setName("testUseIndication2");
+        drugDao.addUseIndication(testUseIndication2);
+
+        assertEquals(2, drugDao.getAllUseIndications().size());
+    }
+
 }
