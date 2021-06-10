@@ -90,9 +90,13 @@ public class InMemoryDrugDao implements DrugDao {
     }
 
     @Override
-//    TODO IIlligal Argument exception toevoegen
     public UseIndication getUseIndication(String indicationName) {
-        return useIndications.get(indicationName);
+        if (useIndications.containsKey(indicationName)) {
+            return useIndications.get(indicationName);
+        } else {
+            throw new IllegalArgumentException(indicationName + " Is not found in the dao");
+        }
+
     }
 
     @Override
