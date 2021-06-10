@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="nl">
+
+<head th:replace="template :: head('Disclaimer', 'true')"></head>
+
+<body>
+<div class="wrapper">
+    <nav th:replace="template :: header-nav"></nav>
+
+    <section th:replace="template :: subheader('', 'Disclaimer', 'false')"></section>
+
+
+    <section class="page py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p>
+                        Deze website geeft GEEN advies bij het gebruik/afbouwen van medicijnen. Deze website is alleen bedoelt
+                        voor geven van informatie. Dit betekend ook dat de informatie geen vervanging kan zijn van een medische
+                        consult of de bijsluiter, maar een aanvulling daarop.
+                        Bij twijfel over medicijnen, gezondheid of mogelijke behandeling/afbouw,
+                        dient u altijd contact op te nemen met uw eigen apotheker, arts of specialist.
+                    </p>
+                    <p>De informatie op deze website is niet (geheel) zelf geschreven, maar grotendeels verzameld van de hierna genoemde bronnen</p>
+                    <ul>
+                        <li><a href="https://www.ggzstandaarden.nl/">https://www.ggzstandaarden.nl/</a></li>
+                        <li><a href="https://www.apotheek.nl/">https://www.apotheek.nl/</a></li>
+                        <li><a href="https://www.farmacotherapeutischkompas.nl/">https://www.farmacotherapeutischkompas.nl/</a></li>
+                        <li><a href="https://richtlijnen.nhg.org/">https://richtlijnen.nhg.org/</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer th:replace="template :: footer"></footer>
+</div>
+
+<div th:replace="template :: scripts"></div>
+<script th:src="@{~/js/footer_at_bottom.js}" src="../static/js/footer_at_bottom.js"></script>
+
+</body>
+</html>

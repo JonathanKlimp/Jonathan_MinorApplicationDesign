@@ -15,6 +15,15 @@ public class ContentLeaf implements Content {
     private int id;
     private Map<String, String> attributes = new HashMap<>();
 
+
+    public ContentLeaf() {
+        this(ContentType.PARAGRAPH);
+    }
+
+    private ContentLeaf(ContentType contentType) {
+        this.contentType = contentType;
+    }
+
     @Override
     public void setContentType(String contentType) {
         if (!Arrays.stream(ContentType.values()).anyMatch(str -> str.name().equals(contentType))) {
@@ -33,6 +42,7 @@ public class ContentLeaf implements Content {
         this.content.add(newContent);
     }
 
+    @Override
     public String getContentType() {
         return contentType.name();
     }

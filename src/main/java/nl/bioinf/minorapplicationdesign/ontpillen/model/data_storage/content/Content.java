@@ -3,7 +3,7 @@ package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content;
 import java.util.Map;
 
 /**
- * @author Naomi Hindiks
+ * @author Naomi Hindriks
  */
 public interface Content {
 
@@ -11,11 +11,13 @@ public interface Content {
 
     String getContentTitle();
 
-    Content getParent();
+    ContentNode getParent();
 
     void setParent(ContentNode parent);
 
     void setContentType(String contentType);
+
+    String getContentType();
 
     int getId();
 

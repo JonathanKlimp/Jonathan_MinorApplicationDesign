@@ -127,7 +127,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
             Elements sideEffectDescription = sideEffect.nextElementSibling().select(".sideEffectsItem_content__10s1c");
 
             ContentLeaf newContentLeaf = new ContentLeaf();
-            newContentLeaf.setContentType("LIST");
+            newContentLeaf.setContentType("DESCRIPTION_LIST");
             newContentLeaf.setContentTitle(sideEffect.text());
             newContentLeaf.setContent(sideEffectDescription.eachText());
 
@@ -202,6 +202,8 @@ public class ApotheekWebScraper implements AbstractWebScraper {
             drugName = drugName.replace("ï", "i");
         }
         String completeUrl = basicUrl + drugName.toLowerCase();
-        return Jsoup.connect(completeUrl).get();
+
+        Document doc = Jsoup.connect(completeUrl).get();
+        return doc;
     }
 }

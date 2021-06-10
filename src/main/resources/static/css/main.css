@@ -80,13 +80,16 @@ nav#header, footer {
     background-color: var(--color-primary);
 }
 
-#header.navbar-dark .navbar-nav .nav-link, footer .footer-link {
+#header.navbar-dark .navbar-nav .nav-link, footer .footer-link,
+#header.navbar-dark .navbar-nav .btn-link {
     color: var(--color-light);
     opacity: 75%;
     text-decoration: none;
 }
 
-#header.navbar-dark .navbar-nav .nav-link:focus, #header.navbar-dark .navbar-nav .nav-link:hover, footer .footer-link:hover, footer .footer-link:focus {
+#header.navbar-dark .navbar-nav .nav-link:focus, #header.navbar-dark .navbar-nav .nav-link:hover,
+footer .footer-link:hover, footer .footer-link:focus,
+#header.navbar-dark .navbar-nav .btn-link:focus, #header.navbar-dark .navbar-nav .btn-link:hover {
     opacity: 100%;
     text-decoration: underline;
 }
@@ -183,6 +186,6 @@ form select#gender:not(form select#gender:focus, form select#gender:active) {
     color: var(--color-dark);
 }
 
-.search-item-row {
-
+nav#drug-page-scroll-nav ul li.nav-item a:hover {
+    color: var(--color-accent);
 }
