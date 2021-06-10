@@ -41,12 +41,16 @@ public class ContentNode implements Content {
 
     @Override
     public void setContentType(String contentType) {
-        if (!Arrays.stream(ContentType.values()).anyMatch(str -> str.name().equals(contentType))) {
+        if (isValidContent(contentType)) {
             List<String> newList = Arrays.stream(ContentType.values()).map(Enum::name).collect(Collectors.toList());
             String message = "Given contentType (" + contentType + ") is not any of the allowed values, the allowed values are: " + String.join(", ", newList);
             throw new IllegalArgumentException(message);
         }
         this.contentType = ContentType.valueOf(contentType);
+    }
+
+    private boolean isValidContent(String contentType) {
+        return !Arrays.stream(ContentType.values()).anyMatch(str -> str.name().equals(contentType));
     }
 
     @Override
