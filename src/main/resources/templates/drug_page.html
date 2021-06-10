@@ -139,14 +139,24 @@
                                         <div th:unless="${drug.getUseIndications().isEmpty()}" id="gebruik-indicaties">
                                             <h3>Gebruik indicaties</h3>
                                             <th:block th:each="indication : ${drug.getUseIndications()}">
+                                                <div class="accordion-item">
+                                                    <h4 class="accordion-header">
+                                                        <button th:text="${indication.getName()}" class="accordion-button collapsed text-capitalize" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapseOne' + ${indication.getName().split(' ')[0]}"></button>
+                                                    </h4>
 
-                                                <h4 th:text="${indication.getName()}"></h4>
+                                                    <div th:id="'collapseOne' + ${indication.getName().split(' ')[0]}" class="accordion-collapse collapse">
 
-                                                <th:block th:unless="${indication.getContentPatient().isEmpty}">
-                                                    <th:block th:each="content : ${indication.getContentPatient()}">
-                                                        <th:block th:replace="template :: contentFragment(${content})"></th:block>
-                                                    </th:block>
-                                                </th:block>
+                                                        <div class="accordion-body">
+                                                            <th:block th:if="${indication.getContentPractitioner().isEmpty}">
+                                                                <p>Geen verdere informatie om weer te geven</p>
+                                                            </th:block>
+                                                            <th:block th:unless="${indication.getContentPractitioner().isEmpty}" th:each="content : ${indication.getContentPractitioner()}">
+                                                                <th:block th:replace="template :: contentFragment(${content})"></th:block>
+                                                            </th:block>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
                                             </th:block>
                                         </div>
                                     </th:block>
