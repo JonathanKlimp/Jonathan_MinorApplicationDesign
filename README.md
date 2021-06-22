@@ -76,40 +76,31 @@ DISCLAIMER: The information on this website is no advice! Always consult your ps
 
 
 
-<!-- GETTING STARTED 
 ## Getting Started
 
 To get a local copy up and running follow these simple steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
 
 ### Installation
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/MinorApplicationDesign/MinorApplicationDesign
    ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-  -->
+2. Run the project \
+   to run the project execute: \
+   src/main/java/nl/bioinf/minorapplicationdesign/ontpillen/OntpillenApplication.java
 
 
 
 <!-- USAGE EXAMPLES --> 
 ## Usage
 
-Currently, this project is a work in progress and can't be used. The main usage of the website will
-be gathering information about medicines. This information will contain general information and guidelines 
-on how to reduce the usage of those medicines. You will be able to save and print this information
-and take it to your psychiatrist.
+Currently, this project is a work in progress and can't be used for the ultimate goal. 
+The main usage of the website will be gathering information about medicines. 
+This information will contain general information and guidelines on how to reduce the usage of those medicines. 
+You will be able to save and print this information and take it to your psychiatrist/doctor.
+With the current version of the project you can search for medicines or medicine groups for general information. 
+This information cannot be saved and printed yet.
 
 
 <!-- ROADMAP 
@@ -143,6 +134,7 @@ Project Link: [https://github.com/MinorApplicationDesign/MinorApplicationDesign]
 * [Apotheek](https://www.apotheek.nl/)
 * [Farmacotherapeutischkompas](https://www.farmacotherapeutischkompas.nl/)
 * [ggzstandaarden](https://www.ggzstandaarden.nl/)
+* [richtlijnenNHG](https://richtlijnen.nhg.org/)
 
 
 

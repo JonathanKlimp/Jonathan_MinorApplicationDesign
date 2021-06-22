@@ -13,11 +13,18 @@ import java.util.*;
  */
 public class DrugSubstance extends Drug {
     private List<String> brandNames = new ArrayList<>();
-    private Map<String, List<String>> description = Map.of("patient",new ArrayList<>(), "practitioner", new ArrayList<>());
-    private Map<String, List<String>> interactions = Map.of("patient",new ArrayList<>(), "practitioner", new ArrayList<>());
     private List<UseIndication> useIndications = new ArrayList<>();
     private List<String>  stopIndications = new ArrayList<>();
-
+    private Map<String, List<String>> interactions = new HashMap<>();
+    {
+        interactions.put("patient", new ArrayList<>());
+        interactions.put("practitioner", new ArrayList<>());
+    }
+    private Map<String, List<String>> description = new HashMap<>();
+    {
+        description.put("patient", new ArrayList<>());
+        description.put("practitioner", new ArrayList<>());
+    }
 
     public DrugSubstance(String name) {
         super(name);

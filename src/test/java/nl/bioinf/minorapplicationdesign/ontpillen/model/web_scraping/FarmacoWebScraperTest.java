@@ -63,7 +63,7 @@ class FarmacoWebScraperTest {
      * Method checks if FarmacoWebScraper adds side effects to each drug substance
      * @throws IOException
      */
-    @Test
+    @Test //TODO split test there are to many asserts in one method
     void parseHtml_sideEffectsContainsItems() throws IOException {
         farmacoWebScraper.parseHtml();
 

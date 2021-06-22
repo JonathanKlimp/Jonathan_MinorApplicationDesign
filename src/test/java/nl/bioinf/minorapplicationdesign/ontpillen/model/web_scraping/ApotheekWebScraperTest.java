@@ -9,7 +9,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
@@ -119,33 +118,39 @@ class ApotheekWebScraperTest {
         List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
 
         for (DrugSubstance drugSubstance: drugSubstances) {
-            List<Content> contentList = new ArrayList<>();
-            for (Content content : drugSubstance.getSideEffects().getSideEffectsPatient()) {
-                System.out.println("Bijna bij get contentText");
-                contentList.add(content);
-                getContentText(contentList);
-            }
             assertNotNull(drugSubstance.getSideEffects().getSideEffectsPatient());
         }
     }
 
+    //TODO fix test
 
-    private void getContentText(List<Content> content) {
-        for (Content content1 : content) {
-            String classType = content1.getClass().toString();
-            switch(classType) {
-                case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode":
-//                    System.out.println(((ContentNode) content1).getContent());
-                    System.out.println(content1.getContentTitle());
-                    getContentText(((ContentNode) content1).getContent());
-                    break;
-                case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentLeaf":
-                    System.out.println((content1.getContentTitle()));
-                    System.out.println(((ContentLeaf) content1).getContent());
-                    break;
-            }
-        }
+//    @Test
+//    void parseHtml_SideEffectGetContent_ContainsString() throws IOException {
+//        apotheekWebScraper.parseHtml();
+//
+//        List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
+//
+//        for (DrugSubstance drugSubstance: drugSubstances) {
+//            List<Content> contentList = new ArrayList<>();
+//            for (Content content : drugSubstance.getSideEffects().getSideEffectsPatient()) {
+//                contentList.add(content);
+//                assertNotNull(getContentText(contentList));
+//            }
+//        }
+//    }
 
-    }
 
+//    private List<String> getContentText(List<Content> content) {
+//        for (Content content1 : content) {
+//            String classType = content1.getClass().toString();
+//            switch (classType) {
+//                case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode":
+//                    getContentText(con)
+//                    getContentText(((Content) content1).getContent());
+//                case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentLeaf":
+//                    return ((ContentLeaf) content1).getContent();
+//            }
+//        }
+//        return null;
+//    }
 }

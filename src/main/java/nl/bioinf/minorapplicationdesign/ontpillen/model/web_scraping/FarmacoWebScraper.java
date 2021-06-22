@@ -20,7 +20,10 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- *
+ * Class FarmacoWebScraper implements AbstractWebscraper. It fetches all drug
+ * names from the drug dao and uses these to connect to the correct page on www.farmacotherapeutischkompas.nl.
+ * It scrapes the side effects, description and interactions for each drug in the dao. This information
+ * is saved to the drug object.
  * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
  */
 @Component
