@@ -52,7 +52,7 @@ class IndicationScraperTest {
      *
      * @throws IOException
      */
-    @Test
+    @Test //TODO clean up + add more tests?
     void parseHtml_checkIfCorrectIndicationIsAdded() throws IOException {
         HashMap<String, List<String>> useIndicationsExpected = new HashMap<>();
         useIndicationsExpected.put("ADHD bij kinderen", Arrays.asList("atomoxetine", "dexamfetamine", "guanfacine", "lisdexamfetamine", "methylfenidaat"));

@@ -13,22 +13,31 @@ import java.util.*;
  */
 public class DrugSubstance extends Drug {
     private List<String> brandNames = new ArrayList<>();
-    private Map<String, List<String>> description = Map.of("patient",new ArrayList<>(), "practitioner", new ArrayList<>());
-    private Map<String, List<String>> interactions = Map.of("patient",new ArrayList<>(), "practitioner", new ArrayList<>());
     private List<UseIndication> useIndications = new ArrayList<>();
     private List<String>  stopIndications = new ArrayList<>();
-
+    private Map<String, List<String>> interactions = new HashMap<>();
+    {
+        interactions.put("patient", new ArrayList<>());
+        interactions.put("practitioner", new ArrayList<>());
+    }
+    private Map<String, List<String>> description = new HashMap<>();
+    {
+        description.put("patient", new ArrayList<>());
+        description.put("practitioner", new ArrayList<>());
+    }
 
     public DrugSubstance(String name) {
         super(name);
     }
 
     public void setDescriptionPatient(List<String> descriptionPatient) {
-        this.description.put("patient", descriptionPatient);
+        this.description.get("patient").clear();
+        this.description.get("patient").addAll(descriptionPatient);
     }
 
     public void setDescriptionPractitioner(List<String> descriptionPsychiatrist) {
-        this.description.put("practitioner", descriptionPsychiatrist);
+        this.description.get("practitioner").clear();
+        this.description.get("practitioner").addAll(descriptionPsychiatrist);
     }
 
     public void addBrandName(String brandName){
@@ -44,11 +53,13 @@ public class DrugSubstance extends Drug {
     }
 
     public void setInteractionsPatient(List<String> interactionsPatient) {
-        this.interactions.put("patient", interactionsPatient);
+        this.interactions.get("patient").clear();
+        this.interactions.get("patient").addAll(interactionsPatient);
     }
 
     public void setInteractionsPractitioner(List<String> interactionsPsychiatrist) {
-        this.interactions.put("practitioner", interactionsPsychiatrist);
+        this.interactions.get("practitioner").clear();
+        this.interactions.get("practitioner").addAll(interactionsPsychiatrist);
     }
 
     public String getName() {

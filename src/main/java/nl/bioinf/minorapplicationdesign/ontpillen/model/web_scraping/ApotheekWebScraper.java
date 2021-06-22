@@ -45,7 +45,12 @@ public class ApotheekWebScraper implements AbstractWebScraper {
         this.drugDao = drugDao;
     }
 
-
+    /**
+     * Method that parses the html. It checks if the drug is present on the website using the drugNotOnWebsite list
+     * if the drug is not present on the website it sets the information for that drug to the information parsed
+     * by FarmacoWebScraper.
+     * @throws IOException IOException
+     */
     @Override
     public void parseHtml() throws IOException {
         LOGGER.info("Parsing html");
@@ -127,7 +132,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
             Elements sideEffectDescription = sideEffect.nextElementSibling().select(".sideEffectsItem_content__10s1c");
 
             ContentLeaf newContentLeaf = new ContentLeaf();
-            newContentLeaf.setContentType("LIST");
+            newContentLeaf.setContentType("DESCRIPTION_LIST");
             newContentLeaf.setContentTitle(sideEffect.text());
             newContentLeaf.setContent(sideEffectDescription.eachText());
 
@@ -202,6 +207,7 @@ public class ApotheekWebScraper implements AbstractWebScraper {
             drugName = drugName.replace("ï", "i");
         }
         String completeUrl = basicUrl + drugName.toLowerCase();
+
         return Jsoup.connect(completeUrl).get();
     }
 }

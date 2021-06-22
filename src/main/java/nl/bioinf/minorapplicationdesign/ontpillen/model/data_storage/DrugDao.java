@@ -67,9 +67,23 @@ public interface DrugDao {
      */
     boolean drugInDrugDao(String drugName);
 
+    /**
+     * Method that returns specific use indications of a drug given a indication name
+     * @param indicationName String of the name of the use indication
+     * @return The found UseIndication Object
+     * @throws IllegalArgumentException if the indication is not found.
+     */
     UseIndication getUseIndication(String indicationName);
 
+    /**
+     * Method that returns all use indications of a drug
+     * @return List of UseIndication objects
+     */ //TODO remove method?
     List<UseIndication> getAllUseIndications();
 
+    /**
+     * Method that adds a new use indication to the drug
+     * @param useIndication UseIndication object to be added
+     */
     void addUseIndication(UseIndication useIndication);
 }

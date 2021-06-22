@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ContentNodeTest {
 
-    @Test
+    @Test //TODO split test there are to many asserts in one method
     public void setContent() {
 //        Create ContentNode object
         ContentNode contentNode = new ContentNode();
@@ -45,7 +45,7 @@ class ContentNodeTest {
         };
     }
 
-    @Test
+    @Test //TODO split test there are to many asserts in one method
     void addContent_addSingleContent() {
 //        Create ContentNode object
         ContentNode contentNode = new ContentNode();
@@ -69,7 +69,7 @@ class ContentNodeTest {
         }
     }
 
-    @Test
+    @Test //TODO split test there are to many asserts in one method
     void addContent_addMultipleContents() {
 //        Create ContentNode object
         ContentNode contentNode = new ContentNode();

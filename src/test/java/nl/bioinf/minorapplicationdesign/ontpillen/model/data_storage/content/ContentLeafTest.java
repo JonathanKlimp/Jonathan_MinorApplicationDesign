@@ -55,7 +55,7 @@ class ContentLeafTest {
         };
     }
 
-    @Test
+    @Test //TODO split test there are to many asserts in one method
     public void addContent_addSingleContent() {
 //        Create ContentLeaf object
         ContentLeaf mySideEffectContent = new ContentLeaf();
@@ -71,7 +71,7 @@ class ContentLeafTest {
         assertArrayEquals(expectedContent, content.toArray());
     }
 
-    @Test
+    @Test //TODO split test there are to many asserts in one method
     public void addContent_addMultipleContents() {
 //        Create ContentLeaf object
         ContentLeaf mySideEffectContent = new ContentLeaf();

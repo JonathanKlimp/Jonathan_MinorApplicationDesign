@@ -4,22 +4,19 @@ import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.web_interaction.User;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.web_interaction.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Objects;
 
 
 /**
  *
  * @author Noami Hindriks
- */
+ */ //TODO add javaodc
 @Controller
 public class WebController {
     DrugDao drugDao;
@@ -47,7 +44,7 @@ public class WebController {
         return "index";
     }
 
-    @PostMapping({"/", "/zoekresultaten/{searchQuery}", "/medicijn/{drugName}"})
+    @PostMapping({"/", "/zoekresultaten/{searchQuery}", "/medicijn/{drugName}", "/lijst", "/privacy", "/disclaimer"})
     public RedirectView changeFrontEnd(HttpServletRequest request) {
         HttpSession session = request.getSession();
         UserType newUserType = UserType.valueOf(request.getParameter("user-type"));
@@ -69,7 +66,7 @@ public class WebController {
         return "search_result";
     }
 
-    @GetMapping("/list")
+    @GetMapping("/lijst")
     public String showResult(Model model, @ModelAttribute User user, HttpServletRequest request) {
         HttpSession session = request.getSession();
 
@@ -79,7 +76,7 @@ public class WebController {
         }
 
         model.addAttribute("user", user);
-        return "result_test";
+        return "list_page";
     }
 
     @GetMapping("/medicijn/{drugName}")
@@ -90,7 +87,7 @@ public class WebController {
         if (session.getAttribute("userType") == null) {
             session.setAttribute("userType", UserType.valueOf("PATIENT"));
         }
-        return "drugPage";
+        return "drug_page";
     }
 
     @PostMapping("/zoeken")
@@ -104,5 +101,27 @@ public class WebController {
 
         String searchQuery = request.getParameter("search-query");
         return new RedirectView(("zoekresultaten/" + searchQuery));
+    }
+
+    @GetMapping("/disclaimer")
+    public String showDisclaimer(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        //        If there is no userType set in the session, set t he userType to "gebruiker"
+        if (session.getAttribute("userType") == null) {
+            session.setAttribute("userType", UserType.valueOf("PATIENT"));
+        }
+        return "disclaimer";
+    }
+
+    @GetMapping("/privacy")
+    public String showPrivacy(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        //        If there is no userType set in the session, set t he userType to "gebruiker"
+        if (session.getAttribute("userType") == null) {
+            session.setAttribute("userType", UserType.valueOf("PATIENT"));
+        }
+        return "privacy";
     }
 }

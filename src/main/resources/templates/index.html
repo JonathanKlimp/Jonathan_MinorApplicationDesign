@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+<!DOCTYPE html> <!-- Author Naomi Hindriks !-->
 <html xmlns:th="http://www.thymeleaf.org" lang="nl">
 
-<head th:replace="template :: head('Ontpillen')"></head>
+<head th:replace="template :: head('Ontpillen', 'false')"></head>
 
 <body>
 
@@ -46,11 +46,14 @@
                                                     <div class="col-12 col-md-7">
                                                         <h3>Lijst maken</h3>
                                                         <p>
-                                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl nisi, semper vitae tincidunt ut, accumsan eget diam. Quisque lacus elit, euismod quis odio non, vestibulum commodo ante. Nunc et fringilla enim. Donec ac mi arcu. Aliquam quis lacinia tortor. Aenean imperdiet malesuada neque nec consequat. Nullam maximus leo a malesuada vestibulum. Donec eget consectetur justo. Nullam nibh sapien, malesuada id lacinia ullamcorper, consequat nec arcu. Integer neque tellus, euismod et nisl dapibus, egestas sodales justo. Donec facilisis urna at odio ultrices, sed fringilla nisi euismod. Morbi aliquet eu justo vel convallis. Duis nibh leo, efficitur in est sed, venenatis imperdiet urna. Phasellus egestas malesuada nunc a rhoncus.
+                                                            Om voor u relevante informatie te krijgen over de medicijnen die u gebruikt kunt u een lijst met medicijnen samenstellen.
+                                                            Om te beginnen met het samenstellen van de lijst kunt u aan de rechterkant uw leeftijd en geslacht invullen en vervolgens drukken op de 'Start lijst' knop.
+                                                            We slaan de gegevens die u invult op deze website niet op.
                                                         </p>
+                                                        <p class="fst-italic">Om deze lijst samen te stellen moet u 18 jaar of ouder zijn, indien u jonger bent dan 18 kan het zijn dat de informatie voor u niet klopt.</p>
                                                     </div>
                                                     <div class="col-12 col-md-5">
-                                                        <form action="#" th:action="@{/list}" th:object="${user}" method="get">
+                                                        <form action="#" th:action="@{~/lijst}" th:object="${user}" method="get">
                                                             <label for="age" class="form-label">Leeftijd</label>
                                                             <input th:field="*{age}" type="number" class="form-control mb-3" id="age" min="18" max="150">
                                                             <label for="gender" class="form-label">Geslacht</label>
@@ -90,7 +93,10 @@
                                             <div class="col-12 col-sm-11 col-md-10 col-lg-9 col-xl-8">
                                                 <h3>Privacy</h3>
                                                 <p>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl nisi, semper vitae tincidunt ut, accumsan eget diam. Quisque lacus elit, euismod quis odio non, vestibulum commodo ante. Nunc et fringilla enim. Donec ac mi arcu. Aliquam quis lacinia tortor. Aenean imperdiet malesuada neque nec consequat. Nullam maximus leo a malesuada vestibulum. Donec eget consectetur justo. Nullam nibh sapien, malesuada id lacinia ullamcorper, consequat nec arcu. Integer neque tellus, euismod et nisl dapibus, egestas sodales justo. Donec facilisis urna at odio ultrices, sed fringilla nisi euismod. Morbi aliquet eu justo vel convallis. Duis nibh leo, efficitur in est sed, venenatis imperdiet urna. Phasellus egestas malesuada nunc a rhoncus.
+                                                    Op de website is de mogelijkheid om uw leeftijd en geslacht aan tegeven. Dit wordt alleen gebruikt voor
+                                                    het laten zien van relevante informatie aan de hand van uw leeftijd/geslacht.
+                                                    Uw gegevens worden NIET opgeslagen of gebruikt voor andere (commerciële) doeleinden.
+                                                    De gegevens worden verwijderd nadat u de pagina afsluit.
                                                 </p>
                                             </div>
                                         </div>

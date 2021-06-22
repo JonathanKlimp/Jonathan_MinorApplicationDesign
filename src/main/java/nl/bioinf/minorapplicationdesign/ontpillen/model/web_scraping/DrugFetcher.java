@@ -18,8 +18,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- *
- * @ author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
+ * Class DrugFetches implements AbstractWebScraper. It scrapes the page:
+ * www.farmacotherapeutischkompas.nl/bladeren/categorie/psychiatrie for all the drugs that are used in this project.
+ * Once parsed there is an object created of that drug and this is saved to the doa
+ * @author Larissa Bouwknegt, Jonathan Klimp, Naomi Hindriks
  */
 @Component
 @PropertySource("classpath:application.properties")
