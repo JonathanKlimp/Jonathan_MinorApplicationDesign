@@ -205,6 +205,7 @@ nav#drug-page-scroll-nav ul li.nav-item a:hover {
     top: 100%;
     left: 0;
     right: 0;
+    color: var(--color-dark);
 }
 
 .autocomplete-items div {
