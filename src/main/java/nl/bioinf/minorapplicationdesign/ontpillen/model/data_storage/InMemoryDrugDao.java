@@ -50,8 +50,8 @@ public class InMemoryDrugDao implements DrugDao {
      */
     @Override
     public Drug getDrugByName(String drugName) {
-        if (!allDrugs.containsKey(drugName.toLowerCase())) {
-            throw new IllegalArgumentException(drugName.toLowerCase() + " does not exist.");
+        if (!allDrugs.containsKey(drugName) || drugName == null) {
+            throw new IllegalArgumentException(drugName + " does not exist.");
         }
         return allDrugs.get(drugName);
     }

@@ -78,7 +78,7 @@ public interface DrugDao {
     /**
      * Method that returns all use indications of a drug
      * @return List of UseIndication objects
-     */ //TODO remove method?
+     */
     List<UseIndication> getAllUseIndications();
 
     /**
