@@ -112,7 +112,7 @@ Index:
 
         <th:block th:case="'PARAGRAPH'">
             <th:block th:if="${content.getContentTitle() != null}">
-                <p th:text="${content.getContentTitle()}"></p>
+                <h5 th:text="${content.getContentTitle()}"></h5>
             </th:block>
             <th:block th:each="subContent : ${content.getContent()}">
                 <div th:replace ="template :: contentFragment(${subContent})"></div>
