@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 /**
  *
  * @author Naomi Hindriks
- */
+ */ //TODO add javadoc
 @SpringBootApplication
 public class OntpillenApplication {
     private static Logger LOGGER = LoggerFactory.getLogger(OntpillenApplication.class);

@@ -1,5 +1,6 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage;
 
+import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.UseIndication;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
  * @author Jonathan Klimp
- */
+ */ //TODO add more tests + javadoc
 @SpringBootTest
 class InMemoryDrugDaoTest {
 
@@ -23,7 +27,7 @@ class InMemoryDrugDaoTest {
     DrugDao drugDao;
 
     @AfterEach
-    public void cleanUpTest() {
+    public void cleanUpDao() {
         drugDao.removeAllDrugs();
     }
 
@@ -107,5 +111,118 @@ class InMemoryDrugDaoTest {
         catch (Exception exception){
             assertEquals("null does not exist.", exception.getMessage());
         }
+    }
+
+
+    @Test
+    void getUseIndication_returnUseIndication() {
+        UseIndication testUseIndication = new UseIndication();
+        testUseIndication.setName("testUseIndication");
+        drugDao.addUseIndication(testUseIndication);
+        assertEquals("testUseIndication", drugDao.getUseIndication("testUseIndication").getName());
+    }
+
+    @Test
+    void getUseIndication_nonExistentValue_throwIllegalArgumentException() {
+        try{
+            drugDao.getUseIndication("test");
+        } catch (Exception exception) {
+            assertEquals("test Is not found in the dao", exception.getMessage());
+        }
+    }
+
+    @Test
+    void getAllUseIndications_returnAllUseIndications() {
+        UseIndication testUseIndication = new UseIndication();
+        testUseIndication.setName("testUseIndication");
+        drugDao.addUseIndication(testUseIndication);
+
+        UseIndication testUseIndication2 = new UseIndication();
+        testUseIndication2.setName("testUseIndication2");
+        drugDao.addUseIndication(testUseIndication2);
+
+        assertEquals(2, drugDao.getAllUseIndications().size());
+    }
+
+    @Test
+    void getDrugSubstances_returnSubstances() {
+        ArrayList<String> drugNamesExpected = new ArrayList<>();
+        drugNamesExpected.add("Citalopram");
+        drugNamesExpected.add("Guanfacine");
+        drugNamesExpected.add("Sulpiride");
+        DrugSubstance drugSubstance1 = new DrugSubstance("Citalopram");
+        DrugSubstance drugSubstance2 = new DrugSubstance("Guanfacine");
+        DrugSubstance drugSubstance3 = new DrugSubstance("Sulpiride");
+        drugDao.addDrug(drugSubstance1);
+        drugDao.addDrug(drugSubstance2);
+        drugDao.addDrug(drugSubstance3);
+
+        ArrayList<String> drugNames = new ArrayList<>();
+        for (DrugSubstance drug : drugDao.getDrugSubstances()) {
+            drugNames.add(drug.getName());
+        }
+        assertEquals(drugNamesExpected, drugNames);
+    }
+
+    @Test
+    void getAllDrugNames_returnAllDrugNames() {
+        ArrayList<String> drugNamesExpected = new ArrayList<>();
+        drugNamesExpected.add("Citalopram");
+        drugNamesExpected.add("Guanfacine");
+        drugNamesExpected.add("Sulpiride");
+        DrugSubstance drugSubstance1 = new DrugSubstance("Citalopram");
+        DrugSubstance drugSubstance2 = new DrugSubstance("Guanfacine");
+        DrugSubstance drugSubstance3 = new DrugSubstance("Sulpiride");
+        drugDao.addDrug(drugSubstance1);
+        drugDao.addDrug(drugSubstance2);
+        drugDao.addDrug(drugSubstance3);
+
+        List<String> drugNames = drugDao.getAllDrugNames();
+        assertEquals(drugNamesExpected.containsAll(drugNames), drugNames.containsAll(drugNamesExpected));
+    }
+
+    @Test
+    void getAllDrugs_returnAllDrugs() {
+        ArrayList<String> drugNamesExpected = new ArrayList<>();
+        drugNamesExpected.add("Citalopram");
+        drugNamesExpected.add("Guanfacine");
+        drugNamesExpected.add("Sulpiride");
+        drugNamesExpected.add("testgroup");
+        DrugSubstance drugSubstance1 = new DrugSubstance("Citalopram");
+        DrugSubstance drugSubstance2 = new DrugSubstance("Guanfacine");
+        DrugSubstance drugSubstance3 = new DrugSubstance("Sulpiride");
+        DrugGroup drugGroup = new DrugGroup("testgroup");
+        drugDao.addDrug(drugSubstance1);
+        drugDao.addDrug(drugSubstance2);
+        drugDao.addDrug(drugSubstance3);
+        drugDao.addDrug(drugGroup);
+
+        ArrayList<String> drugNames = new ArrayList<>();
+        for (Drug drug : drugDao.getAllDrugs()) {
+            drugNames.add(drug.getName());
+        }
+        assertEquals(drugNamesExpected.containsAll(drugNames), drugNames.containsAll(drugNamesExpected));
+    }
+
+    @Test
+    void getMainDrugGroups_returnMainDrugGroups() {
+        ArrayList<String> drugNamesExpected = new ArrayList<>();
+        drugNamesExpected.add("testgroup1");
+        drugNamesExpected.add("testgroup2");
+        DrugSubstance drugSubstance1 = new DrugSubstance("Citalopram");
+        DrugGroup drugGroup1 = new DrugGroup("testgroup1");
+        DrugSubstance drugSubstance3 = new DrugSubstance("Sulpiride");
+        DrugGroup drugGroup2 = new DrugGroup("testgroup2");
+        drugDao.addDrug(drugSubstance1);
+        drugDao.addDrug(drugGroup1);
+        drugDao.addDrug(drugSubstance3);
+        drugDao.addDrug(drugGroup2);
+
+        ArrayList<String> drugNames = new ArrayList<>();
+        for (Drug drug : drugDao.getMainDrugGroups()) {
+            drugNames.add(drug.getName());
+        }
+        assertEquals(drugNamesExpected.containsAll(drugNames), drugNames.containsAll(drugNamesExpected));
+        System.out.println(drugDao.getMainDrugGroups());
     }
 }
