@@ -102,7 +102,7 @@ You will be able to save and print this information and take it to your psychiat
 With the current version of the project you can search for medicines or medicine groups for general information. 
 This information cannot be saved and printed yet. If you are a psychiatrist or a doctor and want to get more detailed
 information you can click on the button "Voor behandelaren" on the top right, left of the search bar.
-The functionality to make a list of medicines is also not implemented yet. This button now generates a default landing
+The functionality to make a list of medicines is still in development. This button now generates a default landing
 page.
 An exmaple for searching a drug can be seen in the images below:
 
