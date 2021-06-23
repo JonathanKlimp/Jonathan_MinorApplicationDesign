@@ -51,7 +51,7 @@
 
                                                 <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugGroup)}">
                                                     <li th:unless="${drug.getChildren().isEmpty()}" class="nav-item">
-                                                        <a class="nav-link ps-2 link-dark" href="#geneesmiddelen-in-deze-groep">Bijwerkingen</a>
+                                                        <a class="nav-link ps-2 link-dark" href="#geneesmiddelen-in-deze-groep">Geneesmiddelen in deze groep</a>
                                                     </li>
                                                     <li th:unless="${drug.getSideEffects().getSideEffectsPatient().isEmpty()}" class="nav-item">
                                                         <a class="nav-link ps-2 link-dark" href="#bijwerkingen">Bijwerkingen</a>
@@ -84,7 +84,7 @@
 
                                                 <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugGroup)}">
                                                     <li th:unless="${drug.getChildren().isEmpty()}" class="nav-item">
-                                                        <a class="nav-link ps-2 link-dark" href="#geneesmiddelen-in-deze-groep">Bijwerkingen</a>
+                                                        <a class="nav-link ps-2 link-dark" href="#geneesmiddelen-in-deze-groep">Geneesmiddelen in deze groep</a>
                                                     </li>
                                                     <li th:unless="${drug.getSideEffects().getSideEffectsPractitioner().isEmpty()}" class="nav-item">
                                                         <a class="nav-link ps-2 link-dark" href="#bijwerkingen">Bijwerkingen</a>

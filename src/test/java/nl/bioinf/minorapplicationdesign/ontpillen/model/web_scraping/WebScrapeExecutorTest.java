@@ -19,7 +19,7 @@ class WebScrapeExecutorTest {
     WebScrapeExecutor webScrapeExecutor;
 
     @Test
-    void runWebcrawlers_test() throws IOException {
+    void runWebcrawlers_test() throws Exception {
         webScrapeExecutor.runWebcrawlers();
     }
 }

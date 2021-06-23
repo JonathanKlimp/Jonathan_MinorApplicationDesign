@@ -1,12 +1,12 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.nhg;
 
-import com.sun.source.tree.AssertTree;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugDao;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentLeaf;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.DrugFetcher;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.IndicationScraper;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.SSLHelper;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.Util;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,7 +23,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -268,30 +267,6 @@ class RichtlijnenNhgWebScraperTest {
     }
 
     @Test
-    void getMaxDepth_depthTwoSingleEndLeave() {
-        String testString = "<ul id='test-ul'><li>Test</li></ul>";
-        Element testDiv = Jsoup.parse(testString).select("ul#test-ul").first();
-        String message = "while finding depth of: " + testString;
-        assertEquals(2, this.richtlijnenNhgWebScraper.getMaxDepth(testDiv));
-    }
-
-    @Test
-    void getMaxDepth_depthFourMultipleEndLeave() {
-        String testHtml =
-                "<ul id='test-ul'>" +
-                    "<li>Depth here is 2</li>" +
-                    "<li>" +
-                        "<ul>" +
-                            "<li>Depth here is 4</li>" +
-                        "</ul>" +
-                    "</li>" +
-                "</ul>";
-        Element testDiv = Jsoup.parse(testHtml).select("ul#test-ul").first();
-        String message = "while finding depth of: " + testHtml;
-        assertEquals(4, this.richtlijnenNhgWebScraper.getMaxDepth(testDiv), message);
-    }
-
-    @Test
     void elementIsTitle_sunnyDay() {
         Elements titleElements = new Elements();
 
@@ -509,7 +484,7 @@ class RichtlijnenNhgWebScraperTest {
     void processList_sunnyDay(String htmlToTest) {
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-list").get(0);
 
-        this.richtlijnenNhgWebScraper.processList(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processListElement(testNode, elementToTest);
         ContentLeaf resultContent = (ContentLeaf) testNode.getContent().get(0);
 
         assertArrayEquals(new String[]{"list element 1", "list element 2", "list element 3"}, resultContent.getContent().toArray());
@@ -520,7 +495,7 @@ class RichtlijnenNhgWebScraperTest {
     void processList_recursiveList_testContentOuterList(String htmlToTest) {
 
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-list").get(0);
-        this.richtlijnenNhgWebScraper.processList(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processListElement(testNode, elementToTest);
 
         ContentNode resultContent = (ContentNode) testNode.getContent().get(0);
         ContentLeaf list1Element1 = (ContentLeaf) resultContent.getContent().get(0);
@@ -533,7 +508,7 @@ class RichtlijnenNhgWebScraperTest {
     void processList_recursiveList_testContentInnerList(String htmlToTest) {
 
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-list").get(0);
-        this.richtlijnenNhgWebScraper.processList(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processListElement(testNode, elementToTest);
 
         ContentNode resultContent = (ContentNode) testNode.getContent().get(0);
         ContentLeaf list2 = (ContentLeaf) resultContent.getContent().get(2);
@@ -553,7 +528,7 @@ class RichtlijnenNhgWebScraperTest {
 
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> {this.richtlijnenNhgWebScraper.processList(testNode, elementToTest);}
+                () -> {this.richtlijnenNhgWebScraper.processListElement(testNode, elementToTest);}
         );
     }
 
@@ -562,7 +537,7 @@ class RichtlijnenNhgWebScraperTest {
     void processParagraph_sunnyDay(String htmlToTest) {
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-paragraph").get(0);
 
-        this.richtlijnenNhgWebScraper.processParagraph(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processParagraphElement(testNode, elementToTest);
 
         ContentLeaf paragraphContent = (ContentLeaf) testNode.getContent().get(0);
 
@@ -581,7 +556,7 @@ class RichtlijnenNhgWebScraperTest {
 
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> {this.richtlijnenNhgWebScraper.processParagraph(testNode, elementToTest);}
+                () -> {this.richtlijnenNhgWebScraper.processParagraphElement(testNode, elementToTest);}
         );
     }
 
@@ -590,7 +565,7 @@ class RichtlijnenNhgWebScraperTest {
     void processDiv_sunnyDay_single(String htmlToTest) {
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-div").get(0);
 
-        this.richtlijnenNhgWebScraper.processDiv(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processDivElement(testNode, elementToTest);
 
         ContentLeaf createdLeaf = (ContentLeaf) testNode.getContent().get(0);
 
@@ -613,7 +588,7 @@ class RichtlijnenNhgWebScraperTest {
 
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-div").get(0);
 
-        this.richtlijnenNhgWebScraper.processDiv(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processDivElement(testNode, elementToTest);
 
         ContentNode createdContent = (ContentNode) testNode.getContent().get(0);
         ContentLeaf div1Element1 = (ContentLeaf) createdContent.getContent().get(testNthElement);
@@ -636,7 +611,7 @@ class RichtlijnenNhgWebScraperTest {
 
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-div").get(0);
 
-        this.richtlijnenNhgWebScraper.processDiv(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processDivElement(testNode, elementToTest);
 
         ContentNode createdContent = (ContentNode) testNode.getContent().get(0);
         ContentLeaf div2 = (ContentLeaf) createdContent.getContent().get(2);
@@ -657,7 +632,7 @@ class RichtlijnenNhgWebScraperTest {
 
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> {this.richtlijnenNhgWebScraper.processDiv(testNode, elementToTest);}
+                () -> {this.richtlijnenNhgWebScraper.processDivElement(testNode, elementToTest);}
         );
     }
 
@@ -714,7 +689,7 @@ class RichtlijnenNhgWebScraperTest {
 
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-list-element").get(0);
 
-        this.richtlijnenNhgWebScraper.processListElement(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processListItemElement(testNode, elementToTest);
         ContentLeaf createdContent = (ContentLeaf) testNode.getContent().get(0);
 
         String[] expected = new String[]{"Element to test"};
@@ -730,7 +705,7 @@ class RichtlijnenNhgWebScraperTest {
 
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-list-element").get(0);
 
-        this.richtlijnenNhgWebScraper.processListElement(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processListItemElement(testNode, elementToTest);
         ContentLeaf createdContent = (ContentLeaf) testNode.getContent().get(0);
 
         String[] expected = new String[]{"Element to test1"};
@@ -760,7 +735,7 @@ class RichtlijnenNhgWebScraperTest {
 
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-list-element").get(0);
 
-        this.richtlijnenNhgWebScraper.processListElement(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processListItemElement(testNode, elementToTest);
 
         ContentNode createdContent = (ContentNode) testNode.getContent().get(0);
         ContentLeaf resultLeaf = (ContentLeaf) createdContent.getContent().get(testNthElement);
@@ -778,7 +753,7 @@ class RichtlijnenNhgWebScraperTest {
 
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> {this.richtlijnenNhgWebScraper.processListElement(testNode, elementToTest);}
+                () -> {this.richtlijnenNhgWebScraper.processListItemElement(testNode, elementToTest);}
         );
     }
 
@@ -812,7 +787,7 @@ class RichtlijnenNhgWebScraperTest {
     @ValueSource(strings = {validTestTable1, validTestTable2})
     void processTable_sunnyDay_someContentIsAdded(String htmlToTest) {
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-table").get(0);
-        this.richtlijnenNhgWebScraper.processTable(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableElement(testNode, elementToTest);
 
         ContentNode createdNode = (ContentNode) testNode.getContent().get(0);
 
@@ -823,7 +798,7 @@ class RichtlijnenNhgWebScraperTest {
     @ValueSource(strings = {validTestTable1, validTestTable2})
     void processTable_sunnyDay_captionIsSet(String htmlToTest) {
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-table").get(0);
-        this.richtlijnenNhgWebScraper.processTable(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableElement(testNode, elementToTest);
 
         String expected = elementToTest.select("caption").get(0).text();
         assertEquals(expected, testNode.getContent().get(0).getContentTitle());
@@ -836,7 +811,7 @@ class RichtlijnenNhgWebScraperTest {
 
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> {this.richtlijnenNhgWebScraper.processTable(testNode, elementToTest);}
+                () -> {this.richtlijnenNhgWebScraper.processTableElement(testNode, elementToTest);}
         );
     }
 
@@ -846,7 +821,7 @@ class RichtlijnenNhgWebScraperTest {
         String cssQuery = "#test-section-" + testNthSection;
         Element elementToTest = Jsoup.parse(validTestTable2).select(cssQuery).get(0);
 
-        this.richtlijnenNhgWebScraper.processTableSection(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableSectionElement(testNode, elementToTest);
         ContentNode createdNode = (ContentNode) testNode.getContent().get(0);
 
         assertTrue(createdNode.getContent().size() > 0);
@@ -861,7 +836,7 @@ class RichtlijnenNhgWebScraperTest {
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> {this.richtlijnenNhgWebScraper.processTableSection(testNode, elementToTest);}
+            () -> {this.richtlijnenNhgWebScraper.processTableSectionElement(testNode, elementToTest);}
         );
     }
 
@@ -870,7 +845,7 @@ class RichtlijnenNhgWebScraperTest {
     void processTableRow_sunnyDay_someContentIsAdded(int testNthtr) {
         Element elementToTest = Jsoup.parse(validTestTable1).select("#test-table tr").get(testNthtr);
 
-        this.richtlijnenNhgWebScraper.processTableRow(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableRowElement(testNode, elementToTest);
         ContentNode createdContent = (ContentNode) testNode.getContent().get(0);
 
         assertTrue(createdContent.getContent().size() > 0);
@@ -881,7 +856,7 @@ class RichtlijnenNhgWebScraperTest {
     void processTableRow_sunnyDay_thOrTdLeafAddedToNodeIsOfClassLeaf(int testNthtr) {
         Element elementToTest = Jsoup.parse(validTestTable1).select("#test-table tr").get(testNthtr);
 
-        this.richtlijnenNhgWebScraper.processTableRow(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableRowElement(testNode, elementToTest);
         ContentNode createdContent = (ContentNode) testNode.getContent().get(0);
 
 
@@ -893,7 +868,7 @@ class RichtlijnenNhgWebScraperTest {
     void processTableRow_sunnyDay_thOrTdLeafAddedToNodeHasRightContentType(int testNthtr) {
         Element elementToTest = Jsoup.parse(validTestTable1).select("#test-table tr").get(testNthtr);
 
-        this.richtlijnenNhgWebScraper.processTableRow(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableRowElement(testNode, elementToTest);
         ContentNode createdContent = (ContentNode) testNode.getContent().get(0);
 
         ContentLeaf trChildContent = (ContentLeaf) createdContent.getContent().get(0);
@@ -907,7 +882,7 @@ class RichtlijnenNhgWebScraperTest {
     void processTableRow_sunnyDay_childrenThAndTdAreOfClassNodes(int testNthChild) {
         Element elementToTest = Jsoup.parse(validTestTable1).select("#test-table tr").get(2);
 
-        this.richtlijnenNhgWebScraper.processTableRow(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableRowElement(testNode, elementToTest);
         ContentNode createdContent = (ContentNode) testNode.getContent().get(0);
 
         assertEquals(ContentLeaf.class, createdContent.getContent().get(testNthChild).getClass());
@@ -918,7 +893,7 @@ class RichtlijnenNhgWebScraperTest {
     void processTableRow_sunnyDay_childrenThAndTdAreOfCorrectContentType(int testNthChild) {
         Element elementToTest = Jsoup.parse(validTestTable1).select("#test-table tr").get(2);
 
-        this.richtlijnenNhgWebScraper.processTableRow(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableRowElement(testNode, elementToTest);
         ContentNode createdContent = (ContentNode) testNode.getContent().get(0);
 
         ContentLeaf resultingLeaf = (ContentLeaf) createdContent.getContent().get(testNthChild);
@@ -934,7 +909,7 @@ class RichtlijnenNhgWebScraperTest {
 
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> {this.richtlijnenNhgWebScraper.processTableRow(testNode, elementToTest);}
+                () -> {this.richtlijnenNhgWebScraper.processTableRowElement(testNode, elementToTest);}
         );
     }
 
@@ -943,7 +918,7 @@ class RichtlijnenNhgWebScraperTest {
     void processTableElement_sunnyDay_someContentIsAdded(int testNthElement) {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(testNthElement);
 
-        this.richtlijnenNhgWebScraper.processTableElement(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
 
         assertTrue(testNode.getContent().size() > 0);
     }
@@ -953,7 +928,7 @@ class RichtlijnenNhgWebScraperTest {
     void processTableElement_sunnyDay_ofCorrectContentTypeForLeafs(int testNthElement) {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(testNthElement);
 
-        this.richtlijnenNhgWebScraper.processTableElement(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
 
         String actual;
         if (testNode.getContent().get(0).getClass().equals(ContentLeaf.class)) {
@@ -971,7 +946,7 @@ class RichtlijnenNhgWebScraperTest {
     void processTableElement_sunnyDay_ofCorrectContent(int testNthElement) {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(testNthElement);
 
-        this.richtlijnenNhgWebScraper.processTableElement(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
 
         String[] expected = new String[]{elementToTest.text()};
         List<String> content = ((ContentLeaf) testNode.getContent().get(0)).getContent();
@@ -982,7 +957,7 @@ class RichtlijnenNhgWebScraperTest {
     void processTableElement_sunnyDay_getsColSpanAttribute() {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(3);
 
-        this.richtlijnenNhgWebScraper.processTableElement(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
 
         String colSpanValue = testNode.getContent().get(0).getAttributes().get("colspan");
         assertEquals("2", colSpanValue);
@@ -992,7 +967,7 @@ class RichtlijnenNhgWebScraperTest {
     void processTableElement_sunnyDay_getsRowSpanAttribute() {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(4);
 
-        this.richtlijnenNhgWebScraper.processTableElement(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
 
         String rowSpanValue = testNode.getContent().get(0).getAttributes().get("rowspan");
         assertEquals("2", rowSpanValue);
@@ -1003,7 +978,7 @@ class RichtlijnenNhgWebScraperTest {
     void processTableElement_sunnyDay_leafWithMultipleElements(int testNthElement) {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(testNthElement);
 
-        this.richtlijnenNhgWebScraper.processTableElement(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
 
         assertEquals(ContentLeaf.class, testNode.getContent().get(0).getClass());
     }
@@ -1013,7 +988,9 @@ class RichtlijnenNhgWebScraperTest {
     void processTableElement_sunnyDay_contentTypeOfLeafWithMultipleElements(int testNthElement) {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(testNthElement);
 
-        this.richtlijnenNhgWebScraper.processTableElement(testNode, elementToTest);
+        System.out.println(elementToTest);
+
+        this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
 
         ContentLeaf resultLeaf = (ContentLeaf) testNode.getContent().get(0);
 
@@ -1027,12 +1004,12 @@ class RichtlijnenNhgWebScraperTest {
     void processTableElement_sunnyDay_contentOfLeafWithMultipleElements(int testNthElement) {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(testNthElement);
 
-        this.richtlijnenNhgWebScraper.processTableElement(testNode, elementToTest);
+        this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
 
         ContentLeaf resultLeaf = (ContentLeaf) ((ContentNode) testNode.getContent().get(0)).getContent().get(0);
 
         String[] expected;
-        if (this.richtlijnenNhgWebScraper.getMaxDepth(elementToTest) == 2) {
+        if (Util.getMaxDepth(elementToTest) == 2) {
             expected = elementToTest.children().eachText().toArray(new String[elementToTest.childrenSize()]);
         } else {
             expected = elementToTest.children().get(0).children().eachText().toArray(new String[elementToTest.childrenSize()]);
