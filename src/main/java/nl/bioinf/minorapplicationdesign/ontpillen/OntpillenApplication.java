@@ -10,9 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * Class OntpillenApplication this class executes the project and starts the webcrawlers.
  * @author Naomi Hindriks
- */ //TODO add javadoc
+ */
 @SpringBootApplication
 public class OntpillenApplication {
     private static Logger LOGGER = LoggerFactory.getLogger(OntpillenApplication.class);
@@ -27,6 +27,8 @@ public class OntpillenApplication {
         LOGGER.info("Starting the application");
         SpringApplication.run(OntpillenApplication.class, args);
 
+        LOGGER.info("Starting the webcrawlers");
         webScrapeExecutor.runWebcrawlers();
+        LOGGER.info("Done with webcrawling");
     }
 }

@@ -5,8 +5,11 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
+ * Class contentLeaf implements the interface Content. This class is used to store the string values of the
+ * content that is parsed from the websites. It has a parent which is the corresponding ContentNode class.
+ * For each contentLeaf the contentType needs to be set. The options for this are stated in the enum ContentType.
  * @author Naomi Hindriks
- */ //TODO add javadoc to ContentLeaf
+ */
 public class ContentLeaf implements Content {
     protected ContentType contentType;
     private String contentTitle;
@@ -24,6 +27,11 @@ public class ContentLeaf implements Content {
         this.contentType = contentType;
     }
 
+    /**
+     * Method that sets the ContentType of the ContentLeaf.
+     * @param contentType String content type (defined in the enum ContentType)
+     * @throws IllegalArgumentException if the given content type isn't defined in the enum ContentType
+     */
     @Override
     public void setContentType(String contentType) {
         if (isValidContent(contentType)) {

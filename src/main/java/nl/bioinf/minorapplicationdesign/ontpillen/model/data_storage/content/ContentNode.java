@@ -4,8 +4,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * Class contentNode implements the interface Content. This class is used to store ContentLeaves or ContentNodes
+ * that holding the information that is parsed by the webscrapers.
+ * It has a parent which is the corresponding ContentNode class.
+ * For each ContentNode the contentType needs to be set. The options for this are stated in the enum ContentType.
  * @author Naomi Hindriks
- */ //TODO add javadoc to ContentNode
+ */
 public class ContentNode implements Content {
     protected ContentType contentType;
     private String contentTitle;
@@ -39,6 +43,11 @@ public class ContentNode implements Content {
         this.content.add(newContent);
     }
 
+    /**
+     * Method that sets the ContentType of the ContentLeaf.
+     * @param contentType String content type (defined in the enum ContentType)
+     * @throws IllegalArgumentException if the given content type isn't defined in the enum ContentType
+     */
     @Override
     public void setContentType(String contentType) {
         if (isValidContent(contentType)) {

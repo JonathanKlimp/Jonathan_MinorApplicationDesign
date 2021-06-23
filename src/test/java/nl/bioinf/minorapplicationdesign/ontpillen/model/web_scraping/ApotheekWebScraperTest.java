@@ -124,33 +124,36 @@ class ApotheekWebScraperTest {
 
     //TODO fix test
 
-//    @Test
-//    void parseHtml_SideEffectGetContent_ContainsString() throws IOException {
-//        apotheekWebScraper.parseHtml();
-//
-//        List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
-//
-//        for (DrugSubstance drugSubstance: drugSubstances) {
-//            List<Content> contentList = new ArrayList<>();
-//            for (Content content : drugSubstance.getSideEffects().getSideEffectsPatient()) {
-//                contentList.add(content);
-//                assertNotNull(getContentText(contentList));
-//            }
-//        }
-//    }
+    @Test
+    void parseHtml_SideEffectGetContent_ContainsString() throws IOException {
+        apotheekWebScraper.parseHtml();
+
+        List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
+        List<Content> contentList = new ArrayList<>();
+        for (DrugSubstance drugSubstance: drugSubstances) {
+            contentList = new ArrayList<>(drugSubstance.getSideEffects().getSideEffectsPatient());
+        }
+        for (Content content : contentList) {
+            assertNotNull(getContentText(content));
+        }
+    }
 
 
-//    private List<String> getContentText(List<Content> content) {
+    private List<String> getContentText(Content content) {
 //        for (Content content1 : content) {
-//            String classType = content1.getClass().toString();
-//            switch (classType) {
-//                case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode":
-//                    getContentText(con)
-//                    getContentText(((Content) content1).getContent());
-//                case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentLeaf":
-//                    return ((ContentLeaf) content1).getContent();
-//            }
+            String classType = content.getClass().toString();
+            System.out.println("JO" + classType);
+            switch (classType) {
+                case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode":
+                    for (Content content1 : ((ContentNode) content).getContent()) {
+                        getContentText(content1);
+                    }
+//                    getContentText( ((ContentNode) content).getContent());
+                case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentLeaf":
+//                    System.out.println("WE ERE");
+                    return ((ContentLeaf) content).getContent();
+            }
 //        }
-//        return null;
-//    }
+        return null;
+    }
 }
