@@ -58,14 +58,14 @@ public interface Content {
     void setId(int id);
 
     /**
-     * // TODO add javadoc
-     * @param attributeName
-     * @param attributeValue
+     * Method that sets the attributes if the content type is a table
+     * @param attributeName String colspan or rowspan
+     * @param attributeValue value of the column or row of the table
      */
     void addAttribute(String attributeName, String attributeValue);
 
-    /** // TODO add javadoc
-     * @return
+    /** method that returns the attributes as a map
+     * @return Map of attributes with attributeName and attributeValue
      */
     Map<String, String> getAttributes();
 }
