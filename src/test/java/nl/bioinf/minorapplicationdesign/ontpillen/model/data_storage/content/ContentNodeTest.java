@@ -134,7 +134,7 @@ class ContentNodeTest {
     /**
      * Test checks if adding multiple content doesnt overwrite the older ones.
      */
-    @Test //TODO split test there are to many asserts in one method
+    @Test
     void addContent_addMultipleContents_CorrectContentTypes() {
 //        Create ContentNode object
         ContentNode contentNode = new ContentNode();
