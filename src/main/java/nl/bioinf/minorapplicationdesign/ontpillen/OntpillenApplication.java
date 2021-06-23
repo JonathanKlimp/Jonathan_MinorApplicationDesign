@@ -23,7 +23,7 @@ public class OntpillenApplication {
         OntpillenApplication.webScrapeExecutor = webScrapeExecutor;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         LOGGER.info("Starting the application");
         SpringApplication.run(OntpillenApplication.class, args);
 

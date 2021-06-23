@@ -6,12 +6,11 @@ import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.Con
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.UseIndication;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.AbstractWebScraper;
+import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.Util;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
-import org.jsoup.select.NodeVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,38 +131,38 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
                     case "ul":
                     case "ol":
                         LOGGER.debug("Processing list");
-                        this.processList(currentContentNode, element);
+                        this.processListElement(currentContentNode, element);
                         break;
                     case "p":
                         LOGGER.debug("Processing paragraph");
-                        processParagraph(currentContentNode, element);
+                        processParagraphElement(currentContentNode, element);
                         break;
                     case "div":
                         LOGGER.debug("Processing div");
-                        processDiv(currentContentNode, element);
+                        processDivElement(currentContentNode, element);
                         break;
                     case "li":
                         LOGGER.debug("Processing list element");
-                        processListElement(currentContentNode, element);
+                        processListItemElement(currentContentNode, element);
                         break;
                     case "table":
                         LOGGER.debug("Processing table");
-                        processTable(currentContentNode, element);
+                        processTableElement(currentContentNode, element);
                         break;
                     case "thead":
                     case "tbody":
                     case "tfoot":
                         LOGGER.debug("Processing table section");
-                        processTableSection(currentContentNode, element);
+                        processTableSectionElement(currentContentNode, element);
                         break;
                     case "tr":
                         LOGGER.debug("Processing table row");
-                        processTableRow(currentContentNode, element);
+                        processTableRowElement(currentContentNode, element);
                         break;
                     case "th":
                     case "td":
                         LOGGER.debug("Processing td/th element");
-                        processTableElement(currentContentNode, element);
+                        processTableDataElement(currentContentNode, element);
                         break;
                     default:
                         LOGGER.error("not able to process: " + element);
@@ -219,7 +218,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
             }
         }
 
-        if (siblingElementTitle || this.getMaxDepth(titleElement) > 2) {
+        if (siblingElementTitle || Util.getMaxDepth(titleElement) > 2) {
             ContentNode newNode = new ContentNode();
             newNode.setContentTitle(titleElement.text());
             parentNode.addContent(newNode);
@@ -232,7 +231,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         }
     }
 
-    protected void processList(ContentNode currentContentNode, Element element) {
+    protected void processListElement(ContentNode currentContentNode, Element element) {
         if (!(element.tagName().equals("ul") || element.tagName().equals("ol") || element.childrenSize() == 0)) {
             throw new IllegalArgumentException("element should be an element of the tag <ul> or <ol>");
         }
@@ -241,14 +240,14 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         Element copyOfElement = element.clone();
         copyOfElement.select("li a, li span, li em, li sub").remove();
 
-        if (this.getMaxDepth(copyOfElement) > 2) {
+        if (Util.getMaxDepth(copyOfElement) > 2) {
 //            If the depth is more than 2, (at least one of) the list elements will have children and therefore
 //            this will be a node that needs further processing
             ContentNode newNode = new ContentNode();
             newNode.setContentType("LIST");
             currentContentNode.addContent(newNode);
             this.process(newNode, element.children());
-        } else if (this.getMaxDepth(copyOfElement) >= 1) {
+        } else if (Util.getMaxDepth(copyOfElement) >= 1) {
             ContentLeaf newLeaf = new ContentLeaf();
             newLeaf.setContentType("LIST");
             newLeaf.setContent(element.children().eachText());
@@ -258,12 +257,12 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         }
     }
 
-    protected boolean processParagraph(ContentNode currentContentNode, Element element) {
+    protected boolean processParagraphElement(ContentNode currentContentNode, Element element) {
         if (!element.tagName().equals("p")) {
             throw new IllegalArgumentException("element should be an element of the tag <p>");
         }
 
-        Map<String, Element> copiesOfParent = getCopiesOfElementWithoutAndOnlySpanEmSubA(element.parent());
+        Map<String, Element> copiesOfParent = Util.getCopiesOfElementWithoutAndOnlySpanEmSubA(element.parent());
         Elements sibblingsWithoutSpanEmSubA = copiesOfParent.get("elementWithoutSpanEmSubA").children();
 
         ContentLeaf newLeaf = new ContentLeaf();
@@ -279,7 +278,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         }
     }
 
-    protected void processDiv(ContentNode currentContentNode, Element element) {
+    protected void processDivElement(ContentNode currentContentNode, Element element) {
         if (!element.tagName().equals("div")) {
             throw new IllegalArgumentException("element should be an element of the tag <div>");
         }
@@ -296,7 +295,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         } else if (element.childrenSize() == 1) {
 //            Go deeper without making new node for this div to prevent making a node contianing a single node.
             this.process(currentContentNode, element.children());
-        } else if (this.getMaxDepth(element) == 2 && this.allElementsAreOfTags(element.children(), new String[]{"p"})) {
+        } else if (Util.getMaxDepth(element) == 2 && this.allElementsAreOfTags(element.children(), new String[]{"p"})) {
             ContentLeaf newLeaf = new ContentLeaf();
             if (looseDivText.length() > 0) {
                 newLeaf.addContent(looseDivText);
@@ -327,12 +326,12 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         return copyWithoutChildren.text();
     }
 
-    protected void processListElement(ContentNode currentContentNode, Element element) {
+    protected void processListItemElement(ContentNode currentContentNode, Element element) {
         if (!element.tagName().equals("li")) {
             throw new IllegalArgumentException("element should be an element of the tag <li>");
         }
 
-        Map<String, Element> copiesOfElement = this.getCopiesOfElementWithoutAndOnlySpanEmSubA(element);
+        Map<String, Element> copiesOfElement = Util.getCopiesOfElementWithoutAndOnlySpanEmSubA(element);
 
         if (copiesOfElement.get("elementWithoutSpanEmSubA").childrenSize() == 0) {
             ContentLeaf newLeaf = new ContentLeaf();
@@ -359,7 +358,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         }
     }
 
-    protected void processTable(ContentNode currentContentNode, Element element) {
+    protected void processTableElement(ContentNode currentContentNode, Element element) {
         if (!element.tagName().equals("table")) {
             throw new IllegalArgumentException("element should be an element of the tag <table>");
         }
@@ -385,7 +384,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         }
     }
 
-    protected void processTableSection(ContentNode currentContentNode, Element element) {
+    protected void processTableSectionElement(ContentNode currentContentNode, Element element) {
         List<String> validTags = List.of("thead", "tbody", "tfoot");
         if (!validTags.contains(element.tagName())) {
             throw new IllegalArgumentException("element should be an element of the tag <thead>, <tbody> or <tfoot>");
@@ -400,7 +399,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         this.process(newNode, element.children());
     }
 
-    protected void processTableRow(ContentNode currentContentNode, Element element) {
+    protected void processTableRowElement(ContentNode currentContentNode, Element element) {
         if (!this.allElementsAreOfTags(element.children(), new String[]{"th", "td"})) {
             throw new IllegalArgumentException("All children of <tr> element should be of the tag <th> or <td>");
         }
@@ -414,7 +413,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
 
         if ((this.allElementsAreOfTags(element.children(), new String[]{"td"}) ||
                 this.allElementsAreOfTags(element.children(), new String[]{"th"})) &
-                this.getMaxDepth(element) == 2) {
+                Util.getMaxDepth(element) == 2) {
             ContentLeaf newLeaf = new ContentLeaf();
             newLeaf.setContentType(element.child(0).tagName().toUpperCase());
             newLeaf.setContent(element.children().eachText());
@@ -424,9 +423,9 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         }
     }
 
-    protected void processTableElement(ContentNode currentContentNode, Element element) {
+    protected void processTableDataElement(ContentNode currentContentNode, Element element) {
 
-        Map<String, Element> copiesOfElement = this.getCopiesOfElementWithoutAndOnlySpanEmSubA(element);
+        Map<String, Element> copiesOfElement = Util.getCopiesOfElementWithoutAndOnlySpanEmSubA(element);
         String contentType = element.tagName().toUpperCase();
 
         if (copiesOfElement.get("elementWithoutSpanEmSubA").childrenSize() == 0) {
@@ -476,15 +475,6 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
                 newContent.addAttribute("rowspan", element.attributes().get("rowspan"));
             }
         }
-    }
-
-    private Map<String, Element> getCopiesOfElementWithoutAndOnlySpanEmSubA(Element element) {
-        Element elementWithoutSpanEmSubA = element.clone();
-        elementWithoutSpanEmSubA.children().select("a, span, em, sub").remove();
-
-        Element elementOnlySpanEmSubA = element.clone();
-        elementOnlySpanEmSubA.children().select(":not(a, span, em, sub)").remove();
-        return Map.of("elementWithoutSpanEmSubA", elementWithoutSpanEmSubA, "elementOnlySpanEmSubA", elementOnlySpanEmSubA);
     }
 
 //    private boolean elementIsSameDepthTitle(Element firstElement, Element secondElement) {
@@ -582,39 +572,6 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
             parentNode = parentNode.getParent();
         }
         throw new IllegalArgumentException("No parent ContentNode found with given title");
-    }
-
-    /**
-     * @param element Jsoup Element to find the maximum node depth of.
-     * @return an integer presenting the maximmum node depth of the element, including the element itself (if it is
-     * an element without children the return value is 1).
-     */
-    protected int getMaxDepth(Element element) {
-        MaxDepthNodeVisitor myNodeVisitor = new MaxDepthNodeVisitor();
-        element.traverse(myNodeVisitor);
-        return myNodeVisitor.maxDepth;
-    }
-
-    /**
-     * A class to use in the Jsoup Element.traverse method, used to find the maxiimum node depth of the element
-     */
-    private static final class MaxDepthNodeVisitor implements NodeVisitor {
-        private int maxDepth = 0;
-
-        @Override
-        public void head(Node node, int depth) {
-            if (node.childNodes().size() == 0 && depth > this.maxDepth) {
-                this.maxDepth = depth;
-            }
-        }
-
-        @Override
-        public void tail(Node node, int depth) {
-        }
-
-        public int getMaxDepth() {
-            return maxDepth;
-        }
     }
 
     /**
