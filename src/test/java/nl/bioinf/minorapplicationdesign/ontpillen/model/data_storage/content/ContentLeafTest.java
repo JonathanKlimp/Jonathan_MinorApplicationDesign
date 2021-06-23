@@ -38,14 +38,23 @@ class ContentLeafTest {
 
 
     @Test
-    public void setContent() {
+    public void setContent_isContentAdded() {
 //        Create ContentLeaf object
         ContentLeaf mySideEffectContent = new ContentLeaf();
 //        Add content to the ContentLeaf object
         mySideEffectContent.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
 
 //        Test if content has been added
-        assertTrue(mySideEffectContent.getContent() != null);
+        assertNotNull(mySideEffectContent.getContent());
+    }
+
+    @Test
+    public void setContent_addContentCorrect() {
+//        Create ContentLeaf object
+        ContentLeaf mySideEffectContent = new ContentLeaf();
+//        Add content to the ContentLeaf object
+        mySideEffectContent.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
+
 
 //        Test if the content that has been added is the correct content
         int i = 0;
@@ -55,7 +64,7 @@ class ContentLeafTest {
         };
     }
 
-    @Test //TODO split test there are to many asserts in one method
+    @Test
     public void addContent_addSingleContent() {
 //        Create ContentLeaf object
         ContentLeaf mySideEffectContent = new ContentLeaf();
@@ -71,8 +80,8 @@ class ContentLeafTest {
         assertArrayEquals(expectedContent, content.toArray());
     }
 
-    @Test //TODO split test there are to many asserts in one method
-    public void addContent_addMultipleContents() {
+    @Test
+    public void addContent_addMultipleContents_CorrectSize() {
 //        Create ContentLeaf object
         ContentLeaf mySideEffectContent = new ContentLeaf();
 //        Add content to the ContentLeaf object
@@ -83,6 +92,18 @@ class ContentLeafTest {
 //        Test if three item in content
         List<String> content = mySideEffectContent.getContent();
         assertEquals(3, content.size());
+    }
+
+    @Test
+    public void addContent_addMultipleContents_CorrectContent() {
+//        Create ContentLeaf object
+        ContentLeaf mySideEffectContent = new ContentLeaf();
+//        Add content to the ContentLeaf object
+        mySideEffectContent.addContent("test1");
+        mySideEffectContent.addContent("test2");
+        mySideEffectContent.addContent("test3");
+
+        List<String> content = mySideEffectContent.getContent();
 
 //        Test if the content that has been added to the ContentLeaf object is the correct content
         String[] expectedContent = {"test1", "test2", "test3"};
@@ -91,12 +112,11 @@ class ContentLeafTest {
 
 
     @Test
-    public void getContent_tryingTOModifyList() {
+    public void getContent_tryingToAddItemToList() {
 //        Create ContentLeaf object
         ContentLeaf mySideEffectContent = new ContentLeaf();
 //        Add content to the ContentLeaf object
         mySideEffectContent.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
-
 
 //        Get the content of the ContentLeaf object
         List<String> content = mySideEffectContent.getContent();
@@ -105,6 +125,18 @@ class ContentLeafTest {
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
             content.add("test4");
         });
+    }
+
+    @Test
+    public void getContent_tryingToRemoveItemFromList() {
+//        Create ContentLeaf object
+        ContentLeaf mySideEffectContent = new ContentLeaf();
+//        Add content to the ContentLeaf object
+        mySideEffectContent.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
+
+//        Get the content of the ContentLeaf object
+        List<String> content = mySideEffectContent.getContent();
+
 
 //        Test if an UnsupportedOperationException is thrown when removing an item of the list
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {

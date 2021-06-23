@@ -63,7 +63,7 @@ class FarmacoWebScraperTest {
      * Method checks if FarmacoWebScraper adds side effects to each drug substance
      * @throws IOException
      */
-    @Test //TODO split test there are to many asserts in one method
+    @Test
     void parseHtml_sideEffectsContainsItems() throws IOException {
         farmacoWebScraper.parseHtml();
 
@@ -72,6 +72,17 @@ class FarmacoWebScraperTest {
         for (DrugSubstance drugSubstance: drugSubstances) {
             assertNotNull(drugSubstance.getSideEffects().getSideEffectsPractitioner());
         }
+    }
+
+    /**
+     * Method checks if FarmacoWebScraper adds side effects content to each drug substance
+     * @throws IOException
+     */
+    @Test
+    void parseHtml_sideEffectsContentContainsItems() throws IOException {
+        farmacoWebScraper.parseHtml();
+
+        List<DrugSubstance> drugSubstances = drugDao.getDrugSubstances();
 
         for (DrugSubstance drugSubstance: drugSubstances) {
             for (Content content : drugSubstance.getSideEffects().getSideEffectsPractitioner()) {

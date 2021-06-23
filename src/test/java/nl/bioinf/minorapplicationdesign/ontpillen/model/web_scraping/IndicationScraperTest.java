@@ -65,9 +65,6 @@ class IndicationScraperTest {
         useIndicationsExpected.put("stoornissen bij het gebruik van alcohol", Arrays.asList("acamprosaat", "carbamazepine", "clorazepinezuur", "diazepam", "disulfiram", "foliumzuur", "lorazepam", "midazolam", "nalmefeen", "naltrexon", "oxazepam", "thiamine"));
         useIndicationsExpected.put("stoppen met roken", Arrays.asList("bupropion", "nicotine", "nortriptyline", "varenicline"));
 
-//        String[] IndicationNamesArray = {"ADHD bij kinderen", "angststoornissen", "bipolaire stoornis", "delier", "depressie", "psychose", "slapeloosheid", "stoornissen bij het gebruik van alcohol", "stoppen met roken"};
-//        indicationScraper.parseHtml();
-
         List<DrugSubstance> allDrugs = drugDao.getDrugSubstances();
         for (DrugSubstance drug1 : allDrugs) {
             List<UseIndication> useIndications = drug1.getUseIndications();

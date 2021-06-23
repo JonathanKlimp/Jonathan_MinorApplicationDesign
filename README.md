@@ -100,8 +100,15 @@ The main usage of the website will be gathering information about medicines.
 This information will contain general information and guidelines on how to reduce the usage of those medicines. 
 You will be able to save and print this information and take it to your psychiatrist/doctor.
 With the current version of the project you can search for medicines or medicine groups for general information. 
-This information cannot be saved and printed yet.
+This information cannot be saved and printed yet. If you are a psychiatrist or a doctor and want to get more detailed
+information you can click on the button "Voor behandelaren" on the top right, left of the search bar.
+The functionality to make a list of medicines is still in development. This button now generates a default landing
+page.
+An exmaple for searching a drug can be seen in the images below:
 
+![Main page](images/mainpage_ontpillen.png)
+![search result](images/searchresult_ontpillen.png)
+![drug page](images/drugPage_ontpillen.png)
 
 <!-- ROADMAP 
 ## Roadmap
