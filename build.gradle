@@ -24,6 +24,8 @@ dependencies {
     // Packages to use headless browser
     implementation 'io.github.bonigarcia:webdrivermanager:4.4.3'
     implementation 'org.seleniumhq.selenium:selenium-server:4.0.0-alpha-2'
+
+
 }
 
 test {

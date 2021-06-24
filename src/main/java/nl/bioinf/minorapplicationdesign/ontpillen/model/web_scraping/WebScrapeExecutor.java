@@ -56,7 +56,7 @@ public class WebScrapeExecutor {
         this.indicationScraper = indicationScraper;
     }
 
-    public void runWebcrawlers() throws IOException {
+    public void runWebcrawlers() throws Exception {
         LOGGER.info("Running all webcrawlers");
         //Bypass certificate security for all connections after this point
         SSLHelper.bypassSSL();
@@ -66,6 +66,7 @@ public class WebScrapeExecutor {
         this.farmacoWebScraper.parseHtml(); // needs to run before ApotheekWebScraper
         this.apotheekWebScraper.parseHtml();
         this.richtlijnenNhgWebScraper.parseHtml();
+        this.ggzStandaardenWebScraper.parseHtml();
         LOGGER.info("Done with parsing html");
     }
 }
