@@ -8,38 +8,34 @@
 
     <nav th:replace="template :: header-nav"></nav>
 
-    <section th:replace="template :: subheader('', 'Zoekresultaten voor ' + ${searchQuery}, 'false')"></section>
+    <th:block th:if="${searchQuery}">
+        <section th:replace="template :: subheader('', 'Zoekresultaten voor ' + ${searchQuery}, 'false')"></section>
+    </th:block>
+
+    <th:block th:unless="${searchQuery}">
+        <section th:replace="template :: subheader('', 'Alle drugs in de database', 'false')"></section>
+    </th:block>
 
     <section id="search-result-page">
         <div id="search-result-content" class="container pt-5">
-            <th:block th:each="drugName : ${drugDao.getAllDrugNames()}">
-                <th:block th:if="${drugName.contains(searchQuery.toLowerCase())}">
+            <th:block th:each="drug : ${drugDao.getAllDrugs()}">
 
-                    <!--Search result items, item for every drug that contains searchQuery in name-->
-                    <div class="row">
-                        <div class="col border-bottom pb-3 mb-5">
-                            <a th:href="@{'~/medicijn/' + ${drugName}}" href="#"><h3 th:text="${drugName.substring(0,1).toUpperCase() + drugName.substring(1)}">__offline search item title__</h3></a>
+                <th:block th:if="${searchQuery}">
+                    <th:block th:if="${drug.getName().contains(searchQuery.toLowerCase())}">
 
-                            <th:block th:switch="${drugDao.getDrugByName(drugName).class}">
-    <!--                        Block will be inserted if the drug is a DrugSubstance-->
-                                <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance)}">
-                                    <p th:text="'Dit middel behoort tot de \'' + ${drugDao.getDrugByName(drugName).getParent().getName()} + '\''">__offline short description/tags__</p>
-                                </th:block>
+                        <!--Search result items, item for every drug that contains searchQuery in name-->
+                        <th:block th:replace="template :: searchResult(${drug})"></th:block>
 
-    <!--                        This block will be inserted if the drug is not a DrugSubstance (but rather a DrugGroup)-->
-                                <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugGroup)}">
-                                    <p>
-                                        <span>Medicijnen en medicijn groepen die tot deze medicijngroep behoren zijn: </span>
-                                        <span th:each="drugChild : ${drugDao.getDrugByName(drugName).getChildren()}" th:text="${drugChild.getName()} + ', '"></span>
-                                    </p>
-                                </th:block>
-                            </th:block>
-
-                        </div>
-                    </div>
-
+                    </th:block>
                 </th:block>
+
+                <th:block th:unless="${searchQuery}">
+                    <!--Search result items, item for every drug that contains searchQuery in name-->
+                    <th:block th:replace="template :: searchResult(${drug})"></th:block>
+                </th:block>
+
             </th:block>
+
         </div>
     </section>
 

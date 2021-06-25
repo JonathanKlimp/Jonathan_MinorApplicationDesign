@@ -80,6 +80,21 @@ public class WebController {
         return "search_result";
     }
 
+    @GetMapping("/zoekresultaten/")
+    public String showAllDrugs(Model model, HttpServletRequest request) {
+        LOGGER.info("Request search result page for all drugs");
+        HttpSession session = request.getSession();
+
+        // If there is no userType set in the session, set t he userType to "gebruiker"
+        if (session.getAttribute("userType") == null) {
+            LOGGER.debug("Setting usertype to PATIENT");
+            session.setAttribute("userType", UserType.valueOf("PATIENT"));
+        }
+
+        LOGGER.info("Serving search results for all drugs");
+        return "search_result";
+    }
+
     @GetMapping("/lijst")
     public String showResult(Model model, @ModelAttribute User user, HttpServletRequest request) {
         LOGGER.info("Request for list page");

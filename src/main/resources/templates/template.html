@@ -62,7 +62,7 @@ Index:
 
             <form class="ms-lg-5" method="post" th:action="@{~/zoeken}">
                 <div class="input-group input-group-sm">
-                    <input class="form-control" type="search" placeholder="Zoeken" id="search-query" name="search-query">
+                    <input class="form-control" type="search" placeholder="Zoeken" id="search-query" name="search-query"  autocomplete="off">
                     <button class="btn btn-light" type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -247,6 +247,31 @@ Index:
         </th:block>
 
     </th:block>
+</th:block>
+
+<!--=Search result fragment-->
+<th:block th:fragment="searchResult(drug)">
+    <div class="row">
+        <div class="col border-bottom pb-3 mb-5">
+            <a th:href="@{'~/medicijn/' + ${drug.getName()}}" href="#"><h3 th:text="${drug.getName().substring(0,1).toUpperCase() + drug.getName().substring(1)}">__offline search item title__</h3></a>
+
+            <th:block th:switch="${drug.class}">
+                <!--                        Block will be inserted if the drug is a DrugSubstance-->
+                <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugSubstance)}">
+                    <p th:text="'Dit middel behoort tot de \'' + ${drug.getParent().getName()} + '\''">__offline short description/tags__</p>
+                </th:block>
+
+                <!--                        This block will be inserted if the drug is not a DrugSubstance (but rather a DrugGroup)-->
+                <th:block th:case="${T(nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.DrugGroup)}">
+                    <p>
+                        <span>Medicijnen en medicijn groepen die tot deze medicijngroep behoren zijn: </span>
+                        <span th:each="drugChild : ${drug.getChildren()}" th:text="${drugChild.getName()} + ', '"></span>
+                    </p>
+                </th:block>
+            </th:block>
+
+        </div>
+    </div>
 </th:block>
 
 <!--=Footer fragment-->
