@@ -69,7 +69,6 @@ public class GgzStandaardenWebScraper implements AbstractWebScraper {
 
         for (int i = 0; i < drugGroupNames.get("ontpillen").size(); i++) {
             DrugGroup drug = (DrugGroup) this.drugDao.getDrugByName(drugGroupNames.get("ontpillen").get(i));
-            // System.out.println("Drugname = " + drug.getName());
             String hyperLinkTextToClick = drugGroupNames.get("ggzstandaarden").get(i);
             this.openWebsiteInDriver(this.url, "#chapter-detail-paragraph-5b04514a-050f-44e6-836f-80a7cd1d2d3f .ul-level-0");
             List<WebElement> hyperLinks = driver.findElements(By.linkText(hyperLinkTextToClick));
@@ -82,7 +81,6 @@ public class GgzStandaardenWebScraper implements AbstractWebScraper {
     }
 
     private void processDrugGroupHyperLink(WebElement hyperLink, DrugGroup drugGroup) throws InterruptedException {
-        System.out.println(hyperLink.getText());
         hyperLink.click();
         this.waitForPageLoad("#main-content");
 
@@ -142,7 +140,7 @@ public class GgzStandaardenWebScraper implements AbstractWebScraper {
             } else if (element.tagName().equals("li")) {
                 processListItemElement(element, currentContentNode);
             } else {
-                System.out.println(element);
+                continue;
             }
         }
     }
@@ -198,7 +196,7 @@ public class GgzStandaardenWebScraper implements AbstractWebScraper {
     private static boolean processParagraphElement(Element element, ContentNode currentContentNode) {
         Content newContent;
 
-        if (elementHasChildrenOfTag(element, "a")) {
+        if (Util.elementHasChildrenOfTag(element, "a")) {
             try {
                 element = removeHyperlinkFromElement(element);
             } catch (IllegalArgumentException e) {
@@ -219,14 +217,8 @@ public class GgzStandaardenWebScraper implements AbstractWebScraper {
     }
 
     private static boolean pElementIsTitle(Element element) {
-        return (elementHasChildrenOfTag(element, "strong")) &&
-                (!elementHasChildrenOfTag(element.select("strong").get(0), "em"));
-    }
-
-
-    private static boolean elementHasChildrenOfTag(Element element, String tagName) {
-        return element.children().stream()
-                .anyMatch((Element e) -> {return e.tagName().equals(tagName);});
+        return (Util.elementHasChildrenOfTag(element, "strong")) &&
+                (!Util.elementHasChildrenOfTag(element.select("strong").get(0), "em"));
     }
 
     private static ContentNode processTitleElement(Element element, ContentNode currentContentNode) {
@@ -267,7 +259,7 @@ public class GgzStandaardenWebScraper implements AbstractWebScraper {
     }
 
     private void getDriver() {
-        WebDriverManager.chromedriver().browserVersion("90.0.4430.78").setup();
+        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200","--ignore-certificate-errors");
         this.driver = new ChromeDriver(options);
@@ -278,7 +270,6 @@ public class GgzStandaardenWebScraper implements AbstractWebScraper {
         waitForPageLoad(cssSelectorCheck);
     }
 
-    //    TODO what sould happen if maxSecondsToTry runs out?
     private void waitForPageLoad(String cssSelectorCheck) throws InterruptedException {
         int maxSecondToTry = this.maxWaitingTime;
         boolean done = false;

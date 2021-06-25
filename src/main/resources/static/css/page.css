@@ -1,3 +1,9 @@
+/* --------------------------------------------------------
+Style Sheet for Ontpillen -> for the pages that are not the homepage. (Drugpages, search result page, disclaimer page etc.)
+
+author: Naomi Hindriks
+------------------------------------------------------------*/
+
 .page {
     color: var(--color-dark);
     height: 100%;

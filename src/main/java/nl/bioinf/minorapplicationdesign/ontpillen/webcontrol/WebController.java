@@ -17,9 +17,10 @@ import javax.servlet.http.HttpSession;
 
 
 /**
- *
  * @author Noami Hindriks
- */ //TODO add javaodc
+ *
+ * This class is responsible for serving the webpages
+ */
 @Controller
 public class WebController {
     DrugDao drugDao;
@@ -41,7 +42,6 @@ public class WebController {
         LOGGER.info("Request for homepage");
         HttpSession session = request.getSession();
 
-        // If there is no userType set in the session, set t he userType to "gebruiker"
         if (session.getAttribute("userType") == null) {
             LOGGER.debug("Setting usertype to PATIENT");
             session.setAttribute("userType", UserType.valueOf("PATIENT"));
@@ -66,11 +66,10 @@ public class WebController {
     }
 
     @GetMapping("/zoekresultaten/{searchQuery}")
-    public String showSearchResults(Model model, @PathVariable String searchQuery, HttpServletRequest request) {
+    public String showSearchResults(@PathVariable String searchQuery, HttpServletRequest request) {
         LOGGER.info("Request search result page");
         HttpSession session = request.getSession();
 
-        // If there is no userType set in the session, set t he userType to "gebruiker"
         if (session.getAttribute("userType") == null) {
             LOGGER.debug("Setting usertype to PATIENT");
             session.setAttribute("userType", UserType.valueOf("PATIENT"));
@@ -81,11 +80,10 @@ public class WebController {
     }
 
     @GetMapping("/zoekresultaten/")
-    public String showAllDrugs(Model model, HttpServletRequest request) {
+    public String showAllDrugs(HttpServletRequest request) {
         LOGGER.info("Request search result page for all drugs");
         HttpSession session = request.getSession();
 
-        // If there is no userType set in the session, set t he userType to "gebruiker"
         if (session.getAttribute("userType") == null) {
             LOGGER.debug("Setting usertype to PATIENT");
             session.setAttribute("userType", UserType.valueOf("PATIENT"));
@@ -100,7 +98,6 @@ public class WebController {
         LOGGER.info("Request for list page");
         HttpSession session = request.getSession();
 
-        // If there is no userType set in the session, set t he userType to "gebruiker"
         if (session.getAttribute("userType") == null) {
             LOGGER.debug("Setting usertype to PATIENT");
             session.setAttribute("userType", UserType.valueOf("PATIENT"));
@@ -112,11 +109,10 @@ public class WebController {
     }
 
     @GetMapping("/medicijn/{drugName}")
-    public String showDrugPage(Model model, @PathVariable String drugName, HttpServletRequest request) {
+    public String showDrugPage(@PathVariable String drugName, HttpServletRequest request) {
         LOGGER.info("Request for " + drugName + " drug page");
         HttpSession session = request.getSession();
 
-        // If there is no userType set in the session, set t he userType to "gebruiker"
         if (session.getAttribute("userType") == null) {
             LOGGER.debug("Setting usertype to PATIENT");
             session.setAttribute("userType", UserType.valueOf("PATIENT"));
@@ -127,13 +123,12 @@ public class WebController {
     }
 
     @PostMapping("/zoeken")
-    public RedirectView zoeken(Model model, HttpServletRequest request) {
+    public RedirectView zoeken(HttpServletRequest request) {
         String searchQuery = request.getParameter("search-query");
         LOGGER.info("Request searching for " + searchQuery);
 
         HttpSession session = request.getSession();
 
-        // If there is no userType set in the session, set t he userType to "gebruiker"
         if (session.getAttribute("userType") == null) {
             LOGGER.debug("Setting usertype to PATIENT");
             session.setAttribute("userType", UserType.valueOf("PATIENT"));
@@ -144,12 +139,11 @@ public class WebController {
     }
 
     @GetMapping("/disclaimer")
-    public String showDisclaimer(Model model, HttpServletRequest request) {
+    public String showDisclaimer(HttpServletRequest request) {
         LOGGER.info("Request for disclaimer page");
 
         HttpSession session = request.getSession();
 
-        // If there is no userType set in the session, set t he userType to "gebruiker"
         if (session.getAttribute("userType") == null) {
             LOGGER.debug("Setting usertype to PATIENT");
             session.setAttribute("userType", UserType.valueOf("PATIENT"));
@@ -160,12 +154,11 @@ public class WebController {
     }
 
     @GetMapping("/privacy")
-    public String showPrivacy(Model model, HttpServletRequest request) {
+    public String showPrivacy(HttpServletRequest request) {
         LOGGER.info("Request for privacy page");
 
         HttpSession session = request.getSession();
 
-        // If there is no userType set in the session, set t he userType to "gebruiker"
         if (session.getAttribute("userType") == null) {
             LOGGER.debug("Setting usertype to PATIENT");
             session.setAttribute("userType", UserType.valueOf("PATIENT"));

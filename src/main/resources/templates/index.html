@@ -1,4 +1,4 @@
-<!DOCTYPE html> <!-- Author Naomi Hindriks !-->
+<!DOCTYPE html> <!-- Author Naomi Hindriks -->
 <html xmlns:th="http://www.thymeleaf.org" lang="nl">
 
 <head th:replace="template :: head('Ontpillen', 'false')"></head>
@@ -60,6 +60,7 @@
                                                             <select th:field="*{gender}" class="form-select mb-3" id="gender" required>
                                                                 <option value="MALE">Man</option>
                                                                 <option value="FEMALE">Vrouw</option>
+                                                                <option value="OTHER">Anders</option>
                                                             </select>
                                                             <button type="submit" class="btn btn-primary">Start lijst</button>
                                                         </form>

@@ -1,6 +1,7 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,41 +17,37 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ContentNodeTest {
 
+    private ContentNode myContentNode;
+    private ContentLeaf myContentLeaf;
+
+    @BeforeEach
+    public void createContentNode() {
+        this.myContentNode = new ContentNode();
+        this.myContentLeaf = new ContentLeaf();
+        myContentLeaf.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
+        myContentLeaf.setContentType("PARAGRAPH");
+    }
+
     @Test
     public void setContent_contentNotNull() {
-//        Create ContentNode object
-        ContentNode contentNode = new ContentNode();
-//        Create new content to be added to ContentNode object
-        ContentLeaf contentToAdd = new ContentLeaf();
-        contentToAdd.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
-        contentToAdd.setContentType("PARAGRAPH");
         List<Content> contentToAddInList = new ArrayList<>() {{
-            add(contentToAdd);
+            add(myContentLeaf);
         }};
-//        set the created content to the ContentNode object
-        contentNode.setContent(contentToAddInList);
 
-//        Test if content has been added
-        assertNotNull(contentNode.getContent());
+        myContentNode.setContent(contentToAddInList);
 
+        assertNotNull(myContentNode.getContent());
     }
 
     @Test
     public void setContent_CorrectContentType() {
-//        Create ContentNode object
-        ContentNode contentNode = new ContentNode();
-//        Create new content to be added to ContentNode object
-        ContentLeaf contentToAdd = new ContentLeaf();
-        contentToAdd.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
-        contentToAdd.setContentType("PARAGRAPH");
         List<Content> contentToAddInList = new ArrayList<>() {{
-            add(contentToAdd);
+            add(myContentLeaf);
         }};
-//        set the created content to the ContentNode object
-        contentNode.setContent(contentToAddInList);
 
-//        Test if the content that has been added is the correct content
-        for (Content content: contentNode.getContent()) {
+        myContentNode.setContent(contentToAddInList);
+
+        for (Content content: myContentNode.getContent()) {
             ContentLeaf contentAsLeaf = (ContentLeaf) content;
             assertEquals("PARAGRAPH",  contentAsLeaf.contentType.name());
         }
@@ -58,20 +55,12 @@ class ContentNodeTest {
 
     @Test
     public void setContent_CorrectContentValue() {
-//        Create ContentNode object
-        ContentNode contentNode = new ContentNode();
-//        Create new content to be added to ContentNode object
-        ContentLeaf contentToAdd = new ContentLeaf();
-        contentToAdd.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
-        contentToAdd.setContentType("PARAGRAPH");
         List<Content> contentToAddInList = new ArrayList<>() {{
-            add(contentToAdd);
+            add(myContentLeaf);
         }};
-//        set the created content to the ContentNode object
-        contentNode.setContent(contentToAddInList);
+        myContentNode.setContent(contentToAddInList);
 
-//        Test if the content that has been added is the correct content
-        for (Content content: contentNode.getContent()) {
+        for (Content content: myContentNode.getContent()) {
             ContentLeaf contentAsLeaf = (ContentLeaf) content;
             int i = 0;
             for (String contentOfLeaf : contentAsLeaf.getContent()) {
@@ -83,47 +72,26 @@ class ContentNodeTest {
 
     @Test
     void addContent_addSingleContent_contentAdded() {
-//        Create ContentNode object
-        ContentNode contentNode = new ContentNode();
-//        Create new content to be added to ContentNode object
-        ContentLeaf contentToAdd = new ContentLeaf();
-        contentToAdd.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
-        contentToAdd.setContentType("PARAGRAPH");
-//        Add content to ContentNode object
-        contentNode.addContent(contentToAdd);
+        myContentNode.addContent(myContentLeaf);
 
 //        Test if content has been added
-        assertEquals(1, contentNode.getContent().size());
+        assertEquals(1, myContentNode.getContent().size());
     }
 
     @Test
     void addContent_addSingleContent_correctContentType() {
-//        Create ContentNode object
-        ContentNode contentNode = new ContentNode();
-//        Create new content to be added to ContentNode object
-        ContentLeaf contentToAdd = new ContentLeaf();
-        contentToAdd.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
-        contentToAdd.setContentType("PARAGRAPH");
-//        Add content to ContentNode object
-        contentNode.addContent(contentToAdd);
+        myContentNode.addContent(myContentLeaf);
 
 //        Test if the content that has been added is the correct content
-        ContentLeaf contentAsLeaf = (ContentLeaf) contentNode.getContent().get(0);
+        ContentLeaf contentAsLeaf = (ContentLeaf) myContentNode.getContent().get(0);
         assertEquals("PARAGRAPH",  contentAsLeaf.contentType.name());
     }
 
     @Test
     void addContent_addSingleContent_correctContentValue() {
-//        Create ContentNode object
-        ContentNode contentNode = new ContentNode();
-//        Create new content to be added to ContentNode object
-        ContentLeaf contentToAdd = new ContentLeaf();
-        contentToAdd.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
-        contentToAdd.setContentType("PARAGRAPH");
-//        Add content to ContentNode object
-        contentNode.addContent(contentToAdd);
+        myContentNode.addContent(myContentLeaf);
 
-        ContentLeaf contentAsLeaf = (ContentLeaf) contentNode.getContent().get(0);
+        ContentLeaf contentAsLeaf = (ContentLeaf) myContentNode.getContent().get(0);
         int i = 0;
         for (String contentOfLeaf : contentAsLeaf.getContent()) {
             i += 1;
@@ -136,58 +104,33 @@ class ContentNodeTest {
      */
     @Test
     void addContent_addMultipleContents_CorrectContentTypes() {
-//        Create ContentNode object
-        ContentNode contentNode = new ContentNode();
-//        Create new content to be added to ContentNode object
-        ContentLeaf contentToAdd1 = new ContentLeaf();
-        contentToAdd1.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
-        contentToAdd1.setContentType("PARAGRAPH");
+        myContentNode.addContent(myContentLeaf);
 
-//        Create new content to be added to ContentNode object
-        ContentLeaf contentToAdd2 = new ContentLeaf();
-        contentToAdd2.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
-        contentToAdd2.setContentType("LIST");
+        ContentLeaf contentToAdd = new ContentLeaf();
+        contentToAdd.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
+        contentToAdd.setContentType("LIST");
 
-//        Add content to ContentNode object
-        contentNode.addContent(contentToAdd1);
-        contentNode.addContent(contentToAdd2);
+        myContentNode.addContent(contentToAdd);
+        myContentNode.addContent(contentToAdd);
 
-//        Test if the content that has been added is the correct content and is not overwritten
-        ContentLeaf contentAsLeaf = (ContentLeaf) contentNode.getContent().get(0);
+        ContentLeaf contentAsLeaf = (ContentLeaf) myContentNode.getContent().get(0);
         assertEquals("PARAGRAPH",  contentAsLeaf.contentType.name());
     }
 
     @Test
     void getContent_tryingToRemoveFromList() {
-//        Create ContentNode object
-        ContentNode contentNode = new ContentNode();
-//        Create new content to be added to ContentNode object
-        ContentLeaf contentToAdd = new ContentLeaf();
-        contentToAdd.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
-        contentToAdd.setContentType("PARAGRAPH");
-
-//        Get the content of the ContentNode object
-        List<Content> content = contentNode.getContent();
+        List<Content> content = myContentNode.getContent();
 
 //        Test if an UnsupportedOperationException is thrown when removing an item of the list
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-            content.remove(contentToAdd);
+            content.remove(myContentLeaf);
         });
     }
 
     @Test
     void getContent_tryingToAddToList() {
-//        Create ContentNode object
-        ContentNode contentNode = new ContentNode();
-//        Create new content to be added to ContentNode object
-        ContentLeaf contentToAdd = new ContentLeaf();
-        contentToAdd.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
-        contentToAdd.setContentType("PARAGRAPH");
+        List<Content> content = myContentNode.getContent();
 
-//        Get the content of the ContentNode object
-        List<Content> content = contentNode.getContent();
-
-//        Test if an UnsupportedOperationException is thrown when adding to the list
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
             content.add(new ContentLeaf());
         });

@@ -1,6 +1,7 @@
 package nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,96 +17,85 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ContentLeafTest {
 
+    private ContentLeaf myContentLeaf;
+
+    @BeforeEach
+    public void createContentLeaf() {
+        this.myContentLeaf = new ContentLeaf();
+    }
+
     @Test
     void setContentType_sunnyDay() {
         for (ContentType contentType : ContentType.values()) {
-            ContentLeaf mySideEffectContent = new ContentLeaf();
-            mySideEffectContent.setContentType(contentType.name());
+            myContentLeaf.setContentType(contentType.name());
 
-//            Test if contentType is set the right value
-            assertEquals(contentType.name(), mySideEffectContent.getContentType());
+            assertEquals(contentType.name(), myContentLeaf.getContentType());
         }
     }
 
     @Test()
     void setContentType_wrongContentType() {
-        ContentLeaf mySideEffectContent = new ContentLeaf();
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            mySideEffectContent.setContentType("ThisIsAWrongContentType");
+            myContentLeaf.setContentType("ThisIsAWrongContentType");
         });
     }
 
 
     @Test
     public void setContent_isContentAdded() {
-//        Create ContentLeaf object
-        ContentLeaf mySideEffectContent = new ContentLeaf();
-//        Add content to the ContentLeaf object
-        mySideEffectContent.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
-
-//        Test if content has been added
-        assertNotNull(mySideEffectContent.getContent());
+        myContentLeaf.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
+        assertNotNull(myContentLeaf.getContent());
     }
 
     @Test
     public void setContent_addContentCorrect() {
-//        Create ContentLeaf object
-        ContentLeaf mySideEffectContent = new ContentLeaf();
-//        Add content to the ContentLeaf object
-        mySideEffectContent.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
+        myContentLeaf.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
 
 
 //        Test if the content that has been added is the correct content
         int i = 0;
-        for (String content: mySideEffectContent.getContent()) {
+        for (String content: myContentLeaf.getContent()) {
             i += 1;
-            assertEquals("test" + Integer.toString(i), content);
+            String expected = "test" + Integer.toString(i);
+            assertEquals(expected, content);
         };
     }
 
     @Test
     public void addContent_addSingleContent() {
-//        Create ContentLeaf object
-        ContentLeaf mySideEffectContent = new ContentLeaf();
-//        Add content to the ContentLeaf object
-        mySideEffectContent.addContent("test1");
+        myContentLeaf.addContent("test1");
 
-//        Test if one item in content
-        List<String> content = mySideEffectContent.getContent();
+        List<String> content = myContentLeaf.getContent();
         assertEquals(1, content.size());
+    }
 
-//        Test if the content that has been added to the ContentLeaf object is the correct content
+    @Test
+    public void addContent_addSingleContent_CorrectContent() {
+        myContentLeaf.addContent("test1");
+        List<String> content = myContentLeaf.getContent();
         String[] expectedContent = {"test1"};
         assertArrayEquals(expectedContent, content.toArray());
     }
 
     @Test
     public void addContent_addMultipleContents_CorrectSize() {
-//        Create ContentLeaf object
-        ContentLeaf mySideEffectContent = new ContentLeaf();
-//        Add content to the ContentLeaf object
-        mySideEffectContent.addContent("test1");
-        mySideEffectContent.addContent("test2");
-        mySideEffectContent.addContent("test3");
+        myContentLeaf.addContent("test1");
+        myContentLeaf.addContent("test2");
+        myContentLeaf.addContent("test3");
 
-//        Test if three item in content
-        List<String> content = mySideEffectContent.getContent();
+        List<String> content = myContentLeaf.getContent();
         assertEquals(3, content.size());
     }
 
     @Test
     public void addContent_addMultipleContents_CorrectContent() {
-//        Create ContentLeaf object
-        ContentLeaf mySideEffectContent = new ContentLeaf();
-//        Add content to the ContentLeaf object
-        mySideEffectContent.addContent("test1");
-        mySideEffectContent.addContent("test2");
-        mySideEffectContent.addContent("test3");
+        myContentLeaf.addContent("test1");
+        myContentLeaf.addContent("test2");
+        myContentLeaf.addContent("test3");
 
-        List<String> content = mySideEffectContent.getContent();
+        List<String> content = myContentLeaf.getContent();
 
-//        Test if the content that has been added to the ContentLeaf object is the correct content
         String[] expectedContent = {"test1", "test2", "test3"};
         assertArrayEquals(expectedContent, content.toArray());
     }
@@ -113,15 +103,10 @@ class ContentLeafTest {
 
     @Test
     public void getContent_tryingToAddItemToList() {
-//        Create ContentLeaf object
-        ContentLeaf mySideEffectContent = new ContentLeaf();
-//        Add content to the ContentLeaf object
-        mySideEffectContent.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
+        myContentLeaf.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
 
-//        Get the content of the ContentLeaf object
-        List<String> content = mySideEffectContent.getContent();
+        List<String> content = myContentLeaf.getContent();
 
-//        Test if an UnsupportedOperationException is thrown when adding to the list
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
             content.add("test4");
         });
@@ -129,16 +114,10 @@ class ContentLeafTest {
 
     @Test
     public void getContent_tryingToRemoveItemFromList() {
-//        Create ContentLeaf object
-        ContentLeaf mySideEffectContent = new ContentLeaf();
-//        Add content to the ContentLeaf object
-        mySideEffectContent.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
+        myContentLeaf.setContent(new ArrayList<>(Arrays.asList("test1", "test2", "test3")));
 
-//        Get the content of the ContentLeaf object
-        List<String> content = mySideEffectContent.getContent();
+        List<String> content = myContentLeaf.getContent();
 
-
-//        Test if an UnsupportedOperationException is thrown when removing an item of the list
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
             content.remove("test1");
         });

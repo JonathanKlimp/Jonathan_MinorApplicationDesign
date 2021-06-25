@@ -6,7 +6,6 @@ import nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.Con
 import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.DrugFetcher;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.IndicationScraper;
 import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.SSLHelper;
-import nl.bioinf.minorapplicationdesign.ontpillen.model.web_scraping.Util;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -473,15 +472,9 @@ class RichtlijnenNhgWebScraperTest {
         );
     }
 
-    @Test
-    void createNewLeafOrNodeWithTitle() {
-//        TODO create tests for createNewLeafOrNodeWithTitle
-
-    }
-
     @ParameterizedTest
     @ValueSource(strings = {olToTest, ulToTest})
-    void processList_sunnyDay(String htmlToTest) {
+    void processListElement_sunnyDay(String htmlToTest) {
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-list").get(0);
 
         this.richtlijnenNhgWebScraper.processListElement(testNode, elementToTest);
@@ -492,7 +485,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(strings = {recursiveListToTestUlUl, recursiveListToTestUlOl, recursiveListToTestOlUl, recursiveListToTestOlOl})
-    void processList_recursiveList_testContentOuterList(String htmlToTest) {
+    void processListElement_recursiveList_testContentOuterList(String htmlToTest) {
 
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-list").get(0);
         this.richtlijnenNhgWebScraper.processListElement(testNode, elementToTest);
@@ -505,7 +498,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(strings = {recursiveListToTestUlUl, recursiveListToTestUlOl, recursiveListToTestOlUl, recursiveListToTestOlOl})
-    void processList_recursiveList_testContentInnerList(String htmlToTest) {
+    void processListElement_recursiveList_testContentInnerList(String htmlToTest) {
 
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-list").get(0);
         this.richtlijnenNhgWebScraper.processListElement(testNode, elementToTest);
@@ -517,7 +510,7 @@ class RichtlijnenNhgWebScraperTest {
     }
 
     @Test
-    void processList_inputNotAList() {
+    void processListElement_inputNotAList() {
         String htmlToTest =
                 "<div id='test-list'>" +
                     "<p>Fake list element 1</p>" +
@@ -534,8 +527,10 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(strings = {simplePToTest, pWithSubElementsToTest})
-    void processParagraph_sunnyDay(String htmlToTest) {
+    void processParagraphElement_sunnyDay(String htmlToTest) {
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-paragraph").get(0);
+
+        System.out.println(elementToTest);
 
         this.richtlijnenNhgWebScraper.processParagraphElement(testNode, elementToTest);
 
@@ -546,7 +541,7 @@ class RichtlijnenNhgWebScraperTest {
     }
 
     @Test
-    void processParagraph_inputNotAParagraph() {
+    void processParagraphElement_inputNotAParagraph() {
         String htmlToTest =
                 "<div id='test-paragraph'>" +
                     "This is not a paragraph. " +
@@ -562,7 +557,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(strings = {simpleDiv, divWithLooseText})
-    void processDiv_sunnyDay_single(String htmlToTest) {
+    void processDivElement_sunnyDay_single(String htmlToTest) {
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-div").get(0);
 
         this.richtlijnenNhgWebScraper.processDivElement(testNode, elementToTest);
@@ -575,7 +570,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1})
-    void processDiv_sunnyDay_recursiveOuterContent(int testNthElement) {
+    void processDivElement_sunnyDay_recursiveOuterContent(int testNthElement) {
         String htmlToTest =
                 "<div id='test-div'>" +
                     "div 1 child 0" +
@@ -598,7 +593,7 @@ class RichtlijnenNhgWebScraperTest {
     }
 
     @Test
-    void processDiv_sunnyDay_recursiveInnerContent() {
+    void processDivElement_sunnyDay_recursiveInnerContent() {
         String htmlToTest =
                 "<div id='test-div'>" +
                     "div 1 child 0" +
@@ -621,7 +616,7 @@ class RichtlijnenNhgWebScraperTest {
     }
 
     @Test
-    void processDiv_inputNotADiv() {
+    void processDivElement_inputNotADiv() {
         String htmlToTest =
                 "<a id='test-div'>" +
                     "<p>fake div element 1</p>" +
@@ -642,36 +637,6 @@ class RichtlijnenNhgWebScraperTest {
                 "<div id='test-div'> " +
                     "This is loose text" +
                     "<p>fake div element 1</p>" +
-                    "<p>fake div element 2</p>" +
-                "</div>";
-
-        Element elementToTest = Jsoup.parse(htmlToTest).select("#test-div").get(0);
-
-        assertEquals("This is loose text", this.richtlijnenNhgWebScraper.getLooseTextFromElement(elementToTest));
-    }
-
-    @Test
-    void getLooseTextFromElement_afterChildren() {
-//        TODO What to do with this case
-        String htmlToTest =
-                "<div id='test-div'> " +
-                    "<p>fake div element 1</p>" +
-                    "<p>fake div element 2</p>" +
-                    "This is loose text" +
-                "</div>";
-
-        Element elementToTest = Jsoup.parse(htmlToTest).select("#test-div").get(0);
-
-        assertEquals("This is loose text", this.richtlijnenNhgWebScraper.getLooseTextFromElement(elementToTest));
-    }
-
-    @Test
-    void getLooseTextFromElement_betweenChildren() {
-//        TODO What to do with this case
-        String htmlToTest =
-                "<div id='test-div'> " +
-                    "<p>fake div element 1</p>" +
-                    "This is loose text" +
                     "<p>fake div element 2</p>" +
                 "</div>";
 
@@ -757,35 +722,10 @@ class RichtlijnenNhgWebScraperTest {
         );
     }
 
-    @Test
-    void processListElement_childrenOnlyPElements() {
-//        TODO what to do with this case
-        String htmlToTest =
-                "<ul>" +
-                    "<li id='test-list-element'>" +
-                        "<p>child 0</p>" +
-                        "<p>child 1</p>" +
-                    "</li>" +
-                "</ul>";
-    }
-
-
-    @Test
-    void processListElement_spanEmSubAChildrenBetweenElements() {
-//        TODO what to do with this case
-        String htmlToTest =
-                "<ul>" +
-                    "<li id='test-list-element'>" +
-                        "<p>child 0</p>" +
-                        "<span>spanEmSubA </span><em>elements </em> <sub>between </sub><a>other</a> elements" +
-                        "<p>child 1</p>" +
-                    "</li>" +
-                "</ul>";
-    }
 
     @ParameterizedTest
     @ValueSource(strings = {validTestTable1, validTestTable2})
-    void processTable_sunnyDay_someContentIsAdded(String htmlToTest) {
+    void processTableElement_sunnyDay_someContentIsAdded(String htmlToTest) {
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-table").get(0);
         this.richtlijnenNhgWebScraper.processTableElement(testNode, elementToTest);
 
@@ -796,7 +736,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(strings = {validTestTable1, validTestTable2})
-    void processTable_sunnyDay_captionIsSet(String htmlToTest) {
+    void processTableElement_sunnyDay_captionIsSet(String htmlToTest) {
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-table").get(0);
         this.richtlijnenNhgWebScraper.processTableElement(testNode, elementToTest);
 
@@ -806,7 +746,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(strings = {illegalTableDoubleCaption, illegalTableIllegalCombinedChildren, illegalTableNotATable})
-    void processTable_tableWithTwoCaptions(String htmlToTest) {
+    void processTableElement_tableWithTwoCaptions(String htmlToTest) {
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-table").get(0);
 
         Assertions.assertThrows(
@@ -817,7 +757,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3})
-    void processTableSection_sunnyDay_someContentIsAdded(int testNthSection) {
+    void processTableSectionElement_sunnyDay_someContentIsAdded(int testNthSection) {
         String cssQuery = "#test-section-" + testNthSection;
         Element elementToTest = Jsoup.parse(validTestTable2).select(cssQuery).get(0);
 
@@ -828,7 +768,7 @@ class RichtlijnenNhgWebScraperTest {
     }
 
     @Test
-    void processTableSection_invalidTableSection() {
+    void processTableSectionElement_invalidTableSection() {
         String htmlToTest =
                 "<p id='test-section'>This is not a table section</p>";
 
@@ -842,7 +782,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1 , 2, 3})
-    void processTableRow_sunnyDay_someContentIsAdded(int testNthtr) {
+    void processTableRowElement_sunnyDay_someContentIsAdded(int testNthtr) {
         Element elementToTest = Jsoup.parse(validTestTable1).select("#test-table tr").get(testNthtr);
 
         this.richtlijnenNhgWebScraper.processTableRowElement(testNode, elementToTest);
@@ -853,7 +793,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1})
-    void processTableRow_sunnyDay_thOrTdLeafAddedToNodeIsOfClassLeaf(int testNthtr) {
+    void processTableRowElement_sunnyDay_thOrTdLeafAddedToNodeIsOfClassLeaf(int testNthtr) {
         Element elementToTest = Jsoup.parse(validTestTable1).select("#test-table tr").get(testNthtr);
 
         this.richtlijnenNhgWebScraper.processTableRowElement(testNode, elementToTest);
@@ -865,7 +805,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1})
-    void processTableRow_sunnyDay_thOrTdLeafAddedToNodeHasRightContentType(int testNthtr) {
+    void processTableRowElement_sunnyDay_thOrTdLeafAddedToNodeHasRightContentType(int testNthtr) {
         Element elementToTest = Jsoup.parse(validTestTable1).select("#test-table tr").get(testNthtr);
 
         this.richtlijnenNhgWebScraper.processTableRowElement(testNode, elementToTest);
@@ -879,7 +819,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1})
-    void processTableRow_sunnyDay_childrenThAndTdAreOfClassNodes(int testNthChild) {
+    void processTableRowElement_sunnyDay_childrenThAndTdAreOfClassNodes(int testNthChild) {
         Element elementToTest = Jsoup.parse(validTestTable1).select("#test-table tr").get(2);
 
         this.richtlijnenNhgWebScraper.processTableRowElement(testNode, elementToTest);
@@ -890,7 +830,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1})
-    void processTableRow_sunnyDay_childrenThAndTdAreOfCorrectContentType(int testNthChild) {
+    void processTableRowElement_sunnyDay_childrenThAndTdAreOfCorrectContentType(int testNthChild) {
         Element elementToTest = Jsoup.parse(validTestTable1).select("#test-table tr").get(2);
 
         this.richtlijnenNhgWebScraper.processTableRowElement(testNode, elementToTest);
@@ -902,7 +842,7 @@ class RichtlijnenNhgWebScraperTest {
     }
 
     @Test
-    void processTableRow_inputNotTr() {
+    void processTableRowElement_inputNotTr() {
         String htmlToTest =
                 "<p id='test-tr'>This is not a table row</p>";
         Element elementToTest = Jsoup.parse(htmlToTest).select("#test-tr").get(0);
@@ -915,7 +855,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7})
-    void processTableElement_sunnyDay_someContentIsAdded(int testNthElement) {
+    void processTableDataElement_sunnyDay_someContentIsAdded(int testNthElement) {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(testNthElement);
 
         this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
@@ -925,7 +865,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7})
-    void processTableElement_sunnyDay_ofCorrectContentTypeForLeafs(int testNthElement) {
+    void processTableDataElement_sunnyDay_ofCorrectContentTypeForLeafs(int testNthElement) {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(testNthElement);
 
         this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
@@ -943,7 +883,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4})
-    void processTableElement_sunnyDay_ofCorrectContent(int testNthElement) {
+    void processTableDataElement_sunnyDay_ofCorrectContent(int testNthElement) {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(testNthElement);
 
         this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
@@ -954,7 +894,7 @@ class RichtlijnenNhgWebScraperTest {
     }
 
     @Test
-    void processTableElement_sunnyDay_getsColSpanAttribute() {
+    void processTableDataElement_sunnyDay_getsColSpanAttribute() {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(3);
 
         this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
@@ -964,7 +904,7 @@ class RichtlijnenNhgWebScraperTest {
     }
 
     @Test
-    void processTableElement_sunnyDay_getsRowSpanAttribute() {
+    void processTableDataElement_sunnyDay_getsRowSpanAttribute() {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(4);
 
         this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
@@ -975,7 +915,7 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(ints = {5, 6})
-    void processTableElement_sunnyDay_leafWithMultipleElements(int testNthElement) {
+    void processTableDataElement_sunnyDay_leafWithMultipleElements(int testNthElement) {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(testNthElement);
 
         this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
@@ -985,10 +925,8 @@ class RichtlijnenNhgWebScraperTest {
 
     @ParameterizedTest
     @ValueSource(ints = {5, 6})
-    void processTableElement_sunnyDay_contentTypeOfLeafWithMultipleElements(int testNthElement) {
+    void processTableDataElement_sunnyDay_contentTypeOfLeafWithMultipleElements(int testNthElement) {
         Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(testNthElement);
-
-        System.out.println(elementToTest);
 
         this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
 
@@ -997,34 +935,5 @@ class RichtlijnenNhgWebScraperTest {
         String expected = elementToTest.tagName().toUpperCase();
         String actual = resultLeaf.getContentType();
         assertEquals(expected, actual);
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {5, 6})
-    void processTableElement_sunnyDay_contentOfLeafWithMultipleElements(int testNthElement) {
-        Element elementToTest = Jsoup.parse(validTestTable3).select("#test-table tr").get(0).children().get(testNthElement);
-
-        this.richtlijnenNhgWebScraper.processTableDataElement(testNode, elementToTest);
-
-        ContentLeaf resultLeaf = (ContentLeaf) ((ContentNode) testNode.getContent().get(0)).getContent().get(0);
-
-        String[] expected;
-        if (Util.getMaxDepth(elementToTest) == 2) {
-            expected = elementToTest.children().eachText().toArray(new String[elementToTest.childrenSize()]);
-        } else {
-            expected = elementToTest.children().get(0).children().eachText().toArray(new String[elementToTest.childrenSize()]);
-        }
-        String[] actual = resultLeaf.getContent().toArray(new String[resultLeaf.getContent().size()]);
-        assertArrayEquals(expected, actual);
-    }
-
-    @Test
-    void processTableElement_sunnyDay_() {
-
-    }
-
-    @Test
-    void parseHtml() throws IOException {
-        this.richtlijnenNhgWebScraper.parseHtml();
     }
 }

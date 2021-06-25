@@ -74,23 +74,15 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
             String ontpillenIndicationName = this.drugIndicationsNames.get("ontpillen").get(i).strip();
             String nhgIndicationName = this.drugIndicationsNames.get("nhgrichtlijnen").get(i).strip();
 
-//            If there is no indication name in ontpillen or in nhg richtlijnen for this index, continue to next index
             if(ontpillenIndicationName.equals("") || nhgIndicationName.equals("")) {
                 continue;
             }
 
-//            Get Jsoup document of the webpage for this indication
             Document doc = this.getIndicationWebDocument(nhgIndicationName);
-
-//            Collect the contest of interest from the document and save in this map.
             Map<String, Elements> contentOfInterest = this.getContentOfInterest(doc);
-
-//            Get the use indication from the drugDao that belongs to this indication
             UseIndication currentUseIndication = this.drugDao.getUseIndication(ontpillenIndicationName);
 
-
             processContentOfInterest(contentOfInterest, currentUseIndication);
-//            break;
         }
     }
 
@@ -257,25 +249,16 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
         }
     }
 
-    protected boolean processParagraphElement(ContentNode currentContentNode, Element element) {
+    protected void processParagraphElement(ContentNode currentContentNode, Element element) {
         if (!element.tagName().equals("p")) {
             throw new IllegalArgumentException("element should be an element of the tag <p>");
         }
-
-        Map<String, Element> copiesOfParent = Util.getCopiesOfElementWithoutAndOnlySpanEmSubA(element.parent());
-        Elements sibblingsWithoutSpanEmSubA = copiesOfParent.get("elementWithoutSpanEmSubA").children();
 
         ContentLeaf newLeaf = new ContentLeaf();
         newLeaf.setContentType("PARAGRAPH");
         currentContentNode.addContent(newLeaf);
 
-        if (this.allElementsAreOfTags(sibblingsWithoutSpanEmSubA, new String[]{"p"})) {
-            newLeaf.setContent(sibblingsWithoutSpanEmSubA.eachText());
-            return true;
-        } else {
-            newLeaf.addContent(element.text());
-            return false;
-        }
+        newLeaf.addContent(element.text());
     }
 
     protected void processDivElement(ContentNode currentContentNode, Element element) {
@@ -424,7 +407,6 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
     }
 
     protected void processTableDataElement(ContentNode currentContentNode, Element element) {
-
         Map<String, Element> copiesOfElement = Util.getCopiesOfElementWithoutAndOnlySpanEmSubA(element);
         String contentType = element.tagName().toUpperCase();
 
@@ -448,7 +430,13 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
             Elements  childrenToProcess = copiesOfElement.get("elementWithoutSpanEmSubA").children();
 
             this.process(newNode, childrenToProcess);
+        } else if (!Util.elementHasChildrenOfTag(element, "[^p]")) {
+            ContentLeaf newLeaf = new ContentLeaf();
+            newLeaf.setContentType("TD");
+            newLeaf.setContent(element.children().eachText());
+            currentContentNode.addContent(newLeaf);
         } else {
+            System.out.println("else");
             ContentNode newNode = new ContentNode();
             newNode.setContentType(contentType);
             addAttributesToContent(element, newNode);
