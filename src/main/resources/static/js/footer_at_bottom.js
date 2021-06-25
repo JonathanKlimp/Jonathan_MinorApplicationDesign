@@ -3,7 +3,7 @@
  * @author Naomi Hindriks
  */
 $(document).ready(() => {
-//Get dom elements
+    // Get dom elements
     const $wrapper = $(".wrapper");
     const $footer = $("footer");
 

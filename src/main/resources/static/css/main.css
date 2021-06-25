@@ -2,9 +2,8 @@
 Style Sheet for Ontpillen
 
 author: Naomi Hindriks
-----------------------------------------------------------*/
 
-/* -----------------------------------------------------------
+
 CONTENTS:
 =General styling and utility classes
 =Header and footer styling
@@ -92,6 +91,10 @@ footer .footer-link:hover, footer .footer-link:focus,
 #header.navbar-dark .navbar-nav .btn-link:focus, #header.navbar-dark .navbar-nav .btn-link:hover {
     opacity: 100%;
     text-decoration: underline;
+}
+
+.navbar-brand #logo {
+    height: 60px;
 }
 
 footer .footer-element {

@@ -1,4 +1,4 @@
-<!DOCTYPE html> <!-- Author Naomi Hindriks and Jonathan Klimp  !-->
+<!DOCTYPE html> <!-- Author Naomi Hindriks and Jonathan Klimp  -->
 <html xmlns:th="http://www.thymeleaf.org" lang="nl">
 
 <head th:replace="template :: head(${drugName}, 'true')"></head>
@@ -16,7 +16,7 @@
 
             <div class="container">
 
-                <div class="row" style="color: #1c1f23">
+                <div class="row">
 
                     <div class="col-3">
 
@@ -172,21 +172,21 @@
                                             </p>
                                         </div>
 
-                                        <th:block th:unless="${drug.getChildren().isEmpty()}" class="nav-item">
+                                        <div th:unless="${drug.getChildren().isEmpty()}" class="nav-item" id="geneesmiddelen-in-deze-groep">
                                             <h3>Medicijnen die tot deze groep behoren</h3>
                                             <ul>
                                                 <li th:each="drugChild : ${drug.getChildren()}">
                                                     <a th:text="${drugChild.getName()}" th:href="@{'~/medicijn/' + ${drugChild.getName()}}"></a>
                                                 </li>
                                             </ul>
-                                        </th:block>
+                                        </div>
 
-                                        <th:block th:unless="${drug.getSideEffects().getSideEffectsPatient().isEmpty()}" id="bijwerkingen">
+                                        <div th:unless="${drug.getSideEffects().getSideEffectsPatient().isEmpty()}" id="bijwerkingen">
                                             <h3>Bijwerkingen</h3>
                                             <th:block th:each="sideEffect : ${drug.getSideEffects().getSideEffectsPatient()}">
                                                 <th:block th:replace="template :: contentFragment(${sideEffect})"></th:block>
                                             </th:block>
-                                        </th:block>
+                                        </div>
                                     </th:block>
 
                                 </th:block>
@@ -264,21 +264,21 @@
                                             </p>
                                         </div>
 
-                                        <th:block th:unless="${drug.getChildren().isEmpty()}" class="nav-item">
+                                        <div th:unless="${drug.getChildren().isEmpty()}" class="nav-item" id="geneesmiddelen-in-deze-groep">
                                             <h3>Medicijnen die tot deze groep behoren</h3>
                                             <ul>
                                                 <li th:each="drugChild : ${drug.getChildren()}">
                                                     <a th:text="${drugChild.getName()}" th:href="@{'~/medicijn/' + ${drugChild.getName()}}"></a>
                                                 </li>
                                             </ul>
-                                        </th:block>
+                                        </div>
 
-                                        <th:block th:unless="${drug.getSideEffects().getSideEffectsPractitioner().isEmpty()}" id="bijwerkingen">
+                                        <div th:unless="${drug.getSideEffects().getSideEffectsPractitioner().isEmpty()}" id="bijwerkingen">
                                             <h3>Bijwerkingen</h3>
                                             <th:block th:each="sideEffect : ${drug.getSideEffects().getSideEffectsPractitioner()}">
                                                 <th:block th:replace="template :: contentFragment(${sideEffect})"></th:block>
                                             </th:block>
-                                        </th:block>
+                                        </div>
                                     </th:block>
 
                                 </th:block>

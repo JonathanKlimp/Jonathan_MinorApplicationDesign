@@ -4,6 +4,15 @@ import org.jsoup.nodes.Element;
 
 public class TitleElementComparerNhg {
 
+    /**
+     * A function to compare one title element to another title element (of nhg richtlijnen))
+     * @param titleElement first title element
+     * @param otherTitleElement second title element
+     * @return returns an integer
+     *          - if the title elements are the same returns 0
+     *          - if the first title element is "bigger" return 1
+     *          - if the first title element is "smaller" return -1
+     */
     public static int compareTo(Element titleElement, Element otherTitleElement) {
         if (titleElement.tagName().matches("h[1-6]") && otherTitleElement.tagName().matches("h[1-6]")) {
             int thisTitleElementInt = Integer.parseInt(titleElement.tagName().substring(1,2));

@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest //TODO add test?
+@SpringBootTest
 class WebScrapeExecutorTest {
     @Autowired
     DrugDao drugDao;

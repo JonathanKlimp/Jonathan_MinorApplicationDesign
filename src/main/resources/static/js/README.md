@@ -23,3 +23,11 @@ main_content_adjustments.js is the file that makes sure the elements that hold t
 ### background_adjustments.js
 
 background_adjustments.js is the javascript file that sets the background image and color for the homepage of the site. It sets the placement and size of the background elements (the background image,  the background color and the gradient that connects the image with the background color). It makes sure the background image is the correct size even when the window is resized.
+
+### footer_at_bottom.js
+
+The name of this javascript file is pretty self explanatory, it keeps the footer at the bottom of the webpage (in combination with the css).
+
+### autocomplete.js
+
+This javascript file contains the code that makes the searchbar have a dropdown to autocomplete the drugname the user tries to type.

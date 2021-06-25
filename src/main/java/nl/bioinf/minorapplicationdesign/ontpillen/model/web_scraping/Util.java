@@ -8,6 +8,9 @@ import java.util.Map;
 
 /**
  * @author Naomi Hindriks
+ *
+ * A class that holds functions that can be used for multiple webcrawlers, these are general methods that can work on the
+ * HTML of any website
  */
 public class Util {
 
@@ -48,4 +51,10 @@ public class Util {
         elementOnlySpanEmSubA.children().select(":not(a, span, em, sub)").remove();
         return Map.of("elementWithoutSpanEmSubA", elementWithoutSpanEmSubA, "elementOnlySpanEmSubA", elementOnlySpanEmSubA);
     }
+
+    public static boolean elementHasChildrenOfTag(Element element, String tagNameRegex) {
+        return element.children().stream()
+                .anyMatch((Element e) -> {return e.tagName().matches(tagNameRegex);});
+    }
+
 }
