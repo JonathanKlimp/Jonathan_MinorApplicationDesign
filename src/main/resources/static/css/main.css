@@ -94,6 +94,10 @@ footer .footer-link:hover, footer .footer-link:focus,
     text-decoration: underline;
 }
 
+.navbar-brand #logo {
+    height: 60px;
+}
+
 footer .footer-element {
     display: block;
     width: max-content;
