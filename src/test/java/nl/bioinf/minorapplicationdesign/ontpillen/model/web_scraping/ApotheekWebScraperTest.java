@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -122,7 +123,6 @@ class ApotheekWebScraperTest {
         }
     }
 
-    //TODO fix test
 
     @Test
     void parseHtml_SideEffectGetContent_ContainsString() throws IOException {
@@ -140,20 +140,15 @@ class ApotheekWebScraperTest {
 
 
     private List<String> getContentText(Content content) {
-//        for (Content content1 : content) {
-            String classType = content.getClass().toString();
-            System.out.println("JO" + classType);
-            switch (classType) {
-                case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode":
-                    for (Content content1 : ((ContentNode) content).getContent()) {
-                        getContentText(content1);
-                    }
-//                    getContentText( ((ContentNode) content).getContent());
-                case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentLeaf":
-//                    System.out.println("WE ERE");
-                    return ((ContentLeaf) content).getContent();
-            }
-//        }
+        String classType = content.getClass().toString();
+        switch (classType) {
+            case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentNode":
+                for (Content content1 : ((ContentNode) content).getContent()) {
+                    return Collections.singletonList(content1.getContentTitle());
+                }
+            case "class nl.bioinf.minorapplicationdesign.ontpillen.model.data_storage.content.ContentLeaf":
+                return ((ContentLeaf) content).getContent();
+        }
         return null;
     }
 }
