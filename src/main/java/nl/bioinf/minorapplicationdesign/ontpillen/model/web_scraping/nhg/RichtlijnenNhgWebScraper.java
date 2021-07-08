@@ -434,6 +434,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
             ContentLeaf newLeaf = new ContentLeaf();
             newLeaf.setContentType("TD");
             newLeaf.setContent(element.children().eachText());
+            addAttributesToContent(element, newLeaf);
             currentContentNode.addContent(newLeaf);
         } else {
             System.out.println("else");
@@ -446,6 +447,7 @@ public class RichtlijnenNhgWebScraper implements AbstractWebScraper {
     }
 
     private void addAttributesToContent(Element element, Content content) {
+        LOGGER.info("ADDING ATTRIBUTE TO CONTENT");
         if (content.getClass().equals(ContentLeaf.class)) {
             ContentLeaf newContent = (ContentLeaf) content;
             if (element.hasAttr("colspan")) {
