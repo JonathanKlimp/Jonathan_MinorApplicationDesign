@@ -229,8 +229,9 @@ Index:
                 <th:block th:if="${content.getContentTitle() != null}">
                     <p th:text="${content.getContentTitle()}"></p>
                 </th:block>
-                <th:block th:each="testContent : ${content.getContent()}">
-                    <p th:text="textContent"></p>
+                <th:block th:each="textContent : ${content.getContent()}">
+
+                    <p th:text="${textContent}"></p>
                 </th:block>
             </th>
         </th:block>
@@ -241,7 +242,8 @@ Index:
                     <p th:text="${content.getContentTitle()}"></p>
                 </th:block>
                 <th:block th:each="textContent : ${content.getContent()}">
-                    <p th:text="textContent"></p>
+
+                    <p th:text="${textContent}"></p>
                 </th:block>
             </td>
         </th:block>

@@ -18,11 +18,6 @@ public class ContentNode implements Content {
     private int id;
     private Map<String, String> attributes = new HashMap<>();
 
-    {
-        attributes.put("colspan", "1");
-        attributes.put("rowspan", "1");
-    }
-
     public ContentNode() {
         this(ContentType.PARAGRAPH);
     }
